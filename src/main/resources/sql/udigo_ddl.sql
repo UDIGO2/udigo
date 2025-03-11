@@ -38,7 +38,8 @@ DROP TABLE IF EXISTS `tbl_user`;
 
 -- 테이블 생성
 CREATE TABLE `tbl_user` (
-                            `user_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '회원 고유 ID',
+                            `user_code` INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '회원식별코드',
+                            `user_id` VARCHAR(50) NOT NULL COMMENT'사용자ID',
                             `user_name` VARCHAR(30) NOT NULL COMMENT '사용자 이름(UNIQUE)',
                             `email` VARCHAR(100) NOT NULL COMMENT '회원 이메일(UNIQUE)',
                             `password` VARCHAR(255) NOT NULL COMMENT '암호화된 비밀번호',
@@ -68,6 +69,7 @@ CREATE TABLE `tbl_pwd_his` (
 CREATE TABLE `tbl_acm` (
                            `acm_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '숙소 관리 ID',
                            `acm_name` VARCHAR(255) NOT NULL COMMENT '숙소명',
+                           `acm_adress` VARCHAR(255) NOT NULL COMMENT '숙소 상세 주소',
                            `acm_location` VARCHAR(255) NOT NULL COMMENT '숙소 위치',
                            `acm_price` BIGINT NOT NULL COMMENT '숙소 가격',
                            `acm_info` VARCHAR(255) NOT NULL COMMENT '숙소 설명',
@@ -75,12 +77,82 @@ CREATE TABLE `tbl_acm` (
                            `regist_date` DATETIME NOT NULL COMMENT '숙소 등록일자',
                            `max_guest` INT NOT NULL COMMENT '최대 숙박인원',
                            `liked_count` INT NULL COMMENT '좋아요 개수',
-                           `acc_photo1` VARCHAR(255) NOT NULL COMMENT '숙소 사진1',
+                           `acm_photo1` VARCHAR(255) NOT NULL COMMENT '숙소 사진1',
                            `acm_photo2` VARCHAR(255) NOT NULL COMMENT '숙소 사진2',
                            `acm_photo3` VARCHAR(255) NOT NULL COMMENT '숙소 사진3',
                            `acm_photo4` VARCHAR(255) NULL COMMENT '숙소사진4',
                            `acm_photo5` VARCHAR(255) NULL COMMENT '숙소 사진5'
 );
+
+
+-- # DROP TRIGGER IF EXISTS before_insert_tbl_acm;
+DELIMITER $$
+
+CREATE TRIGGER before_insert_tbl_acm
+    BEFORE INSERT ON tbl_acm
+    FOR EACH ROW
+BEGIN
+    DECLARE max_id INT;
+
+    -- 서울/경기 지역 처리
+    IF NEW.acm_location = '서울/경기' THEN
+        SELECT MAX(acm_id) INTO max_id FROM tbl_acm WHERE acm_location = '서울/경기';
+        IF max_id IS NULL THEN
+            SET NEW.acm_id = 101;
+        ELSE
+            SET NEW.acm_id = max_id + 1;
+        END IF;
+
+        -- 충청 지역 처리
+    ELSEIF NEW.acm_location = '충청' THEN
+        SELECT MAX(acm_id) INTO max_id FROM tbl_acm WHERE acm_location = '충청';
+        IF max_id IS NULL THEN
+            SET NEW.acm_id = 201;
+        ELSE
+            SET NEW.acm_id = max_id + 1;
+        END IF;
+
+        -- 강원 지역 처리
+    ELSEIF NEW.acm_location = '강원' THEN
+        SELECT MAX(acm_id) INTO max_id FROM tbl_acm WHERE acm_location = '강원';
+        IF max_id IS NULL THEN
+            SET NEW.acm_id = 301;
+        ELSE
+            SET NEW.acm_id = max_id + 1;
+        END IF;
+
+        -- 제주 지역 처리
+    ELSEIF NEW.acm_location = '제주' THEN
+        SELECT MAX(acm_id) INTO max_id FROM tbl_acm WHERE acm_location = '제주';
+        IF max_id IS NULL THEN
+            SET NEW.acm_id = 401;
+        ELSE
+            SET NEW.acm_id = max_id + 1;
+        END IF;
+
+        -- 전라 지역 처리
+    ELSEIF NEW.acm_location = '전라' THEN
+        SELECT MAX(acm_id) INTO max_id FROM tbl_acm WHERE acm_location = '전라';
+        IF max_id IS NULL THEN
+            SET NEW.acm_id = 501;
+        ELSE
+            SET NEW.acm_id = max_id + 1;
+        END IF;
+
+        -- 경상 지역 처리
+    ELSEIF NEW.acm_location = '경상' THEN
+        SELECT MAX(acm_id) INTO max_id FROM tbl_acm WHERE acm_location = '경상';
+        IF max_id IS NULL THEN
+            SET NEW.acm_id = 601;
+        ELSE
+            SET NEW.acm_id = max_id + 1;
+        END IF;
+
+    END IF;
+END $$
+
+DELIMITER ;
+
 
 
 CREATE TABLE `tbl_cart` (
