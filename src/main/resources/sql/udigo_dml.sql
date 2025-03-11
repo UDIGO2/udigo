@@ -38,47 +38,51 @@ ALTER TABLE tbl_user AUTO_INCREMENT = 107;
 INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3, acm_photo4, acm_photo5)
 VALUES('서울/경기', '롯데호텔 서울', '서울특별시 중구 을지로 30', 150000,
        '롯데호텔 서울은 최고의 편안함과 서비스를 제공합니다.',  '02-771-1000', NOW(), 3, 403,
-       'hotel1_1.jpg',
-       'hotel1_2.jpg',
-       'hotel1_3.jpg',
-       'hotel1_4.jpg',
-       'hotel1_5.jpg');
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/lotte1.jpg',
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/lotte2.jpg',
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/lotte3.jpg',
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/lotte4.jpg',
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/lotte5.jpg');
 
 INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3, acm_photo4, acm_photo5)
 VALUES('서울/경기', '신라호텔 서울','서울특별시 중구 동호로 249', 250000,
        '신라호텔 서울은 최고의 편안함과 서비스를 제공합니다.', '02-2233-3131', NOW(), 6, 540,
-       'hotel2_1.jpg',
-       'hotel2_2.jpg',
-       'hotel2_3.jpg',
-       'hotel2_4.jpg',
-       'hotel2_5.jpg');
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/shila.jpg',
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/shila2.jpg',
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/shila3.jpg',
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/shila4.jpg',
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/shila5.png'
+      );
 
 INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3, acm_photo4, acm_photo5)
 VALUES('서울/경기', '웨스틴조선 서울', '서울특별시 중구 동호로 249', 200000,
        '웨스틴조선 서울은 최고의 편안함과 서비스를 제공합니다.', '02-2233-3131', NOW(), 4,78,
-       'hotel3_1.jpg',
-       'hotel3_2.jpg',
-       'hotel3_3.jpg',
-       'hotel3_4.jpg',
-       'hotel3_5.jpg');
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/josun1.jpg',
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/josun2.jpg',
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/josun3.jpg',
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/josun4.jpg',
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/josun5.jpg');
+
 
 INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3, acm_photo4, acm_photo5)
 VALUES('서울/경기', '송암스페이스센터', '경기도 양주시 장흥면 권율로185번길 103',
        63000,'송암 스페이스센터는 최고의 편안함과 서비스를 제공합니다.', '031-894-6000', NOW(), 2, 87,
-       'hotel4_1.jpg',
-       'hotel4_2.jpg',
-       'hotel4_3.jpg',
-       'hotel4_4.jpg',
-       'hotel4_5.jpg');
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/space1.jpg',
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/space2.jpg',
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/space3.jpg',
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/space4.jpg',
+       'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/space5.jpg'
+       );
 
 INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3, acm_photo4, acm_photo5)
 VALUES ('서울/경기', '홈즈스테이 수원', '경기 수원시 팔달구 인계로 116',54000,
         '홈즈스테이 수원에서 삶을 풍요롭게 하는 다채로운 경험의 시간을 누리세요.', '031-233-0338', NOW(),2, 32,
-        'hotel5_1.jpg',
-        'hotel5_2.jpg',
-        'hotel5_3.jpg',
-        'hotel5_4.jpg',
-        'hotel5_5.jpg');
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/suwon.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/suwon2.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/suwon3.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/suwon4.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/seoul/suwon5.jpg'
+      );
 
 -- 📌 충청 지역 호텔 데이터
 INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3, acm_photo4, acm_photo5)
@@ -223,92 +227,107 @@ INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, a
 VALUES ('전라','쏠비치 호텔앤리조트','진도 전라남도 진도군 의신면 송군길 30-40', 250000,
         '''해가 처음 비추는 곳''이라는 뜻의 해비치 호텔앤드리조트는 때묻지 않은 자연 그대로의 제주와 에메랄드빛 바다가 한눈에 펼쳐지는 아름다운 곳에 위치하고 있습니다.',
         '061-123-4567', NOW(), 4,800,
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju2.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju3.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/havichi-jeju4.jpg' );
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeonla/solbeach1.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeonla/solbeach2.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeonla/solbeach3.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeonla/solbeach4.jpg'
+       );
 
 INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3 , acm_photo4)
 VALUES ('전라','소노벨 변산','부안군 변산면 변산해변로 51', 250000,
         '''해가 처음 비추는 곳''이라는 뜻의 해비치 호텔앤드리조트는 때묻지 않은 자연 그대로의 제주와 에메랄드빛 바다가 한눈에 펼쳐지는 아름다운 곳에 위치하고 있습니다.',
         '063-123-4567', NOW(), 4,800,
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju2.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju3.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/havichi-jeju4.jpg' );
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeonla/sonobell1.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeonla/sonobell2.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeonla/sonobell3.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeonla/sonobell4.jpg'
+       );
 
-INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3 , acm_photo4)
+INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3)
 VALUES ('전라','소노캄 여수','전라남도 여수시 오동도로 111', 250000,
         '''해가 처음 비추는 곳''이라는 뜻의 해비치 호텔앤드리조트는 때묻지 않은 자연 그대로의 제주와 에메랄드빛 바다가 한눈에 펼쳐지는 아름다운 곳에 위치하고 있습니다.',
         '061-123-4568', NOW(), 4,800,
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju2.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju3.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/havichi-jeju4.jpg' );
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeonla/sonocam1.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeonla/sonocam2.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeonla/sonocam3.jpg'
+       );
 
 INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3 , acm_photo4)
 VALUES ('전라','홀리데이 인 광주호텔','광주광역시 서구 상무누리로 55', 250000,
         '''해가 처음 비추는 곳''이라는 뜻의 해비치 호텔앤드리조트는 때묻지 않은 자연 그대로의 제주와 에메랄드빛 바다가 한눈에 펼쳐지는 아름다운 곳에 위치하고 있습니다.',
         '062-610-7000', NOW(), 4,800,
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju2.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju3.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/havichi-jeju4.jpg' );
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeonla/holyday1.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeonla/holyday2.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeonla/holyday3.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeonla/holyday4.jpg'
+       );
 
-INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3 , acm_photo4)
+INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3)
 VALUES ('전라','베스트웨스턴플러스 전주호텔','전라북도 전주시 완산구 현무1길 4', 250000,
         '''해가 처음 비추는 곳''이라는 뜻의 해비치 호텔앤드리조트는 때묻지 않은 자연 그대로의 제주와 에메랄드빛 바다가 한눈에 펼쳐지는 아름다운 곳에 위치하고 있습니다.',
         '063-123-4569', NOW(), 4,800,
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju2.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju3.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/havichi-jeju4.jpg' );
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeonla/western1.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeonla/western2.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeonla/western3.jpg'
+       );
 -- 📌 경상 지역 호텔 데이터
 
-INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3 , acm_photo4)
+INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3 , acm_photo4,acm_photo5)
 VALUES ('경상','그랜드 머큐어 앰배서더','창원  경상남도 창원시 의창구 원이대로 332', 250000,
         '''해가 처음 비추는 곳''이라는 뜻의 해비치 호텔앤드리조트는 때묻지 않은 자연 그대로의 제주와 에메랄드빛 바다가 한눈에 펼쳐지는 아름다운 곳에 위치하고 있습니다.',
         '063-123-4569', NOW(), 4,800,
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju2.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju3.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/havichi-jeju4.jpg' );
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/grand1.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/grand2.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/grand3.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/grand4.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/grand5.jpg'
+       );
 
-INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3 , acm_photo4)
-VALUES ('경상','베스트웨스턴플러스 전주호텔','전라북도 전주시 완산구 현무1길 4', 250000,
-        '''해가 처음 비추는 곳''이라는 뜻의 해비치 호텔앤드리조트는 때묻지 않은 자연 그대로의 제주와 에메랄드빛 바다가 한눈에 펼쳐지는 아름다운 곳에 위치하고 있습니다.',
-        '055-600-0700', NOW(), 4,800,
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju2.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju3.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/havichi-jeju4.jpg' );
-
-INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3 , acm_photo4)
+INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3 , acm_photo4,acm_photo5)
 VALUES ('경상','토요코인 창원','경상남도 창원시 성산구 중앙대로 93', 250000,
         '''해가 처음 비추는 곳''이라는 뜻의 해비치 호텔앤드리조트는 때묻지 않은 자연 그대로의 제주와 에메랄드빛 바다가 한눈에 펼쳐지는 아름다운 곳에 위치하고 있습니다.',
         '055-282-1045', NOW(), 4,800,
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju2.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju3.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/havichi-jeju4.jpg' );
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/toyo1.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/toyo2.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/toyo3.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/toyo4.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/toyo5.jpg'
+       );
 
-INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3 , acm_photo4)
+INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3 , acm_photo4,acm_photo5)
 VALUES ('경상','마산관광호텔','경상남도 창원시 마산합포구 수산1길 285', 250000,
         '''해가 처음 비추는 곳''이라는 뜻의 해비치 호텔앤드리조트는 때묻지 않은 자연 그대로의 제주와 에메랄드빛 바다가 한눈에 펼쳐지는 아름다운 곳에 위치하고 있습니다.',
         '055-123-4567', NOW(), 4,800,
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju2.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju3.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/havichi-jeju4.jpg' );
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/masan1.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/masan2.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/masan3.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/masan4.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/masan5.jpg'
+       );
 
 
-INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3 , acm_photo4)
+INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3 , acm_photo4,acm_photo5)
 VALUES ('경상','롯데호텔 김해','경상남도 김해시 장유로 38번길 33', 250000,
         '''해가 처음 비추는 곳''이라는 뜻의 해비치 호텔앤드리조트는 때묻지 않은 자연 그대로의 제주와 에메랄드빛 바다가 한눈에 펼쳐지는 아름다운 곳에 위치하고 있습니다.',
         '055-123-4568', NOW(), 4,800,
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju2.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju3.jpg',
-        'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/havichi-jeju4.jpg' );
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/lotte1.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/lotte2.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/lotte3.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/lotte4.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/lotte5.jpg'
+       );
+
+INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3 , acm_photo4,acm_photo5)
+VALUES ('경상','STX 리조트 문경','경상북도 문경시 농암면 청화로 509', 250000,
+        '''해가 처음 비추는 곳''이라는 뜻의 해비치 호텔앤드리조트는 때묻지 않은 자연 그대로의 제주와 에메랄드빛 바다가 한눈에 펼쳐지는 아름다운 곳에 위치하고 있습니다.',
+        '054-123-4569', NOW(), 4,800,
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/stx1.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/stx2.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/stx3.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/stx4.jpg',
+        'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/stx5.jpg'
+       );
+
+
 
 
