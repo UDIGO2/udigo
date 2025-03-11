@@ -39,7 +39,7 @@ DROP TABLE IF EXISTS `tbl_user`;
 -- 테이블 생성
 CREATE TABLE `tbl_user` (
                             `user_code` INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '회원식별코드',
-                            `user_id` VARCHAR(50) NOT NULL COMMENT'사용자ID',
+                            `user_id` VARCHAR(50) NOT NULL UNIQUE COMMENT'사용자ID',
                             `user_name` VARCHAR(30) NOT NULL COMMENT '사용자 이름(UNIQUE)',
                             `email` VARCHAR(100) NOT NULL COMMENT '회원 이메일(UNIQUE)',
                             `password` VARCHAR(255) NOT NULL COMMENT '암호화된 비밀번호',
@@ -58,12 +58,12 @@ CREATE TABLE `tbl_user` (
 
 CREATE TABLE `tbl_pwd_his` (
                                `pwd_no` INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '비밀번호 변경 이력 번호',
-                               `user_id` INT NOT NULL COMMENT '회원  ID',
+                               `user_code` INT NOT NULL COMMENT '회원  ID',
                                `exp_time` DATETIME NULL COMMENT '임시비밀번호  만료일시',
                                `change_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경일시',
                                `old_pwd` VARCHAR(255) NULL COMMENT '이전 비밀번호(해시저장)',
                                `is_temp` BOOLEAN NULL DEFAULT FALSE COMMENT '임시 비밀번호 여부',
-                               CONSTRAINT `FK_tbl_user_TO_tbl_pwd_his_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_user` (`user_id`)
+                               CONSTRAINT `FK_tbl_user_TO_tbl_pwd_his_1` FOREIGN KEY (`user_code`) REFERENCES `tbl_user` (`user_code`)
 );
 
 CREATE TABLE `tbl_acm` (
@@ -158,28 +158,28 @@ DELIMITER ;
 CREATE TABLE `tbl_cart` (
                             `cart_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'PRIMARY KEY AUTO_INCREMENT',
                             `acm_id` INT NOT NULL COMMENT '숙소 정보',
-                            `user_id` INT NOT NULL COMMENT '회원 고유 ID',
+                            `user_code` INT NOT NULL COMMENT '회원 고유 ID',
                             `unit_price` INT NOT NULL COMMENT '단가',
                             `total_price` INT NOT NULL COMMENT '총 가격',
                             CONSTRAINT `FK_tbl_acm_TO_tbl_cart_1` FOREIGN KEY (`acm_id`) REFERENCES `tbl_acm` (`acm_id`),
-                            CONSTRAINT `FK_tbl_user_TO_tbl_cart_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_user` (`user_id`)
+                            CONSTRAINT `FK_tbl_user_TO_tbl_cart_1` FOREIGN KEY (`user_code`) REFERENCES `tbl_user` (`user_code`)
 );
 
 CREATE TABLE `tbl_pay` (
                            `pay_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'PRIMARY KEY AUTO_INCREMENT',
-                           `user_id` INT NOT NULL COMMENT '회원 정보',
+                           `user_code` INT NOT NULL COMMENT '회원 정보',
                            `cart_id` INT NOT NULL COMMENT '장바구니에 담긴 숙소 및 날짜/인원 등의 정보',
                            `pay_method` ENUM('간편결제','계좌이체') NOT NULL COMMENT 'API로 간편결제와 계좌이체 두 개 구현',
-                           CONSTRAINT `FK_tbl_user_TO_tbl_pay_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_user` (`user_id`),
+                           CONSTRAINT `FK_tbl_user_TO_tbl_pay_1` FOREIGN KEY (`user_code`) REFERENCES `tbl_user` (`user_code`),
                            CONSTRAINT `FK_tbl_cart_TO_tbl_pay_1` FOREIGN KEY (`cart_id`) REFERENCES `tbl_cart` (`cart_id`)
 );
 
 CREATE TABLE `tbl_login_his` (
                                  `login_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '로그인 이력 고유 ID',
-                                 `user_id` INT NOT NULL COMMENT '로그인한 회원 ID',
+                                 `user_code` INT NOT NULL COMMENT '로그인한 회원식별코드',
                                  `login_ip` VARCHAR(50) NULL COMMENT '로그인 시 사용된 IP 주소',
                                  `success` BOOLEAN NOT NULL DEFAULT FALSE COMMENT 'TRUE: 성공, FALSE: 실패',
-                                 CONSTRAINT `FK_tbl_user_TO_tbl_login_his_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_user` (`user_id`)
+                                 CONSTRAINT `FK_tbl_user_TO_tbl_login_his_1` FOREIGN KEY (`user_code`) REFERENCES `tbl_user` (`user_code`)
 );
 
 CREATE TABLE `tbl_roles` (
@@ -190,33 +190,33 @@ CREATE TABLE `tbl_roles` (
 CREATE TABLE `tbl_reservations` (
                                     `resv_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '예약 고유 번호(기본키)',
                                     `acm_id` INT NOT NULL COMMENT '예약한 숙소 ID',
-                                    `user_id` INT NOT NULL COMMENT '예약한 회원의 ID',
+                                    `user_code` INT NOT NULL COMMENT '예약한 회원의 ID',
                                     `check_in` DATETIME NOT NULL COMMENT '체크인 날짜',
                                     `check_out` DATETIME NOT NULL COMMENT '체크아웃 날짜',
                                     `guest_count` INT NOT NULL COMMENT '숙박인원',
                                     `is_resv` BOOLEAN NOT NULL DEFAULT FALSE COMMENT '예약 상태',
                                     `created_at` DATETIME NOT NULL COMMENT '생성일자',
                                     CONSTRAINT `FK_tbl_acm_TO_tbl_reservations_1` FOREIGN KEY (`acm_id`) REFERENCES `tbl_acm` (`acm_id`),
-                                    CONSTRAINT `FK_tbl_user_TO_tbl_reservations_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_user` (`user_id`)
+                                    CONSTRAINT `FK_tbl_user_TO_tbl_reservations_1` FOREIGN KEY (`user_code`) REFERENCES `tbl_user` (`user_code`)
 );
 
 
 CREATE TABLE `tbl_wishlist` (
                                 `wishlist_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'PRIMARY KEY AUTO_INCREMENT',
                                 `acm_id` INT NOT NULL COMMENT '숙소관리 ID',
-                                `user_id` INT NOT NULL COMMENT '회원 고유 ID',
+                                `user_code` INT NOT NULL COMMENT '회원 고유 ID',
                                 CONSTRAINT `FK_tbl_acm_TO_tbl_wishlist_1` FOREIGN KEY (`acm_id`) REFERENCES `tbl_acm` (`acm_id`),
-                                CONSTRAINT `FK_tbl_user_TO_tbl_wishlist_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_user` (`user_id`)
+                                CONSTRAINT `FK_tbl_user_TO_tbl_wishlist_1` FOREIGN KEY (`user_code`) REFERENCES `tbl_user` (`user_code`)
 );
 
 CREATE TABLE `tbl_board_posts` (
                                    `post_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '게시글 고유 번호',
-                                   `user_id` INT NOT NULL COMMENT '작성자 회원 ID',
+                                   `user_code` INT NOT NULL COMMENT '작성자 회원식별코드',
                                    `title` VARCHAR(255) NOT NULL COMMENT '게시글 제목',
                                    `content` TEXT NOT NULL COMMENT '게시글 내용',
                                    `created_at` DATETIME NOT NULL COMMENT '게시글 작성 시간',
                                    `updated_at` DATETIME NULL COMMENT '게시글 수정 시간',
-                                   CONSTRAINT `FK_tbl_user_TO_tbl_board_posts_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_user` (`user_id`)
+                                   CONSTRAINT `FK_tbl_user_TO_tbl_board_posts_1` FOREIGN KEY (`user_code`) REFERENCES `tbl_user` (`user_code`)
 );
 
 CREATE TABLE `tbl_board_comments` (
@@ -245,7 +245,7 @@ CREATE TABLE `tbl_pay_res` (
 
 CREATE TABLE `tbl_reviews` (
                                `review_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '후기 고유 번호',
-                               `user_id` INT NOT NULL COMMENT '작성한 회원 ID',
+                               `user_code` INT NOT NULL COMMENT '작성한 회원식별코드',
                                `acm_id` INT NOT NULL COMMENT '숙소 ID',
                                `resv_id` INT NULL COMMENT '예약 고유 번호',
                                `content` VARCHAR(255) NOT NULL COMMENT '후기 내용',
@@ -253,17 +253,17 @@ CREATE TABLE `tbl_reviews` (
                                `re_photo1` VARCHAR(255) NULL COMMENT '후기 사진1',
                                `re_photo2` VARCHAR(255) NULL COMMENT '후기 사진2',
                                `re_photo3` VARCHAR(255) NULL COMMENT '후기 사진3',
-                               CONSTRAINT `FK_tbl_user_TO_tbl_reviews_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_user` (`user_id`),
+                               CONSTRAINT `FK_tbl_user_TO_tbl_reviews_1` FOREIGN KEY (`user_code`) REFERENCES `tbl_user` (`user_code`),
                                CONSTRAINT `FK_tbl_acm_TO_tbl_reviews_1` FOREIGN KEY (`acm_id`) REFERENCES `tbl_acm` (`acm_id`),
                                CONSTRAINT `FK_tbl_reservations_TO_tbl_reviews_1` FOREIGN KEY (`resv_id`) REFERENCES `tbl_reservations` (`resv_id`)
 );
 
 
 CREATE TABLE `tbl_user_roles` (
-                                  `user_id` INT NOT NULL COMMENT '회원 고유 ID',
+                                  `user_code` INT NOT NULL COMMENT '회원 고유 ID',
                                   `role_code` INT NOT NULL COMMENT '권한 코드',
-                                  PRIMARY KEY (`user_id`, `role_code`),
-                                  CONSTRAINT `FK_tbl_user_TO_tbl_user_roles_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_user` (`user_id`),
+                                  PRIMARY KEY (`user_code`, `role_code`),
+                                  CONSTRAINT `FK_tbl_user_TO_tbl_user_roles_1` FOREIGN KEY (`user_code`) REFERENCES `tbl_user` (`user_code`),
                                   CONSTRAINT `FK_tbl_roles_TO_tbl_user_roles_1` FOREIGN KEY (`role_code`) REFERENCES `tbl_roles` (`role_code`)
 );
 
