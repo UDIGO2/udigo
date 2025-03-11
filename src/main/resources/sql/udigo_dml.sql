@@ -301,6 +301,7 @@ VALUES ('경상','마산관광호텔','경상남도 창원시 마산합포구 �
         'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/haevichi-jeju3.jpg',
         'https://github.com/UDIGO2/udigo-midea/blob/main/images/jeju/havichi-jeju4.jpg' );
 
+
 INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3 , acm_photo4)
 VALUES ('경상','롯데호텔 김해','경상남도 김해시 장유로 38번길 33', 250000,
         '''해가 처음 비추는 곳''이라는 뜻의 해비치 호텔앤드리조트는 때묻지 않은 자연 그대로의 제주와 에메랄드빛 바다가 한눈에 펼쳐지는 아름다운 곳에 위치하고 있습니다.',
