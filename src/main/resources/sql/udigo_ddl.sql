@@ -85,7 +85,7 @@ CREATE TABLE `tbl_acm` (
 );
 
 
--- # DROP TRIGGER IF EXISTS before_insert_tbl_acm;
+DROP TRIGGER IF EXISTS before_insert_tbl_acm;
 DELIMITER $$
 
 CREATE TRIGGER before_insert_tbl_acm
@@ -159,8 +159,8 @@ CREATE TABLE `tbl_cart` (
                             `cart_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'PRIMARY KEY AUTO_INCREMENT',
                             `acm_id` INT NOT NULL COMMENT '숙소 정보',
                             `user_code` INT NOT NULL COMMENT '회원 고유 ID',
-                            `unit_price` INT NOT NULL COMMENT '단가',
-                            `total_price` INT NOT NULL COMMENT '총 가격',
+                            `unit_price` INT NOT NULL DEFAULT 0 COMMENT '장바구니 개별금액',
+                            `total_price` INT NOT NULL DEFAULT 0 COMMENT '장바구니 총 가격',
                             CONSTRAINT `FK_tbl_acm_TO_tbl_cart_1` FOREIGN KEY (`acm_id`) REFERENCES `tbl_acm` (`acm_id`),
                             CONSTRAINT `FK_tbl_user_TO_tbl_cart_1` FOREIGN KEY (`user_code`) REFERENCES `tbl_user` (`user_code`)
 );
