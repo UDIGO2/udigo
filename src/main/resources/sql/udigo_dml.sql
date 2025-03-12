@@ -1,38 +1,38 @@
-INSERT INTO tbl_user (user_code, user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
+INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked)
 VALUES (1,'admin', 'admin', 'admin@naver.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', NULL, NOW(), TRUE, FALSE);
 
-INSERT INTO tbl_user (user_code, user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
-VALUES (101,'user01', '김건우', 'gunwoo@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '010-3868-8803', NOW(), FALSE, FALSE);
+INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked)
+VALUES (101,'member01', '김건우', 'gunwoo@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '010-3868-8803', NOW(), FALSE, FALSE);
 
-INSERT INTO tbl_user (user_code, user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
-VALUES (102,'user02', '김나영', 'nayoung@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '016-3494-8126', NOW(), FALSE, FALSE);
+INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked)
+VALUES (102,'member02', '김나영', 'nayoung@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '016-3494-8126', NOW(), FALSE, FALSE);
 
-INSERT INTO tbl_user (user_code, user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
-VALUES (103,'user03', '박송이', 'songyi@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '011-1190-2653', NOW(), FALSE, FALSE);
+INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked)
+VALUES (103,'member03', '박송이', 'songyi@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '011-1190-2653', NOW(), FALSE, FALSE);
 
-INSERT INTO tbl_user (user_code, user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
-VALUES (104,'user04', '박성현', 'sunghyun@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '011-2245-7620', NOW(), FALSE, FALSE);
+INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked)
+VALUES (104,'member04', '박성현', 'sunghyun@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '011-2245-7620', NOW(), FALSE, FALSE);
 
-INSERT INTO tbl_user (user_code, user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
-VALUES (105,'user05', '조수민', 'sumin@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '011-7339-7957', NOW(), FALSE, FALSE);
+INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked)
+VALUES (105,'member05', '조수민', 'sumin@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '011-7339-7957', NOW(), FALSE, FALSE);
 
-INSERT INTO tbl_user (user_code, user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
-VALUES (106,'user06', '허아름', 'areum@daum.net', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '016-4814-3905', NOW(), FALSE, FALSE);
+INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked)
+VALUES (106,'member06', '허아름', 'areum@daum.net', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '016-4814-3905', NOW(), FALSE, FALSE);
 
 INSERT INTO tbl_roles (role_code, role_name) VALUES (1, 'ADMIN');
-INSERT INTO tbl_roles (role_code, role_name) VALUES (2, 'USER');
+INSERT INTO tbl_roles (role_code, role_name) VALUES (2, 'member');
 
-INSERT INTO tbl_user_roles (user_code, role_code) VALUES (1, 1);
-INSERT INTO tbl_user_roles (user_code, role_code) VALUES (1, 2);
+INSERT INTO tbl_member_roles (member_code, role_code) VALUES (1, 1);
+INSERT INTO tbl_member_roles (member_code, role_code) VALUES (1, 2);
 
-INSERT INTO tbl_user_roles (user_code, role_code) VALUES (101, 2);
-INSERT INTO tbl_user_roles (user_code, role_code) VALUES (102, 2);
-INSERT INTO tbl_user_roles (user_code, role_code) VALUES (103, 2);
-INSERT INTO tbl_user_roles (user_code, role_code) VALUES (104, 2);
-INSERT INTO tbl_user_roles (user_code, role_code) VALUES (105, 2);
-INSERT INTO tbl_user_roles (user_code, role_code) VALUES (106, 2);
+INSERT INTO tbl_member_roles (member_code, role_code) VALUES (101, 2);
+INSERT INTO tbl_member_roles (member_code, role_code) VALUES (102, 2);
+INSERT INTO tbl_member_roles (member_code, role_code) VALUES (103, 2);
+INSERT INTO tbl_member_roles (member_code, role_code) VALUES (104, 2);
+INSERT INTO tbl_member_roles (member_code, role_code) VALUES (105, 2);
+INSERT INTO tbl_member_roles (member_code, role_code) VALUES (106, 2);
 
-ALTER TABLE tbl_user AUTO_INCREMENT = 107;
+ALTER TABLE tbl_member AUTO_INCREMENT = 107;
 
 -- 📌 서울/경기 호텔 데이터
 INSERT INTO tbl_acm (acm_location, acm_name, acm_adress , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3, acm_photo4, acm_photo5)
@@ -336,8 +336,11 @@ VALUES ('경상','STX 리조트 문경','경상북도 문경시 농암면 청화
         'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/stx5.jpg'
        );
 
+SELECT * FROM tbl_cart WHERE acm_id = 101;
+SELECT acm_id FROM tbl_pay;
+
 INSERT INTO tbl_pay (
-    pay_id, user_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
     pay_price, discount, pay_ref, transaction_id, pay_provider
 ) VALUES
 -- 1번 결제 데이터 (카카오페이, 결제완료)

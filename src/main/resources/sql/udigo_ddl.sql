@@ -29,6 +29,7 @@ DROP TABLE IF EXISTS `tbl_pay`;
 DROP TABLE IF EXISTS `tbl_cart`;
 DROP TABLE IF EXISTS `tbl_reservations`;
 DROP TABLE IF EXISTS `tbl_acm`;
+DROP TABLE IF EXISTS `tbl_user_roles`;
 DROP TABLE IF EXISTS `tbl_roles`;
 DROP TABLE IF EXISTS `tbl_login_his`;
 DROP TABLE IF EXISTS `tbl_pwd_his`;
@@ -157,7 +158,7 @@ CREATE TABLE tbl_cart (
                           cart_code INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '장바구니 고유 코드',
                           member_code INT NOT NULL COMMENT '회원 고유 코드',
                           acm_id INT NOT NULL COMMENT '숙소 관리 ID',
-                          FOREIGN KEY (member_code) REFERENCES tbl_member(member_id),
+                          FOREIGN KEY (member_code) REFERENCES tbl_member(member_code),
                           FOREIGN KEY (acm_id) REFERENCES tbl_acm(acm_id)
 );
 
@@ -248,7 +249,7 @@ CREATE TABLE `tbl_member_roles` (
                                   `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '인조식별자',
                                   `member_code` INT NOT NULL COMMENT '회원 고유코드',
                                   `role_code` INT NOT NULL COMMENT ' 부여된 권한 코드',
-                                  PRIMARY KEY (`member_code`, `role_code`),
+                                  UNIQUE KEY `UK_member_role` (`member_code`, `role_code`),
                                   CONSTRAINT `FK_tbl_member_TO_tbl_member_roles_1` FOREIGN KEY (`member_code`) REFERENCES `tbl_member` (`member_code`),
                                   CONSTRAINT `FK_tbl_roles_TO_tbl_member_roles_1` FOREIGN KEY (`role_code`) REFERENCES `tbl_roles` (`role_code`)
 );
