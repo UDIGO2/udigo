@@ -1,22 +1,22 @@
-INSERT INTO tbl_user (user_code,user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
+INSERT INTO tbl_user (user_code, user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
 VALUES (1,'admin', 'admin', 'admin@naver.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', NULL, NOW(), TRUE, FALSE);
 
-INSERT INTO tbl_user (user_code,user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
+INSERT INTO tbl_user (user_code, user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
 VALUES (101,'user01', '김건우', 'gunwoo@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '010-3868-8803', NOW(), FALSE, FALSE);
 
-INSERT INTO tbl_user (user_code,user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
+INSERT INTO tbl_user (user_code, user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
 VALUES (102,'user02', '김나영', 'nayoung@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '016-3494-8126', NOW(), FALSE, FALSE);
 
-INSERT INTO tbl_user (user_code,user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
+INSERT INTO tbl_user (user_code, user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
 VALUES (103,'user03', '박송이', 'songyi@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '011-1190-2653', NOW(), FALSE, FALSE);
 
-INSERT INTO tbl_user (user_code,user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
+INSERT INTO tbl_user (user_code, user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
 VALUES (104,'user04', '박성현', 'sunghyun@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '011-2245-7620', NOW(), FALSE, FALSE);
 
-INSERT INTO tbl_user (user_code,user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
+INSERT INTO tbl_user (user_code, user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
 VALUES (105,'user05', '조수민', 'sumin@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '011-7339-7957', NOW(), FALSE, FALSE);
 
-INSERT INTO tbl_user (user_code,user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
+INSERT INTO tbl_user (user_code, user_id, user_name, email, password, phone_no, join_date, email_verified, is_locked)
 VALUES (106,'user06', '허아름', 'areum@daum.net', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '016-4814-3905', NOW(), FALSE, FALSE);
 
 INSERT INTO tbl_roles (role_code, role_name) VALUES (1, 'ADMIN');
@@ -344,10 +344,22 @@ INSERT INTO tbl_pay (
 (1, 101, 1, '카드결제', 1, '카드', '2025-03-11 14:25:00',
  150000, 5000, 0, 'TID1234567890', 'KAKAO'),
 
+(2, 102, 5, '간편결제', 1, '네이버페이', '025-03-14 11:30:00',
+ 130000, 5000, 0, 'TID1122334455', 'NAVER'),
+
 -- 2번 결제 데이터 (토스페이, 결제취소)
-(2, 102, 2, '간편결제', 2, '계좌이체', '2025-03-12 10:10:00',
+(3, 103, 2, '간편결제', 2, '계좌이체', '2025-03-12 10:10:00',
  200000, 5000, 200000, 'TID0987654321', 'TOSS'),
 
 -- 3번 결제 데이터 (이니시스, 환불완료)
-(3, 103, 3, '카드결제', 3, '카드', '2025-03-13 18:45:00',
- 180000, 5000, 180000, 'TID5678901234', 'INICIS');
+(4, 104, 6, '카드결제', 2, '신한카드', '2025-03-15 16:20:00',
+ 170000, 5000, 170000, 'TID5566778899', 'SHINHAN'),
+
+(5, 105, 3, '카드결제', 3, '카드', '2025-03-13 18:45:00',
+ 180000, 5000, 180000, 'TID5678901234', 'INICIS'),
+
+(6, 106, 4, '카드결제', 3, '카카오페이', '2025-03-16 09:00:00',
+ 140000, 5000, 140000, 'TID7788990011', 'KAKAO');
+
+
+
