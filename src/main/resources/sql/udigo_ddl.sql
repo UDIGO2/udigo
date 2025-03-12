@@ -166,12 +166,18 @@ CREATE TABLE `tbl_cart` (
 );
 
 CREATE TABLE `tbl_pay` (
-                           `pay_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'PRIMARY KEY AUTO_INCREMENT',
-                           `user_code` INT NOT NULL COMMENT '회원 정보',
-                           `cart_id` INT NOT NULL COMMENT '장바구니에 담긴 숙소 및 날짜/인원 등의 정보',
-                           `pay_method` ENUM('간편결제','계좌이체') NOT NULL COMMENT 'API로 간편결제와 계좌이체 두 개 구현',
-                           CONSTRAINT `FK_tbl_user_TO_tbl_pay_1` FOREIGN KEY (`user_code`) REFERENCES `tbl_user` (`user_code`),
-                           CONSTRAINT `FK_tbl_cart_TO_tbl_pay_1` FOREIGN KEY (`cart_id`) REFERENCES `tbl_cart` (`cart_id`)
+                           `pay_id`	INT	NOT NULL	COMMENT '거래 내역 고유 번호(기본 키)',
+                           `user_code`	INT	NOT NULL	COMMENT '회원 정보',
+                           `acm_id`	INT	NOT NULL	COMMENT '숙소 관리 ID',
+                           `pay_method`	VARCHAR(30)	NOT NULL	COMMENT ' 간편결제 ,  카드결제 ',
+                           `pay_status`	INT	NOT NULL	COMMENT '현재 거래 상태(결제취소, 결제완료 등)',
+                           `pay_type`	VARCHAR(30)	NOT NULL	COMMENT '결제수단 정보(카드사 등)',
+                           `pay_date`	DATETIME	NOT NULL	COMMENT '거래가 발생한 일시',
+                           `pay_price`	INT	NOT NULL	COMMENT '결제한 금액',
+                           `discount`	INT	NOT NULL	DEFAULT 0	COMMENT '회원가입 시 발생하는 쿠폰의 할인 금액',
+                           `pay_ref`	INT	NOT NULL	DEFAULT 0	COMMENT '환불된 금액',
+                           `transaction_id`	VARCHAR(30)	NOT NULL	COMMENT 'PG사에서 제공되는 거래고유 ID',
+                           `pay_provider`	VARCHAR(30)	NOT NULL	COMMENT '결제 서비스 제공업체'
 );
 
 CREATE TABLE `tbl_login_his` (
@@ -228,20 +234,6 @@ CREATE TABLE `tbl_board_comments` (
 );
 
 
-
-CREATE TABLE `tbl_pay_res` (
-                               `pay_res_ID` INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '거래-예약 연동 테이블 고유 키',
-                               `pay_id` INT NOT NULL COMMENT '결제 정보',
-                               `resv_id` INT NULL COMMENT '예약 고유 번호',
-                               `pay_status` VARCHAR(30) NOT NULL COMMENT '결제 상태',
-                               `pay_type` VARCHAR(30) NOT NULL COMMENT '결제 방법',
-                               `pay_date` DATETIME NOT NULL COMMENT '결제 일시',
-                               `pay_price` INT NOT NULL COMMENT '결제 금액',
-                               `discount` INT NULL DEFAULT 0 COMMENT '할인 금액',
-                               `pay_ref` INT NOT NULL COMMENT '참조 번호',
-                               CONSTRAINT `FK_tbl_pay_TO_tbl_pay_res_1` FOREIGN KEY (`pay_id`) REFERENCES `tbl_pay` (`pay_id`),
-                               CONSTRAINT `FK_tbl_reservations_TO_tbl_pay_res_1` FOREIGN KEY (`resv_id`) REFERENCES `tbl_reservations` (`resv_id`)
-);
 
 CREATE TABLE `tbl_reviews` (
                                `review_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '후기 고유 번호',

@@ -336,6 +336,18 @@ VALUES ('경상','STX 리조트 문경','경상북도 문경시 농암면 청화
         'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/stx5.jpg'
        );
 
+INSERT INTO tbl_pay (
+    pay_id, user_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES
+-- 1번 결제 데이터 (카카오페이, 결제완료)
+(1, 101, 1, '카드결제', 1, '카드', '2025-03-11 14:25:00',
+ 150000, 5000, 0, 'TID1234567890', 'KAKAO'),
 
+-- 2번 결제 데이터 (토스페이, 결제취소)
+(2, 102, 2, '간편결제', 2, '계좌이체', '2025-03-12 10:10:00',
+ 200000, 5000, 200000, 'TID0987654321', 'TOSS'),
 
-
+-- 3번 결제 데이터 (이니시스, 환불완료)
+(3, 103, 3, '카드결제', 3, '카드', '2025-03-13 18:45:00',
+ 180000, 5000, 180000, 'TID5678901234', 'INICIS');
