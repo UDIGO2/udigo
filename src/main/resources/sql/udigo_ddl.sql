@@ -69,7 +69,7 @@ CREATE TABLE `tbl_pwd_his` (
 CREATE TABLE `tbl_acm` (
                            `acm_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '숙소 관리 ID',
                            `acm_name` VARCHAR(255) NOT NULL COMMENT '숙소명',
-                           `acm_adress` VARCHAR(255) NOT NULL COMMENT '숙소 상세 주소',
+                           `acm_address` VARCHAR(255) NOT NULL COMMENT '숙소 상세 주소',
                            `acm_location` VARCHAR(255) NOT NULL COMMENT '숙소 위치',
                            `acm_price` BIGINT NOT NULL COMMENT '숙소 가격',
                            `acm_info` VARCHAR(255) NOT NULL COMMENT '숙소 설명',
@@ -205,6 +205,35 @@ CREATE TABLE `tbl_reservations` (
                                     CONSTRAINT `FK_tbl_acm_TO_tbl_reservations_1` FOREIGN KEY (`acm_id`) REFERENCES `tbl_acm` (`acm_id`),
                                     CONSTRAINT `FK_tbl_member_TO_tbl_reservations_1` FOREIGN KEY (`member_code`) REFERENCES `tbl_member` (`member_code`)
 );
+
+DELIMITER $$
+
+CREATE TRIGGER before_insert_tbl_reservations
+    BEFORE INSERT ON tbl_reservations
+    FOR EACH ROW
+BEGIN
+    DECLARE overlap_count INT;
+
+    -- 겹치는 예약이 있는지 확인
+    SELECT COUNT(*)
+    INTO overlap_count
+    FROM tbl_reservations
+    WHERE acm_id = NEW.acm_id
+      AND (
+        (NEW.check_in BETWEEN check_in AND check_out)
+            OR (NEW.check_out BETWEEN check_in AND check_out)
+            OR (check_in BETWEEN NEW.check_in AND NEW.check_out)
+            OR (check_out BETWEEN NEW.check_in AND NEW.check_out)
+        );
+
+    -- 겹치는 예약이 있으면 에러 발생
+    IF overlap_count > 0 THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = '예약 날짜가 겹칩니다.';
+    END IF;
+END $$
+
+DELIMITER ;
 
 
 
