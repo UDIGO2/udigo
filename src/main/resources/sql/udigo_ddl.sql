@@ -85,7 +85,7 @@ CREATE TABLE `tbl_acm` (
 );
 
 
--- # DROP TRIGGER IF EXISTS before_insert_tbl_acm;
+DROP TRIGGER IF EXISTS before_insert_tbl_acm;
 DELIMITER $$
 
 CREATE TRIGGER before_insert_tbl_acm
@@ -164,22 +164,22 @@ CREATE TABLE tbl_cart (
 
 
 CREATE TABLE `tbl_pay` (
-                           `pay_id`	INT	NOT NULL	COMMENT '거래 내역 고유 번호(기본 키)',
-                           `member_code`	INT	NOT NULL	COMMENT '회원 고유 코드',
-                           `acm_id`	INT	NOT NULL	COMMENT '숙소 관리 ID',
-                           `pay_method`	VARCHAR(30)	NOT NULL	COMMENT '간편결제, 카드결제',
-                           `pay_status`	INT	NOT NULL	COMMENT '현재 거래 상태(결제취소, 결제완료 등)',
-                           `pay_type`	VARCHAR(30)	NOT NULL	COMMENT '결제수단 정보(카드사 등)',
-                           `pay_date`	DATETIME	NOT NULL	COMMENT '거래가 발생한 일시',
-                           `pay_price`	INT	NOT NULL	COMMENT '결제한 금액',
-                           `discount`	INT	NOT NULL	DEFAULT 0	COMMENT '회원가입 시 발생하는 쿠폰의 할인 금액',
-                           `pay_ref`	INT	NOT NULL	DEFAULT 0	COMMENT '환불된 금액',
-                           `transaction_id`	VARCHAR(30)	NOT NULL	COMMENT 'PG사에서 제공되는 거래고유 ID',
-                           `pay_provider`	VARCHAR(30)	NOT NULL	COMMENT '결제 서비스 제공업체',
+                           `pay_id` INT NOT NULL AUTO_INCREMENT COMMENT '거래 내역 고유 번호(기본 키)',
+                           `member_code` INT NOT NULL COMMENT '회원 고유 코드',
+                           `acm_id` INT NOT NULL COMMENT '숙소 관리 ID',
+                           `pay_method` VARCHAR(30) NOT NULL COMMENT '간편결제, 카드결제',
+                           `pay_status` ENUM('결제완료', '결제취소', '환불완료') NOT NULL COMMENT '현재 거래 상태(결제취소, 결제완료 등)',
+                           `pay_type` VARCHAR(30) NOT NULL COMMENT '결제수단 정보(카드사 등)',
+                           `pay_date` DATETIME NOT NULL COMMENT '거래가 발생한 일시',
+                           `pay_price` INT NOT NULL COMMENT '결제한 금액',
+                           `discount` INT NOT NULL DEFAULT 0 COMMENT '회원가입 시 발생하는 쿠폰의 할인 금액',
+                           `pay_ref` INT NULL DEFAULT 0 NULL COMMENT '환불된 금액 (NULL 허용)',
+                           `transaction_id` VARCHAR(30) NOT NULL COMMENT 'PG사에서 제공되는 거래고유 ID',
+                           `pay_provider` VARCHAR(30) NOT NULL COMMENT '결제 서비스 제공업체',
+                           PRIMARY KEY (`pay_id`),
                            CONSTRAINT `FK_tbl_member_TO_tbl_pay_1` FOREIGN KEY (`member_code`) REFERENCES `tbl_member` (`member_code`),
-                           CONSTRAINT `FK_tbl_acm_TO_tbl_pay_1` FOREIGN KEY (`acm_id`) REFERENCES `tbl_cart` (`acm_id`)
+                           CONSTRAINT `FK_tbl_acm_TO_tbl_pay_1` FOREIGN KEY (`acm_id`) REFERENCES `tbl_acm` (`acm_id`)
 );
-
 CREATE TABLE `tbl_login_his` (
                                  `login_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '로그인 이력 고유 ID',
                                  `member_code` INT NOT NULL COMMENT '로그인한 회원식별코드',
