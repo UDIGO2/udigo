@@ -336,8 +336,6 @@ VALUES ('경상','STX 리조트 문경','경상북도 문경시 농암면 청화
         'https://github.com/UDIGO2/udigo-midea/blob/main/images/gueongsang/stx5.jpg'
        );
 
-SELECT * FROM tbl_cart WHERE acm_id = 101;
-SELECT acm_id FROM tbl_pay;
 
 INSERT INTO tbl_pay (
     pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
