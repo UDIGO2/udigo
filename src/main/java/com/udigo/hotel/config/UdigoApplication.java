@@ -1,4 +1,4 @@
-package com.ohgiraffers.udigo;
+package com.udigo.hotel.config;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
