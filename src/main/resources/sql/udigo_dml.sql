@@ -375,7 +375,6 @@ INSERT INTO tbl_pay (
 (6, 106, 401, '카드결제', 3, '카카오페이', '2025-03-16 09:00:00',
  140000, 5000, 140000, 'TID7788990011', 'KAKAO');
 
-
 -- 게시판 관련 dml
 
 INSERT INTO `tbl_board_posts` (`member_code`, `board_type`, `title`, `content`, `created_at`, `updated_at`) VALUES
@@ -410,9 +409,9 @@ INSERT INTO `tbl_board_comments` (`post_id`,`content`,`created_at`) VALUES
 INSERT INTO `tbl_reservations` (acm_id, member_code, check_in, check_out, guest_count, is_resv,created_at) VALUES
 (101,101,'2025-03-11','2025-03-14',3,true,NOW()),
 (101,101,'2025-03-15','2025-03-19',3,true,NOW()),
-(101,102,'2025-03-18','2025-03-20',3,true,NOW()), #넣으려면 주석
+# (101,102,'2025-03-18','2025-03-20',3,true,NOW()), #넣으려면 주석
 (102,103,'2025-03-11','2025-03-14',3,true,NOW()),
 (103,104,'2025-03-11','2025-03-14',3,true,NOW()),
 (104,104,'2025-03-11','2025-03-14',3,true,NOW()),
-(104,105,'2025-03-13','2025-03-15',3,true,NOW()), #넣으려면 주석
+# (104,105,'2025-03-13','2025-03-15',3,true,NOW()), #넣으려면 주석
 (105,105,'2025-03-11','2025-03-14',3,true,NOW());
