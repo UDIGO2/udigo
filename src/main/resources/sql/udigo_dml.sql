@@ -434,3 +434,8 @@ INSERT INTO `tbl_reviews` (member_code, acm_id, resv_id, content, written_at) VA
 (103,304,2,'후기 작성 내용 입니다.14',now()),
 (103,305,3,'후기 작성 내용 입니다.15',now());
 
+SELECT * FROM tbl_reservations
+WHERE member_code = 101
+  AND check_out > '2025-03-13 16:30:00'
+  AND is_resv = 1;
+

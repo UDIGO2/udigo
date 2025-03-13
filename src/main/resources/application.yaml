@@ -18,3 +18,9 @@ spring:
 
   thymeleaf:
     cache: false  # Thymeleaf 캐시 비활성화 (HTML 변경 사항 즉시 반영)
+## mybatis config
+mybatis:
+  mapper-locations: mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.udigo.hotel
