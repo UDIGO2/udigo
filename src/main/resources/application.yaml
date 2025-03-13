@@ -7,20 +7,38 @@ spring:
     username: udigo  # MySQL 사용자명
     password: udigo  # MySQL 비밀번호 (설정한 값으로 변경)
     driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL 드라이버 설정
-
-  jpa:
-    hibernate:
-      ddl-auto: update  # (create, update, validate, none 중 선택)
-    properties:
-      hibernate:
-        format_sql: true  # SQL 쿼리 예쁘게 출력
-    show-sql: true  # 실행되는 SQL을 콘솔에 출력
-
   thymeleaf:
-    cache: false  # Thymeleaf 캐시 비활성화 (HTML 변경 사항 즉시 반영)
-## mybatis config
+    prefix: classpath:/templates/  # 템플릿 파일 경로
+    suffix: .html                  # 확장자
+    mode: HTML
+    encoding: UTF-8
+    cache: false                   # Thymeleaf 캐시 비활성화 (HTML 변경 사항 즉시 반영)
+
+
+jpa:
+  hibernate:
+    ddl-auto: update  # (create, update, validate, none 중 선택)
+  properties:
+    hibernate:
+      format_sql: true  # SQL 쿼리 예쁘게 출력
+  show-sql: true  # 실행되는 SQL을 콘솔에 출력
+
 mybatis:
-  mapper-locations: mapper/**/*.xml
   configuration:
-    map-underscore-to-camel-case: true
-  type-aliases-package: com.udigo.hotel
+    map-underscore-to-camel-case: true  # DB의 snake_case를 camelCase로 자동 변환
+    default-fetch-size: 100
+    default-statement-timeout: 30
+  mapper-locations: classpath:mapper/*.xml  # MyBatis 매퍼 XML 경로
+
+logging:
+  level:
+    org.mybatis: DEBUG  # MyBatis SQL 로그 출력
+    jdbc.sqlonly: DEBUG
+    jdbc.sqltiming: DEBUG
+    jdbc.resultsettable: DEBUG
+    jdbc.audit: DEBUG
+
+portone:
+  api-key: "2251047428401785"
+  api-secret: "L90uRj0lhzhp5i8lx7gIOLDienExUpT4bFxZh8L2yieoWF5zIUxCTF3KFakRUfBqEBnb8FCXIhKTMTDa"
+  base-url: "https://api.iamport.kr"

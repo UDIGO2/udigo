@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>거래 내역 조회</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="container">
+  <h2 class="title">거래 내역 조회</h2>
+  <table class="payment-table">
+    <thead>
+    <tr>
+      <th>결제 날짜</th>
+      <th>호텔/숙소명</th>
+      <th>인원</th>
+      <th>이용기간</th>
+      <th>이용날짜</th>
+      <th>결제금액</th>
+    </tr>
+    </thead>
+    <body>
+    <tr th:each="pay : ${payList}">
+      <td th:text="${pay.payDate}"></td>
+      <td th:text="${pay.acmName}">숙소명</td>
+      <td th:text="${pay.peopleCount} + '인'"></td>
+      <td th:text="${pay.stayDuration + '일'}"></td>
+      <td th:text="${pay.startDate + ' - ' + pay.endDate}"></td>
+      <td th:text="${#numbers.formatInteger(pay.payPrice, 3, 'COMMA')}"></td>
+    </tr>
+    </body>
+  </table>
+</div>

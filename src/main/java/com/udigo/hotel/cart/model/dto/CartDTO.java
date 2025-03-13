@@ -1,24 +1,22 @@
 package com.udigo.hotel.cart.model.dto;
-
 import com.udigo.hotel.acm.model.dto.AcmDTO;
-//import lombok.Data;
 
-//@Data
 public class CartDTO {
     private int cartCode;
     private int memberCode;
     private int acmId;
-
     private AcmDTO acm; // 숙소 상세정보
+    private int  Quantity;
 
     public CartDTO() {
     }
 
-    public CartDTO(int cartCode, int memberCode, int acmId, AcmDTO acm) {
+    public CartDTO(int cartCode, int memberCode, int acmId, AcmDTO acm, int quantity) {
         this.cartCode = cartCode;
         this.memberCode = memberCode;
         this.acmId = acmId;
         this.acm = acm;
+        Quantity = quantity;
     }
 
     public int getCartCode() {
@@ -53,6 +51,14 @@ public class CartDTO {
         this.acm = acm;
     }
 
+    public int getQuantity() {
+        return Quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        Quantity = quantity;
+    }
+
     @Override
     public String toString() {
         return "CartDTO{" +
@@ -60,6 +66,7 @@ public class CartDTO {
                 ", memberCode=" + memberCode +
                 ", acmId=" + acmId +
                 ", acm=" + acm +
+                ", Quantity=" + Quantity +
                 '}';
     }
 }

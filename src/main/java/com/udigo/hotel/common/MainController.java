@@ -11,29 +11,21 @@ public class MainController {
         return "main/main";  // templates/main/main.html을 반환
     }
 
-    /*@GetMapping("/mypage")  // 마이페이지 요청
-    public String myPage() {
-        return "member/mypage";  // templates/mypage.html 반환
-    }*/
-}
+    // 결제 페이지
+    @GetMapping("/payment")
+    public String paymentPage() {
+        return "pay/payment";
+    }
 
-//
-//package com.ohgiraffers.udigo.common.main.controller;
-//
-//import org.springframework.stereotype.Controller;
-//import org.springframework.web.bind.annotation.GetMapping;
-//
-//@Controller
-//public class MainController {
-//
-//    @GetMapping("/")
-//    public String Main() {
-//        return "main"; // main.html 또는 main.jsp가 있어야 함
-//    }
-//
-////    @GetMapping("/mypage")  // 마이페이지 요청
-////    public String myPage() {
-////        return "member/mypage";  // templates/mypage.html 반환
-////    }
-//
-//}
+    // 회원별 결제 내역 조회
+    @GetMapping("/payList")
+    public String payListPage() {
+        return "pay/paylist";
+    }
+
+    @GetMapping("/cart-main")
+    public String cart() {
+        return "cartMain";  // 다른 뷰로 변경
+    }
+
+}
