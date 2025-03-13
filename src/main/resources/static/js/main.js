@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+
     // 좋아요 버튼 기능
     const likeBtns = document.querySelectorAll('.like-btn');
     likeBtns.forEach(btn => {
