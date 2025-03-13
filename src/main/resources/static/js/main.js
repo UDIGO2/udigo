@@ -1,25 +1,41 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const navBar = document.querySelector(".nav-links");
+    const navBar = document.querySelector(".navbar");
     const subMenus = document.querySelectorAll(".nav-links ul");
 
-    // 배경이 전체 너비로 확장될 컨테이너 생성
     const dropdownBackground = document.createElement("div");
     dropdownBackground.classList.add("dropdown-background");
 
-    // 네비게이션 바 바로 아래에 배경 추가
-    navBar.appendChild(dropdownBackground);
+    document.body.appendChild(dropdownBackground);
 
     navBar.addEventListener("mouseenter", function () {
         dropdownBackground.style.display = "block";
+        setTimeout(() => {
+            dropdownBackground.classList.add("active");
+        }, 50);
+
         subMenus.forEach(menu => {
             menu.style.display = "block";
+            setTimeout(() => {
+                menu.classList.add("active");
+            }, 50);
         });
     });
 
     navBar.addEventListener("mouseleave", function () {
-        dropdownBackground.style.display = "none";
+        dropdownBackground.classList.remove("active");
         subMenus.forEach(menu => {
-            menu.style.display = "none";
+            menu.classList.remove("active");
         });
+
+        setTimeout(() => {
+            if (!navBar.matches(":hover")) {
+                dropdownBackground.style.display = "none";
+                subMenus.forEach(menu => {
+                    menu.style.display = "none";
+                });
+            }
+        }, 300); // 애니메이션 지속 시간과 동일하게 설정함.
     });
 });
+// 헤더 여기까지
+

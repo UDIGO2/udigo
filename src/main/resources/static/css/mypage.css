@@ -161,7 +161,7 @@ section h3 {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* Footer */
+/* 푸터 css */
 footer {
     background-color: white;
     padding: 2rem;
@@ -205,8 +205,15 @@ footer {
     margin: 2rem auto 0;
     padding-top: 2rem;
     border-top: 1px solid #ddd;
+    font-size: 0.75rem;  /* 폰트 크기 더 작게 수정 */
+    line-height: 1.2;  /* 행간 좁히기 */
+    color: #888;  /* 작은 텍스트의 가독성을 위해 색상 약간 조정 */
 }
 
+.footer-bottom p {
+    margin: 0;  /* 문단 간격 제거 */
+    line-height: 1.2;  /* 행간 좁히기 */
+}
 .social-links {
     display: flex;
     gap: 1rem;
@@ -220,3 +227,4 @@ footer {
     display: inline-block;
     border: 1px solid #0056b3;
 }
+/* 푸터 css 끝 */

@@ -1,7 +1,29 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.udigo.hotel.acm.model.dao.AcmMapper">
+
+    <select id="selectInitialAcms" resultType="AcmDTO">
+        SELECT *
+        FROM
+            tbl_acm
+        ORDER BY
+            liked_count DESC
+        LIMIT 9
+    </select>
+
+    <select id="selectNextAcms" resultType="AcmDTO">
+        SELECT *
+        FROM
+            tbl_acm
+        ORDER BY
+            acm_location
+        LIMIT #{currentCount}, 9
+    </select>
+
+    <select id="getTotalAcmCount" resultType="int">
+        SELECT COUNT(*)
+        FROM
+            tbl_acm
+    </select>
 
 </mapper>

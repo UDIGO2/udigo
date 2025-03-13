@@ -4,21 +4,21 @@ import java.time.LocalDateTime;
 
 public class AcmDTO {
 
-    int acmId;
-    String acmName;
-    String acmAddress;
-    String acmLocation;
-    long acmPrice;
-    String acmInfo;
-    String acmPhone;
-    LocalDateTime acmDate;
-    int maxGuest;
-    int likedCount;
-    String acmPhoto1;
-    String acmPhoto2;
-    String acmPhoto3;
-    String acmPhoto4;
-    String acmPhoto5;
+    private int acmId;
+    private String acmName;
+    private String acmAddress;
+    private String acmLocation;
+    private long acmPrice;
+    private String acmInfo;
+    private String acmPhone;
+    private LocalDateTime acmDate;
+    private int maxGuest;
+    private int likedCount;
+    private String acmPhoto1;
+    private String acmPhoto2;
+    private String acmPhoto3;
+    private String acmPhoto4;
+    private String acmPhoto5;
 
     public AcmDTO() {
     }

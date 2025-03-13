@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ALL MENU</title>
+    <link rel="stylesheet" th:href="@{/css/acm.css}">
+
+</head>
+<body>
+<!-- 헤더 영역 시작 -->
+<div th:replace="~{fragments/header :: header}"></div>
+<script src="/js/main.js"></script>
+<!-- 헤더 영역 끝 -->
+
+<main class="main-content">
+    <h2 class="page-title">ALL HOTELS</h2>
+
+    <!-- 검색 영역 -->
+    <div class="search-container">
+        <div class="search-box">
+            <div class="search-item">
+                <i class="location-icon"></i>
+                <input type="text" placeholder="호텔이나 숙소 명을 검색해주세요.">
+            </div>
+            <div class="search-item">
+                <i class="calendar-icon"></i>
+                <input type="text" placeholder="날짜를 선택해주세요.">
+            </div>
+            <div class="search-item">
+                <i class="person-icon"></i>
+                <input type="text" placeholder="인원 수를 선택해주세요.">
+            </div>
+            <button type="button" class="search-btn">
+                <i class="search-icon"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 숙소 목록 영역 -->
+    <div class="hotel-list">
+        <div class="hotel-card" th:each="acm : ${acms}">
+            <div class="hotel-image">
+                <img th:src="${acm.imageUrl}" th:alt="${acm.name}">
+                <button class="like-btn">
+                    <i class="heart-icon"></i>
+                </button>
+            </div>
+            <div class="hotel-info">
+                <h3 th:text="${acm.name}">숙소 이름</h3>
+                <p th:text="${acm.description}">숙소 설명</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="view-more">
+        <button type="button" class="view-more-btn">VIEW MORE</button>
+    </div>
+</main>
+
+<!-- 푸터 영역 시작 -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script src="/js/main.js"></script>
+<!-- 푸터 영역 끝 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let currentCount = 9;
+
+        // 좋아요 버튼 초기화
+        function initializeLikeButtons() {
+            const likeBtns = document.querySelectorAll('.like-btn:not(.initialized)');
+            likeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                });
+                btn.classList.add('initialized');
+            });
+        }
+
+        // 초기 좋아요 버튼 설정
+        initializeLikeButtons();
+
+        // View More 버튼 기능
+        const viewMoreBtn = document.querySelector('.view-more-btn');
+        const acmList = document.querySelector('.hotel-list');
+
+        viewMoreBtn.addEventListener('click', function() {
+            fetch(`/acm/api/more?currentCount=${currentCount}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.acms.length > 0) {
+                        // 기존 목록 초기화
+                        acmList.innerHTML = '';
+
+                        // 새로운 숙소 목록 추가
+                        data.acms.forEach(acm => {
+                            const acmCard = `
+                                    <div class="hotel-card">
+                                        <div class="hotel-image">
+                                            <img src="${acm.imageUrl}" alt="${acm.name}">
+                                            <button class="like-btn">
+                                                <i class="heart-icon"></i>
+                                            </button>
+                                        </div>
+                                        <div class="hotel-info">
+                                            <h3>${acm.name}</h3>
+                                            <p>${acm.description}</p>
+                                        </div>
+                                    </div>
+                                `;
+                            acmList.insertAdjacentHTML('beforeend', acmCard);
+                        });
+
+                        // 새로 추가된 좋아요 버튼 초기화
+                        initializeLikeButtons();
+
+                        // 현재 표시된 숙소 수 업데이트
+                        currentCount += data.acms.length;
+
+                        // 더 보여줄 데이터가 없으면 버튼 숨기기
+                        if (!data.hasMore) {
+                            viewMoreBtn.style.display = 'none';
+                        }
+                    } else if (!data.success) {
+                        console.error('Error:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching accommodations:', error);
+                });
+        });
+
+        // 검색 기능 (옵션)
+        const searchForm = document.querySelector('.search-box');
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const keyword = document.querySelector('input[type="text"]').value;
+
+            fetch(`/acm/search?keyword=${encodeURIComponent(keyword)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // 검색 결과 처리
+                        console.log('Search results:', data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error searching:', error);
+                });
+        });
+    });
+</script>
+</body>
+</html>

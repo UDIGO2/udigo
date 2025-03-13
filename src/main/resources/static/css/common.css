@@ -1,4 +1,6 @@
-/* Reset CSS */
+/* Google Fonts - Noto Sans KR */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+/* 헤더 css*/
 * {
     margin: 0;
     padding: 0;
@@ -11,7 +13,7 @@ body {
     color: #333;
 }
 
-/* Navigation */
+/* 네비게이션바 */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -19,32 +21,31 @@ body {
     padding: 1rem 5%;
     background: #fff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: relative;
 }
 
-.logo {
-    font-size: 24px;
-    font-weight: bold;
+.logo {font-size: 24px;
+font-weight: bold;
 }
 
-/* 서브 메뉴 내려오는 것 관련(드롭다운) */
-
+/* 하위 메뉴 드롭다운 */
 .nav-links {
     display: flex;
     gap: 2rem;
-    position: absolute;
-    left: 200px;
+    margin-left: 50px;   /* <---- 로고 간격 조정 여기서 하시면 됩니다 */
 }
-
 
 .nav-links > li {
     list-style-type: none;
+    padding: 1rem 0;  /* 상하 패딩 추가 */
 }
 
 .nav-links a {
     text-decoration: none;
     color: #333;
+    font-size: 17px;   /* 폰트 사이즈 키움*/
+    font-weight: 550;  /* 폰트 두께 키웠음 */
 }
-
 
 .nav-links > li {
     position: relative;
@@ -52,7 +53,6 @@ body {
     cursor: pointer;
 }
 
-
 .nav-links ul {
     position: absolute;
     top: 100%;
@@ -62,40 +62,55 @@ body {
     list-style: none;
     text-align: center;
     z-index: 100;
+    background: transparent;
+    /* 상위 메뉴와의 간격 조정 여기서 하시면 됩니다. 위 카테고리와 하위 메뉴 안겹치게 간격 설정*/
+    padding-top: 20px;
+    transition: all 0.3s ease;
 }
 
 .nav-links ul li {
-    padding: 8px 12px;
-    white-space: nowrap;  /* 텍스트 줄바꿈 방지 */
+    padding: 12px 20px;
+    white-space: nowrap;
+    color: white;
+    font-weight: 400;
+    transform: translateY(-10px);
+    transition: transform 0.3s ease;
 }
 
-/* 회색 배경 (전체 너비 적용), 클래스는 main.js에서 추가됨 */
+.nav-links ul.active {
+    display: block;
+    opacity: 1;
+}
+
+.nav-links ul.active li {
+    transform: translateY(0);
+}
+
+/* 회색 배경 (전체 너비 적용 완료) */
 .dropdown-background {
-    position: absolute;
-    top: 100%;
+    position: fixed;
+    top: 72px;
     left: 0;
-    width: 100vw;
-    height: 200px; /* 필요하면 조정 */
-    background-color: gray;
+    width: 100%;
+    height: 200px;
+    background-color: lightgrey;
     display: none;
     z-index: 99;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
 }
 
-/* 하위 메뉴 스타일 */
-.nav-links ul {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    display: none;
-    list-style: none;
-    text-align: center;
-    z-index: 100;
+.dropdown-background.active {
+    opacity: 1;
+    transform: translateY(0);
+    display: block;
 }
 
 .hidden {
     display: none !important;
 }
+/* 헤더 */
 
 
 /* Hero Banner */
