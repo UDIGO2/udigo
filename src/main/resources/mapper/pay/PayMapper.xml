@@ -1,0 +1,22 @@
+<mapper namespace="com.udigo.hotel.mapper.PayMapper">
+
+    <insert id="insertPay" parameterType="com.udigo.hotel.dto.PayDTO">
+        INSERT INTO tbl_pay(
+        member_code, acm_id, pay_method, pay_status, pay_type,
+        pay_date, pay_price, discount, transaction_id, pay_provider
+        )
+        VALUES (
+        #{memberCode}, #{acmId}, #{payMethod}, #{payStatus}, #{payType},
+        NOW(), #{payPrice}, #{discount}, #{transactionId}, #{payProvider}
+        )
+    </insert>
+
+    <select id="selectPayByMemberCode"
+            parameterType="int"
+            resultType="com.udigo.hotel.dto.PayDTO">
+        SELECT *
+        FROM tbl_pay
+        WHERE member_code = #{memberCode}
+    </select>
+
+</mapper>
