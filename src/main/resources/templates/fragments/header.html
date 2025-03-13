@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
@@ -10,7 +10,7 @@
   <nav class="navbar">
     <div class="logo">UDIGO</div>
     <ul class="nav-links">
-      <li><a href="#">Hotel</a>
+      <li><a href="/acm/list">Hotel</a>
       </li>
       <li><a href="#">Board</a>
         <ul>
@@ -19,7 +19,7 @@
           <li>FAQ</li>
         </ul>
       </li>
-      <li><a href="#">Reservations</a>
+      <li><a href="reservations/past">Reservations</a>
         <ul>
           <li>내 예약</li>
           <li>예약 정보</li>
@@ -35,6 +35,5 @@
     </div>
   </nav>
 </header>
-
 </body>
 </html>

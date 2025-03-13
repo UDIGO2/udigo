@@ -6,27 +6,27 @@
     <link rel="stylesheet" th:href="@{/css/list.css}">
 </head>
 <body>
-<!-- 헤더 영역 시작 -->
-<div th:replace="~{fragments/header :: header}"></div>
-<!-- 헤더 영역 끝 -->
+<!-- 헤더 영역 -->
+<header th:replace="~{fragments/header :: header}"></header>
 
+<!-- 메인 컨텐츠 -->
 <main class="main-content">
     <h2 class="page-title">ALL HOTELS</h2>
 
     <!-- 검색 영역 -->
     <div class="search-container">
         <div class="search-box">
-            <div class="search-item">
+            <div class="search-item" id="location-filter">
                 <i class="location-icon"></i>
-                <input type="text" placeholder="호텔이나 숙소 명을 검색해주세요.">
+                <input type="text" placeholder="지역을 선택해주세요." readonly>
             </div>
-            <div class="search-item">
+            <div class="search-item" id="date-filter">
                 <i class="calendar-icon"></i>
-                <input type="text" placeholder="날짜를 선택해주세요.">
+                <input type="text" placeholder="날짜를 선택해주세요." readonly>
             </div>
-            <div class="search-item">
+            <div class="search-item" id="guest-filter">
                 <i class="person-icon"></i>
-                <input type="text" placeholder="인원 수를 선택해주세요.">
+                <input type="text" placeholder="인원 수를 선택해주세요." readonly>
             </div>
             <button type="button" class="search-btn">
                 <i class="search-icon"></i>
@@ -55,9 +55,8 @@
     </div>
 </main>
 
-<!-- 푸터 영역 시작 -->
-<div th:replace="~{fragments/footer :: footer}"></div>
-<!-- 푸터 영역 끝 -->
+<!-- 푸터 영역 -->
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 
 <!-- JavaScript는 한 번만 포함 -->
 <script src="/js/main.js"></script>
@@ -65,7 +64,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         let currentCount = 9;
 
-        // 좋아요 버튼 초기화
+        // Initialize like buttons
         function initializeLikeButtons() {
             const likeBtns = document.querySelectorAll('.like-btn:not(.initialized)');
             likeBtns.forEach(btn => {
@@ -76,10 +75,129 @@
             });
         }
 
-        // 초기 좋아요 버튼 설정
+        // Initial like button setup
         initializeLikeButtons();
 
-        // View More 버튼 기능
+        // Create modal function
+        function createModal(title, content, callback) {
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                    <div class="modal-header">${title}</div>
+                    <div class="modal-content">${content}</div>
+                    <div class="modal-footer">
+                        <button class="modal-confirm-btn">확인</button>
+                    </div>
+                `;
+            document.body.appendChild(modal);
+
+            modal.querySelector('.modal-confirm-btn').addEventListener('click', function() {
+                callback();
+                modal.classList.remove('active');
+            });
+
+            return modal;
+        }
+
+        // Location selection modal
+        const locationModal = createModal('지역 선택', `
+                <div>
+                    <label><input type="radio" name="location" value="서울/경기"> 서울/경기</label><br>
+                    <label><input type="radio" name="location" value="강원도"> 강원도</label><br>
+                    <label><input type="radio" name="location" value="경상북도/남도"> 경상북도/남도</label><br>
+                    <label><input type="radio" name="location" value="전라북도/남도"> 전라북도/남도</label><br>
+                    <label><input type="radio" name="location" value="충청북도/남도"> 충청북도/남도</label><br>
+                    <label><input type="radio" name="location" value="제주"> 제주</label>
+                </div>
+            `, function() {
+            const selectedLocation = document.querySelector('input[name="location"]:checked');
+            if (selectedLocation) {
+                document.querySelector('#location-filter input').value = selectedLocation.value;
+            }
+        });
+
+        // Date selection modal
+        const dateModal = createModal('날짜 선택', `
+                <input type="date" id="date-select" style="width: 100%;">
+            `, function() {
+            const selectedDate = document.getElementById('date-select').value;
+            document.querySelector('#date-filter input').value = selectedDate;
+        });
+
+        // Guest selection modal
+        const guestModal = createModal('인원 선택', `
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                    <label><input type="checkbox" value="1"> 1명</label>
+                    <label><input type="checkbox" value="2"> 2명</label>
+                    <label><input type="checkbox" value="3"> 3명</label>
+                    <label><input type="checkbox" value="4"> 4명</label>
+                    <label><input type="checkbox" value="5"> 5명</label>
+                    <label><input type="checkbox" value="6"> 6명</label>
+                </div>
+            `, function() {
+            const selectedGuests = Array.from(document.querySelectorAll('#guest-filter input[type="checkbox"]:checked'))
+                .map(checkbox => checkbox.value)
+                .join(', ');
+            document.querySelector('#guest-filter input').value = selectedGuests;
+        });
+
+        // Filter click events
+        document.getElementById('location-filter').addEventListener('click', function() {
+            locationModal.classList.add('active');
+        });
+
+        document.getElementById('date-filter').addEventListener('click', function() {
+            dateModal.classList.add('active');
+        });
+
+        document.getElementById('guest-filter').addEventListener('click', function() {
+            guestModal.classList.add('active');
+        });
+
+        // Search button functionality
+        document.querySelector('.search-btn').addEventListener('click', function() {
+            const location = document.querySelector('#location-filter input').value;
+            const date = document.querySelector('#date-filter input').value;
+            const guests = document.querySelector('#guest-filter input').value;
+
+            fetch(`/acm/search?location=${location}&date=${date}&guests=${guests}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.acms.length > 0) {
+                        // Clear existing list
+                        acmList.innerHTML = '';
+
+                        // Add new accommodations
+                        data.acms.forEach(acm => {
+                            const acmCard = `
+                                    <div class="hotel-card">
+                                        <div class="hotel-image">
+                                            <img src="${acm.acmPhoto1}" alt="${acm.acmName}">
+                                            <button class="like-btn">
+                                                <i class="heart-icon"></i>
+                                            </button>
+                                        </div>
+                                        <div class="hotel-info">
+                                            <h3>${acm.acmName}</h3>
+                                            <p>${acm.acmInfo}</p>
+                                        </div>
+                                    </div>
+                                `;
+                            acmList.insertAdjacentHTML('beforeend', acmCard);
+                        });
+
+                        // Reinitialize like buttons
+                        initializeLikeButtons();
+                    } else {
+                        alert('조건에 맞는 숙소가 없습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching accommodations:', error);
+                });
+        });
+
+        // View More button functionality
         const viewMoreBtn = document.querySelector('.view-more-btn');
         const acmList = document.querySelector('.hotel-list');
 
@@ -88,67 +206,42 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success && data.acms.length > 0) {
-                        // 기존 목록 초기화
-                        acmList.innerHTML = '';
-
-                        // 새로운 숙소 목록 추가
+                        // Add new accommodations
                         data.acms.forEach(acm => {
                             const acmCard = `
-                                        <div class="hotel-card">
-                                            <div class="hotel-image">
-                                                <img src="${acm.acmPhoto1}" alt="${acm.acmName}">
-                                                <button class="like-btn">
-                                                    <i class="heart-icon"></i>
-                                                </button>
-                                            </div>
-                                            <div class="hotel-info">
-                                                <h3>${acm.acmName}</h3>
-                                                <p>${acm.acmInfo}</p>
-                                            </div>
+                                    <div class="hotel-card">
+                                        <div class="hotel-image">
+                                            <img src="${acm.acmPhoto1}" alt="${acm.acmName}">
+                                            <button class="like-btn">
+                                                <i class="heart-icon"></i>
+                                            </button>
                                         </div>
-                                    `;
+                                        <div class="hotel-info">
+                                            <h3>${acm.acmName}</h3>
+                                            <p>${acm.acmInfo}</p>
+                                        </div>
+                                    </div>
+                                `;
                             acmList.insertAdjacentHTML('beforeend', acmCard);
                         });
 
-                        // 새로 추가된 좋아요 버튼 초기화
+                        // Reinitialize like buttons
                         initializeLikeButtons();
 
-                        // 현재 표시된 숙소 수 업데이트
+                        // Update current count
                         currentCount += data.acms.length;
 
-                        // 더 보여줄 데이터가 없으면 버튼 숨기기
+                        // Hide button if no more data
                         if (!data.hasMore) {
                             viewMoreBtn.style.display = 'none';
                         }
                     } else if (!data.success) {
-                        console.error('Error:', data.message);
+                        alert('조건에 맞는 숙소가 없습니다.');
                     }
                 })
                 .catch(error => {
                     console.error('Error fetching accommodations:', error);
                 });
         });
-
-        // 검색 기능 (옵션)
-        const searchForm = document.querySelector('.search-box');
-        searchForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const keyword = document.querySelector('input[type="text"]').value;
-
-            fetch(`/acm/search?keyword=${encodeURIComponent(keyword)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // 검색 결과 처리
-                        console.log('Search results:', data);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error searching:', error);
-                });
-        });
     });
 </script>
-</body>
-</html>

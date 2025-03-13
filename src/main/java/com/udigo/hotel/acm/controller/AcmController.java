@@ -51,26 +51,28 @@ public class AcmController {
         return response;
     }
 
-//    // 숙소 검색 기능 (옵션)
-//    @GetMapping("/search")
-//    @ResponseBody
-//    public Map<String, Object> searchAcms(
-//            @RequestParam String keyword,
-//            @RequestParam(required = false) String checkIn,
-//            @RequestParam(required = false) String checkOut,
-//            @RequestParam(required = false) Integer guests) {
-//
-//        Map<String, Object> response = new HashMap<>();
-//
-//        try {
-//            // 검색 로직 구현 필요
-//            response.put("success", true);
-//            // response.put("acms", searchResults);
-//        } catch (Exception e) {
-//            response.put("success", false);
-//            response.put("message", "검색 중 오류가 발생했습니다.");
-//        }
-//
-//        return response;
-//    }
+    // 숙소 검색 기능 (옵션)
+    @GetMapping("/search")
+    @ResponseBody
+    public Map<String, Object> searchAcms(
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) String date,
+            @RequestParam(required = false) Integer guests) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<AcmDTO> acms = acmService.searchAcms(location, date, guests);
+            response.put("acms", acms);
+            response.put("success", !acms.isEmpty());
+            if (acms.isEmpty()) {
+                response.put("message", "조건에 맞는 숙소가 없습니다.");
+            }
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "검색 중 오류가 발생했습니다.");
+        }
+
+        return response;
+    }
 }

@@ -19,6 +19,8 @@ public interface AcmMapper {
     int getTotalAcmCount();
 
     // 검색 기능 (옵션)
-    List<AcmDTO> searchAcms(@Param("keyword") String keyword);
+    List<AcmDTO> searchAcms(@Param("location") String location,
+                            @Param("date") String date,
+                            @Param("guests") Integer guests);
 
 }

@@ -25,5 +25,9 @@ public class AcmService {
         int totalCount = acmMapper.getTotalAcmCount();
         return currentCount < totalCount;
     }
+
+    public List<AcmDTO> searchAcms(String location, String date, Integer guests) {
+        return acmMapper.searchAcms(location, date, guests);
+    }
 }
 
