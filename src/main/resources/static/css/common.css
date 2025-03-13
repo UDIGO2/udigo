@@ -26,15 +26,77 @@ body {
     font-weight: bold;
 }
 
+/* 서브 메뉴 내려오는 것 관련(드롭다운) */
+
 .nav-links {
     display: flex;
     gap: 2rem;
+    position: absolute;
+    left: 200px;
+}
+
+
+.nav-links > li {
+    list-style-type: none;
 }
 
 .nav-links a {
     text-decoration: none;
     color: #333;
 }
+
+
+.nav-links > li {
+    position: relative;
+    list-style: none;
+    cursor: pointer;
+}
+
+
+.nav-links ul {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    list-style: none;
+    text-align: center;
+    z-index: 100;
+}
+
+.nav-links ul li {
+    padding: 8px 12px;
+    white-space: nowrap;  /* 텍스트 줄바꿈 방지 */
+}
+
+/* 회색 배경 (전체 너비 적용), 클래스는 main.js에서 추가됨 */
+.dropdown-background {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100vw;
+    height: 200px; /* 필요하면 조정 */
+    background-color: gray;
+    display: none;
+    z-index: 99;
+}
+
+/* 하위 메뉴 스타일 */
+.nav-links ul {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    list-style: none;
+    text-align: center;
+    z-index: 100;
+}
+
+.hidden {
+    display: none !important;
+}
+
 
 /* Hero Banner */
 .hero {
@@ -293,13 +355,13 @@ body {
 }
 
 .login-btn {
-    background: transparent;
+    background: #f5f5f5;
     border: 1px solid #333;
     color: #333;
 }
 
 .login-btn:hover {
-    background: #f5f5f5;
+    background: #e0e0e0;
 }
 
 .signup-btn {
@@ -314,78 +376,21 @@ body {
 .my-page-btn {
     background: #4A90E2;
     color: white;
+    display: none;
 }
 
 .my-page-btn:hover {
     background: #357ABD;
 }
 
-/* Social Links */
-.social-links {
+/* copy */
+.copy {
     margin-top: 2rem;
     padding-top: 2rem;
     border-top: 1px solid #eee;
+    color: #636e72;
 }
 
-.social-links a {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    border-radius: 50%;
-    background: #f5f5f5;
-    color: #666;
-    margin: 0 10px;
-    transition: all 0.3s ease;
-}
-
-.social-links a:hover {
-    background: #4A90E2;
-    color: white;
-    transform: translateY(-3px);
-}
-
-/* Like Button */
-.like-btn {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-    color: #FF6B6B;
-    transition: transform 0.3s ease;
-}
-
-.like-btn:hover {
-    transform: scale(1.1);
-}
-
-.price-like {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1rem;
-}
-
-/* Section Title */
-.section-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #333;
-    margin-bottom: 2rem;
-    position: relative;
-    padding-bottom: 1rem;
-}
-
-.section-title::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 60px;
-    height: 3px;
-    background: #FF6B6B;
-}
 
 /* Reset CSS */
 * {
@@ -415,15 +420,7 @@ body {
     font-weight: bold;
 }
 
-.nav-links {
-    display: flex;
-    gap: 2rem;
-}
 
-.nav-links a {
-    text-decoration: none;
-    color: #333;
-}
 
 /* Hero Banner */
 .hero {
@@ -475,121 +472,4 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
-
-/* Hotel Cards */
-.hotel-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem;
-    padding: 2rem 5%;
-}
-
-.hotel-card {
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
-}
-
-.hotel-card:hover {
-    transform: translateY(-5px);
-}
-
-.hotel-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
-.hotel-info {
-    padding: 1rem;
-}
-
-.hotel-title {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-}
-
-.hotel-price {
-    font-size: 1.5rem;
-    color: #FF6B6B;
-    font-weight: bold;
-}
-
-/* Regional Recommendations */
-.regional-section {
-    padding: 2rem 5%;
-}
-
-.regional-title {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-}
-
-.regional-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1.5rem;
-}
-
-.regional-card {
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.regional-image {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-}
-
-/* View More Button */
-.view-more {
-    display: block;
-    width: 200px;
-    margin: 2rem auto;
-    padding: 1rem;
-    background: #4A90E2;
-    color: white;
-    text-align: center;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background 0.3s ease;
-}
-
-.view-more:hover {
-    background: #357ABD;
-}
-
-/* Footer */
-.footer {
-    background: #F8F9FA;
-    padding: 3rem 5%;
-    margin-top: 3rem;
-}
-
-.footer-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
-}
-
-.footer-title {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-}
-
-.footer-links {
-    list-style: none;
-}
-
-.footer-links li {
-    margin-bottom: 0.5rem;
-}
-
-.footer-links a {
-    color: #666;
-    text-decoration: none;
 }
