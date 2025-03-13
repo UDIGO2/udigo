@@ -18,7 +18,7 @@ public class SecurityConfig {
         http
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/","/payment","/payList", "/css/**", "/js/**", "/images/**","/reservations/**","/acm/**").permitAll() // 메인 페이지와 정적 리소스 접근 허용
+                        .requestMatchers("/","/cart","/payment","/payList", "/css/**", "/js/**", "/images/**","/reservations/**","/acm/**").permitAll() // 메인 페이지와 정적 리소스 접근 허용
                         // 결제페이지 실제 진행 시, 로그인 후에 되도록 없애기
                         .requestMatchers("/member/signup", "/member/api/**").permitAll() // 회원가입 관련 모든 요청 허용
                         .anyRequest().authenticated() // 나머지는 로그인 필요

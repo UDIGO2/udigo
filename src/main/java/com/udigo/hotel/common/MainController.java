@@ -11,7 +11,6 @@ public class MainController {
         return "main/main";  // templates/main/main.html을 반환
     }
 
-
     // 결제 페이지
     @GetMapping("/payment")
     public String paymentPage() {
@@ -24,5 +23,9 @@ public class MainController {
         return "pay/paylist";
     }
 
+    @GetMapping("/cart-main")
+    public String cart() {
+        return "cartMain";  // 다른 뷰로 변경
+    }
 
 }

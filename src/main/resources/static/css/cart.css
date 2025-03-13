@@ -1,0 +1,88 @@
+/* 전체 스타일 */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+/* 헤더 */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background-color: white;
+    border-bottom: 2px solid #ddd;
+}
+
+.logo {
+    height: 40px;
+}
+
+/* 장바구니 컨테이너 */
+.cart-container {
+    max-width: 800px;
+    margin: 50px auto;
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* 장바구니가 비었을 때 */
+.empty-cart {
+    padding: 60px 20px;
+    font-size: 20px;
+    color: #777;
+}
+
+.empty-icon {
+    font-size: 80px;
+    color: #ccc;
+    margin-bottom: 20px;
+}
+
+/* 상품이 있는 장바구니 */
+.cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.cart-item img {
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.cart-item-details {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.cart-item-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.btn-checkout {
+    display: block;
+    text-align: center;
+    font-size: 20px;
+    padding: 15px 30px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 30px;
+    text-decoration: none;
+    margin-top: 20px;
+}
+
+.btn-checkout:hover {
+    background-color: #0056b3;
+}
