@@ -1,9 +1,9 @@
 package com.udigo.hotel.cart.model.dto;
 
 import com.udigo.hotel.acm.model.dto.AcmDTO;
-import lombok.Data;
+//import lombok.Data;
 
-@Data
+//@Data
 public class CartDTO {
     private int cartCode;
     private int memberCode;

@@ -1,10 +1,9 @@
 package com.udigo.hotel.pay.model.dto;
 
-import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Data
+//@Data
 public class PayDTO {
     private int payId;
     private int memberCode;
