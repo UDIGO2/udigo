@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>ALL MENU</title>
-    <link rel="stylesheet" th:href="@{/css/acm.css}">
-
+    <link rel="stylesheet" th:href="@{/css/list.css}">
 </head>
 <body>
 <!-- 헤더 영역 시작 -->
 <div th:replace="~{fragments/header :: header}"></div>
-<script src="/js/main.js"></script>
 <!-- 헤더 영역 끝 -->
 
 <main class="main-content">
@@ -40,14 +38,14 @@
     <div class="hotel-list">
         <div class="hotel-card" th:each="acm : ${acms}">
             <div class="hotel-image">
-                <img th:src="${acm.imageUrl}" th:alt="${acm.name}">
+                <img th:src="${acm.acmPhoto1}" th:alt="${acm.acmName}">
                 <button class="like-btn">
                     <i class="heart-icon"></i>
                 </button>
             </div>
             <div class="hotel-info">
-                <h3 th:text="${acm.name}">숙소 이름</h3>
-                <p th:text="${acm.description}">숙소 설명</p>
+                <h3 th:text="${acm.acmName}">숙소 이름</h3>
+                <p th:text="${acm.acmInfo}">숙소 설명</p>
             </div>
         </div>
     </div>
@@ -59,9 +57,11 @@
 
 <!-- 푸터 영역 시작 -->
 <div th:replace="~{fragments/footer :: footer}"></div>
-<script src="/js/main.js"></script>
 <!-- 푸터 영역 끝 -->
-<script>
+
+<!-- JavaScript는 한 번만 포함 -->
+<script src="/js/main.js"></script>
+<script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function() {
         let currentCount = 9;
 
@@ -94,19 +94,19 @@
                         // 새로운 숙소 목록 추가
                         data.acms.forEach(acm => {
                             const acmCard = `
-                                    <div class="hotel-card">
-                                        <div class="hotel-image">
-                                            <img src="${acm.imageUrl}" alt="${acm.name}">
-                                            <button class="like-btn">
-                                                <i class="heart-icon"></i>
-                                            </button>
+                                        <div class="hotel-card">
+                                            <div class="hotel-image">
+                                                <img src="${acm.acmPhoto1}" alt="${acm.acmName}">
+                                                <button class="like-btn">
+                                                    <i class="heart-icon"></i>
+                                                </button>
+                                            </div>
+                                            <div class="hotel-info">
+                                                <h3>${acm.acmName}</h3>
+                                                <p>${acm.acmInfo}</p>
+                                            </div>
                                         </div>
-                                        <div class="hotel-info">
-                                            <h3>${acm.name}</h3>
-                                            <p>${acm.description}</p>
-                                        </div>
-                                    </div>
-                                `;
+                                    `;
                             acmList.insertAdjacentHTML('beforeend', acmCard);
                         });
 

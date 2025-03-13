@@ -23,7 +23,7 @@ public class AcmController {
     }
 
     // 초기 숙소 목록 페이지 로드
-    @GetMapping("/acm/list")
+    @GetMapping("/list")
     public String listAcms(Model model) {
         List<AcmDTO> acms = acmService.getInitialAcms();
         model.addAttribute("acms", acms);

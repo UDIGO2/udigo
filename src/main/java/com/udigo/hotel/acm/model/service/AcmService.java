@@ -24,6 +24,6 @@ public class AcmService {
     public boolean hasMoreAcms(int currentCount) {
         int totalCount = acmMapper.getTotalAcmCount();
         return currentCount < totalCount;
-        }
+    }
 }
 
