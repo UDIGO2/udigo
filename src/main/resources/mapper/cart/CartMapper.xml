@@ -1,0 +1,33 @@
+<mapper namespace="com.udigo.hotel.mapper.CartMapper">
+
+    <insert id="insertCart" parameterType="com.udigo.hotel.dto.CartDTO">
+        INSERT INTO tbl_cart (member_code, acm_id)
+        VALUES (#{memberCode}, #{acmId})
+    </insert>
+
+    <select id="selectCartByMemberCode" parameterType="int" resultMap="cartMap">
+        SELECT
+        c.cart_code, c.member_code, c.acm_id,
+        a.acm_name, a.acm_price, a.acm_photo1
+        FROM tbl_cart c
+        JOIN tbl_acm a ON c.acm_id = a.acm_id
+        WHERE c.member_code = #{memberCode}
+    </select>
+
+    <delete id="deleteCart" parameterType="int">
+        DELETE FROM tbl_cart WHERE cart_code = #{cartCode}
+    </delete>
+
+    <resultMap id="cartMap" type="com.udigo.hotel.dto.CartDTO">
+        <id property="cartCode" column="cart_code"/>
+        <result property="memberCode" column="member_code"/>
+        <result property="acmId" column="acm_id"/>
+
+        <association property="acm" javaType="com.udigo.hotel.dto.AcmDTO">
+            <result property="acmName" column="acm_name"/>
+            <result property="acmPrice" column="acm_price"/>
+            <result property="acmPhoto1" column="acm_photo1"/>
+        </association>
+    </resultMap>
+
+</mapper>
