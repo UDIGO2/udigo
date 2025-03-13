@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<header th:fragment="header" class="header">
+  <nav class="navbar">
+    <div class="logo">UDIGO</div>
+    <ul class="nav-links">
+      <li><a href="#">Hotel</a>
+      </li>
+      <li><a href="#">Board</a>
+        <ul>
+          <li>게시판</li>
+          <li>공지사항</li>
+          <li>FAQ</li>
+        </ul>
+      </li>
+      <li><a href="#">Reservations</a>
+        <ul>
+          <li>내 예약</li>
+          <li>예약 정보</li>
+        </ul>
+      </li>
+
+
+
+    </ul>
+
+    <div class="nav-buttons">
+      <button class="login-btn">로그인</button>
+<!--      <button class="signup-btn"">>회원가입</button>-->
+      <button class="my-page-btn hidden"><a th:href="@{/mypage}">마이페이지</a></button>
+    </div>
+  </nav>
+</header>
+
+</body>
+</html>
