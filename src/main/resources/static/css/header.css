@@ -1,0 +1,130 @@
+/* Google Fonts - Noto Sans KR */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+a {
+    text-decoration: none;
+}
+
+
+/* 네비게이션바 */
+.h_navbar {
+    display: flex;
+    align-items: center;
+    padding: 1rem 5%;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+.h_logo a img {
+    position: relative;
+    width: 100px;
+    margin-right: 40px;
+    height: auto;
+    top: 4px;
+}
+
+
+/* 하위 메뉴 드롭다운 */
+.h_nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    flex-grow: 1; /* 메뉴가 가능한 넓게 퍼지도록 설정 */
+}
+
+/* 로그인 버튼 오른쪽 정렬 */
+.h_nav-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-left: auto; /* 오른쪽 끝으로 이동 */
+}
+
+.h_nav-links a {
+    text-decoration: none;
+    color: #000;
+    font-size: 17px;   /* 폰트 사이즈 키움*/
+    font-weight: 500;  /* 폰트 두께 키웠음 */
+
+}
+
+.h_nav-links > li {
+    position: relative;
+    list-style: none;
+    cursor: pointer;
+}
+
+.h_nav-links ul {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    list-style: none;
+    text-align: center;
+    z-index: 100;
+    background: transparent;
+    /* 상위 메뉴와의 간격 조정 여기서 하시면 됩니다. 위 카테고리와 하위 메뉴 안겹치게 간격 설정*/
+    padding-top: 30px;
+    transition: transform 0.3s ease-out, opacity 0.1s ease-out;
+}
+
+.h_nav-links ul li {
+    padding: 12px 20px;
+    white-space: nowrap;
+    color: black;
+    /* 드롭다운되는 글자 색 */
+    font-weight: 400;
+    transform: translateY(-10px);
+    transition: transform 0.3s ease;
+}
+
+.h_nav-links ul.active {
+    display: block;
+    opacity: 1;
+}
+
+.h_nav-links ul.active li {
+    transform: translateY(0);
+}
+
+/* 회색 배경 (전체 너비 적용 완료) */
+.h_dropdown-background {
+    position: fixed;
+    top: 72px;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    background-color: #fafafa;
+
+    /* 드롭다운되는 배경색 */
+    display: none;
+    z-index: 99;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.h_dropdown-background.active {
+    opacity: 1;
+    transform: translateY(-10px) translateX(0px);
+    display: block;
+}
+
+.h_hidden {
+    display: none !important;
+}
+/* 헤더 */
+
+.h_login-btn {
+    padding: 10px 15px;
+    border: none;
+    background-color: #eaeaea;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.h_login-btn > a {
+    color: #000000;
+}

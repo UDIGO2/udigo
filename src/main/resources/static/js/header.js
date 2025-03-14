@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const navBar = document.querySelector(".navbar");
-    const subMenus = document.querySelectorAll(".nav-links ul");
+    const navBar = document.querySelector(".h_navbar");
+    const subMenus = document.querySelectorAll(".h_nav-links ul");
 
     const dropdownBackground = document.createElement("div");
-    dropdownBackground.classList.add("dropdown-background");
+    dropdownBackground.classList.add("h_dropdown-background");
 
     document.body.appendChild(dropdownBackground);
 
@@ -25,7 +25,8 @@ document.addEventListener("DOMContentLoaded", function () {
         dropdownBackground.classList.remove("active");
         subMenus.forEach(menu => {
             menu.classList.remove("active");
-        });
+
+        }, 200);
 
         setTimeout(() => {
             if (!navBar.matches(":hover")) {

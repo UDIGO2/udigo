@@ -1,0 +1,40 @@
+/* Google Fonts - Noto Sans KR */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+/* Footer */
+.footer {
+    background: #F8F9FA;
+    padding: 3rem 10%;
+    margin-top: 3rem;
+
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+}
+
+.footer-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+    color: #666;
+    text-decoration: none;
+}
+
+.f_copy {
+    text-align: center;
+    margin-top: 3rem;
+    color: #b4b4b4;
+}
