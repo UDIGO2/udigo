@@ -20,7 +20,8 @@ public interface AcmMapper {
 
     // 검색 기능 (옵션)
     List<AcmDTO> searchAcms(@Param("acmLocation") String location,
-                            @Param("acmDate") String date,
-                            @Param("maxGuest") Integer guests);
+                            @Param("checkInDate") String checkInDate,
+                            @Param("checkOutDate") String checkOutDate,
+                            @Param("maxGuests") Integer guests);
 
 }

@@ -20,10 +20,14 @@ public class AcmDTO {
     private String acmPhoto4;
     private String acmPhoto5;
 
+    // 체크인 및 체크아웃 날짜 추가
+    private String checkInDate; // 체크인 날짜
+    private String checkOutDate; // 체크아웃 날짜
+
     public AcmDTO() {
     }
 
-    public AcmDTO(int acmId, String acmName, String acmAddress, String acmLocation, long acmPrice, String acmInfo, String acmPhone, LocalDateTime acmDate, int maxGuest, int likedCount, String acmPhoto1, String acmPhoto2, String acmPhoto3, String acmPhoto4, String acmPhoto5) {
+    public AcmDTO(int acmId, String acmName, String acmAddress, String acmLocation, long acmPrice, String acmInfo, String acmPhone, LocalDateTime acmDate, int maxGuest, int likedCount, String acmPhoto1, String acmPhoto2, String acmPhoto3, String acmPhoto4, String acmPhoto5, String checkInDate, String checkOutDate) {
         this.acmId = acmId;
         this.acmName = acmName;
         this.acmAddress = acmAddress;
@@ -39,6 +43,8 @@ public class AcmDTO {
         this.acmPhoto3 = acmPhoto3;
         this.acmPhoto4 = acmPhoto4;
         this.acmPhoto5 = acmPhoto5;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
     }
 
     public int getAcmId() {
@@ -161,6 +167,22 @@ public class AcmDTO {
         this.acmPhoto5 = acmPhoto5;
     }
 
+    public String getCheckInDate() {
+        return checkInDate;
+    }
+
+    public void setCheckInDate(String checkInDate) {
+        this.checkInDate = checkInDate;
+    }
+
+    public String getCheckOutDate() {
+        return checkOutDate;
+    }
+
+    public void setCheckOutDate(String checkOutDate) {
+        this.checkOutDate = checkOutDate;
+    }
+
     @Override
     public String toString() {
         return "AcmDTO{" +
@@ -179,6 +201,8 @@ public class AcmDTO {
                 ", acmPhoto3='" + acmPhoto3 + '\'' +
                 ", acmPhoto4='" + acmPhoto4 + '\'' +
                 ", acmPhoto5='" + acmPhoto5 + '\'' +
+                ", checkInDate='" + checkInDate + '\'' +
+                ", checkOutDate='" + checkOutDate + '\'' +
                 '}';
 
     }

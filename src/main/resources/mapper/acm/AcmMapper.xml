@@ -17,16 +17,17 @@
         tbl_acm a
         WHERE 1 = 1
         <if test="acmLocation != null and acmLocation != ''">
-            AND a.acm_location = #{acmLocation} #지역
+            AND a.acm_location = #{acmLocation}
         </if>
-        <if test="maxGuest != null and maxGuest != ''">
-            AND a.max_guest = #{maxGuest} #최대인원
+        <if test="maxGuests != null">
+            AND a.max_guest >= #{maxGuests}
         </if>
-        <if test="acmDate != null and acmDate != ''">
-            AND a.acm_id NOT IN ( #예약날짜
+        <if test="checkInDate != null and checkOutDate != null">
+            AND a.acm_id NOT IN (
             SELECT r.acm_id
             FROM tbl_reservations r
-            WHERE #{acmDate} BETWEEN r.check_in AND r.check_out
+            WHERE
+            r.check_in &lt; #{checkOutDate} AND r.check_out &gt; #{checkInDate}
             )
         </if>
         ORDER BY
