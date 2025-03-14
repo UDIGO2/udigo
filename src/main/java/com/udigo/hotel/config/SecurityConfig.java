@@ -28,7 +28,7 @@ public class SecurityConfig {
             // 🔹 회원가입 및 로그인 페이지는 인증 없이 접근 허용
             auth.requestMatchers("/member/signup", "/member/api/**", "/auth/login").permitAll();
             auth.requestMatchers("/", "/cart", "/payment", "/payList").permitAll();
-            auth.requestMatchers("/css/**", "/js/**", "/image/**", "/reservations/**", "/acm/**").permitAll(); // 정적 리소스 허용
+            auth.requestMatchers("/css/**", "/js/**", "/image/**", "/reservations/**", "/acm/**","/board/**").permitAll(); // 정적 리소스 허용
             auth.anyRequest().authenticated(); // 나머지는 로그인 필요
         }).formLogin(login -> {
             // 🔹 로그인 페이지 설정

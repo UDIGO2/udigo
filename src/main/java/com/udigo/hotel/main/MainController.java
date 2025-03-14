@@ -1,4 +1,4 @@
-package com.udigo.hotel.common;
+package com.udigo.hotel.main;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
