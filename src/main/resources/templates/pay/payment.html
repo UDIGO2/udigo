@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <title>결제하기 | UDIGO</title>
   <link rel="stylesheet" th:href="@{/css/paypage.css}">
-  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/header.css}">
+  <link rel="stylesheet" th:href="@{/css/footer.css}">
 
 </head>
 
@@ -70,11 +71,15 @@
 
   <!-- 결제 버튼 -->
   <button class="payButton">결제하기</button>
-  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script> <!-- js -->
   <script src="/js/payment.js"></script>
+
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
-</div>
+<script src="/js/header.js"></script>
+
 </body>
 </html>

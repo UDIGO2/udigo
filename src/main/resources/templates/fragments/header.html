@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
@@ -7,33 +7,32 @@
 <body>
 
 <header th:fragment="header" class="header">
-  <nav class="navbar">
-    <div class="logo">UDIGO</div>
-    <ul class="nav-links">
-      <li><a href="/acm/list">Hotel</a>
+  <nav class="h_navbar">
+    <div class="h_logo"><a href="#"><img th:src="@{/image/header/h_logo.png}" alt="이미지"></a></div> <!-- 메인 페이지 -->
+    <ul class="h_nav-links">
+      <li><a href="/acm/list">Hotel</a> <!-- 호텔 -->
       </li>
-      <li><a href="#">Board</a>
+      <li><a href="#">Board</a> <!-- 게시판 -->
         <ul>
-          <li>게시판</li>
-          <li>공지사항</li>
-          <li>FAQ</li>
-        </ul>
-      </li>
-      <li><a href="reservations/past">Reservations</a>
-        <ul>
-          <li>내 예약</li>
-          <li>예약 정보</li>
+          <li><a href="#">게시판</a></li>  <!-- 게시판 -->
+          <li><a href="#">공지사항</a></li> <!-- 공지사항 -->
+          <li><a href="#">FAQ</a></li> <!-- FAQ -->
         </ul>
       </li>
 
+      <li><a href="reservations/past">Reservations</a> <!-- 예약 페이지 -->
+        <ul>
+          <li><a href="#">내 예약</a></li> <!-- 내 예약 -->
+          <li><a href="#">예약 정보</a></li> <!-- 예약 정보 -->
+        </ul>
+      </li>
     </ul>
 
-    <div class="nav-buttons">
-      <button class="login-btn">로그인</button>
-      <!--      <button class="signup-btn"">>회원가입</button>-->
-      <button class="my-page-btn hidden"><a th:href="@{/mypage}">마이페이지</a></button>
+    <div class="h_nav-buttons">
+      <button class="h_login-btn"><a href="#">로그인</a></button> <!-- 로그인 -->
+      <button class="h_my-page-btn h_hidden"><a th:href="@{/mypage}">마이페이지</a></button> <!-- 마이페이지 -->
     </div>
   </nav>
 </header>
+
 </body>
-</html>

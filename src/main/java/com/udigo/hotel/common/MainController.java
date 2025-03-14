@@ -20,7 +20,7 @@ public class MainController {
     // 회원별 결제 내역 조회
     @GetMapping("/payList")
     public String payListPage() {
-        return "pay/paylist";
+        return "payList";
     }
 
     @GetMapping("/cart-main")

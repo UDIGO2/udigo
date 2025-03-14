@@ -7,6 +7,8 @@
 
   <title>UDIGO - Premium Hotel</title>
   <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/header.css}">
+  <link rel="stylesheet" th:href="@{/css/footer.css}">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
   <!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">-->
 </head>
@@ -15,19 +17,19 @@
 <!-- ---------------------------------- haeder ---------------------------------- -->
 
 <div th:replace="~{fragments/header :: header}"></div>
-<script src="/js/main.js"></script>
 
-<!-- ---------------------------------- haeder 끝 ---------------------------------- -->
+<!-- --------------------------------- haeder 끝 --------------------------------- -->
 
 <main>
   <section class="hero">
-    <img src="/image/hero-pool.jpg" alt="Premium Hotel Pool">
+    <img src="/image/main/hero-pool.jpg" alt="Premium Hotel Pool">
     <div class="hero-content">
       <h1>UDIGO</h1>
       <p>Premium HOTEL</p>
     </div>
   </section>
 
+  <!-- 메인 페이지 서치창, 서치창 만든 후에 해당 주석 아래에 입혀주세요   -->
   <div class="search-bar container">
     <div class="search-input">
       <i class="fas fa-map-marker-alt"></i>
@@ -46,6 +48,7 @@
     </button>
   </div>
 
+  <!--  메인페이지 내의 호텔 이미지가 들어간다면  여기에 담아주세요.  -->
   <section class="hotel-section container">
     <h2 class="section-title mb-2">추천 호텔</h2>
     <div class="hotel-grid">
@@ -62,10 +65,10 @@
           </div>
         </div>
       </div>
-
-      <!-- --------------------------- 추가 호텔 카드들 --------------------------- -->
     </div>
   </section>
+
+  <!-- 추가 호텔 이미지를 넣으려면 여기에 넣어주시고, 아니라면 밑에 부분 빼셔도 됩니다 :) -->
 
   <section class="regional-section container">
     <h2 class="section-title mb-2">지역별 추천</h2>
@@ -83,9 +86,6 @@
 <!-- ---------------------------------- footer ---------------------------------- -->
 
 <div th:replace="~{fragments/footer :: footer}"></div>
-
-
-
-<script src="/js/main.js"></script>
+<script src="/js/header.js"></script>
 </body>
 </html>

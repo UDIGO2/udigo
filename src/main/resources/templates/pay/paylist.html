@@ -2,31 +2,42 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>거래 내역 조회</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/common.css">
 </head>
 <body>
-<div class="container">
-  <h2 class="title">거래 내역 조회</h2>
-  <table class="payment-table">
-    <thead>
-    <tr>
-      <th>결제 날짜</th>
-      <th>호텔/숙소명</th>
-      <th>인원</th>
-      <th>이용기간</th>
-      <th>이용날짜</th>
-      <th>결제금액</th>
-    </tr>
-    </thead>
-    <body>
-    <tr th:each="pay : ${payList}">
-      <td th:text="${pay.payDate}"></td>
-      <td th:text="${pay.acmName}">숙소명</td>
-      <td th:text="${pay.peopleCount} + '인'"></td>
-      <td th:text="${pay.stayDuration + '일'}"></td>
-      <td th:text="${pay.startDate + ' - ' + pay.endDate}"></td>
-      <td th:text="${#numbers.formatInteger(pay.payPrice, 3, 'COMMA')}"></td>
-    </tr>
-    </body>
-  </table>
-</div>
+
+<div th:replace="~{fragments/header :: header}"></div>
+<script src="/js/main.js"></script>
+
+<h1>거래 내역 조회</h1>
+
+<h1>거래 내역 조회</h1>
+
+<!-- 테이블 -->
+<table border="1">
+  <thead>
+  <tr>
+    <th>결제 날짜</th>
+    <th>호텔/숙소 명</th>
+    <th>인원</th>
+    <th>이용기간</th>
+    <th>이용날짜</th>
+    <th>결제금액</th>
+  </tr>
+  </thead>
+  <tbody>
+  <!-- Thymeleaf를 이용하여 리스트 데이터를 반복해서 테이블에 표시 -->
+  <tr th:each="payment : ${payments}">
+    <td th:text="${payment.payDate}"></td>
+    <td th:text="${payment.acmName}"></td>
+    <td th:text="${payment.guestCount}"></td>
+    <td th:text="${payment.checkIn} + ' ~ ' + ${payment.checkOut}"></td>
+    <td th:text="${payment.useDate}"></td>
+    <td th:text="${payment.payPrice}"></td>
+  </tr>
+  </tbody>
+</table>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
