@@ -1,19 +1,23 @@
 package com.udigo.hotel.cart.model.dao;
 
 import com.udigo.hotel.cart.model.dto.CartDTO;
-import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
 @Mapper
 public interface CartMapper {
-    void insertCart(CartDTO cartDTO);
-    List<CartDTO> selectCartByMemberCode(int memberCode);
-    void deleteCart(List<Integer> cartCode);
 
-    // 장바구니 아이템 수량 업데이트 메소드
-    void updateCart(CartDTO cartDTO);
+        List<CartDTO> getCartByUserId(@Param("memberCode") Long memberCode);
 
-    // 장바구니 아이템 조회 메소드 (수량 업데이트에 필요)
-    CartDTO selectCartByCode(int cartCode);
+        @Select("SELECT * FROM tbl_cart WHERE member_code = #{memberCode}")
+        List<CartDTO> selectCartByMemberCode(int memberCode);
+
+        // 장바구니 아이템 추가
+        @Insert("INSERT INTO tbl_cart (member_code, acm_id) VALUES (#{memberCode}, #{acmId})")
+        void insertCartItem(int memberCode, int acmId);
+
+        // 장바구니 아이템 삭제
+        @Delete("DELETE FROM tbl_cart WHERE cart_code = #{cartCode}")
+        void deleteCartItem(int cartCode);
 }

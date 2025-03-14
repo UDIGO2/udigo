@@ -51,21 +51,19 @@ public class AcmController {
         return response;
     }
 
-    // 숙소 검색 기능 (옵션)
+    // 숙소 검색 기능
     @GetMapping("/search")
     @ResponseBody
     public Map<String, Object> searchAcms(
             @RequestParam(required = false) String location,
-            @RequestParam(required = false) String date,
+            @RequestParam(required = false) String checkInDate,
+            @RequestParam(required = false) String checkOutDate,
             @RequestParam(required = false) Integer guests) {
 
         Map<String, Object> response = new HashMap<>();
-//        System.out.println("장소--->"+location);
-//        System.out.println("날짜--->"+date);
-//        System.out.println("인원수--->"+guests);
 
         try {
-            List<AcmDTO> acms = acmService.searchAcms(location, date, guests);
+            List<AcmDTO> acms = acmService.searchAcms(location, checkInDate, checkOutDate, guests);
             response.put("acms", acms);
             response.put("success", !acms.isEmpty());
             if (acms.isEmpty()) {

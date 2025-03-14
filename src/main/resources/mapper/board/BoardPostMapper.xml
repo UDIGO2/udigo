@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.udigo.hotel.board.model.dao.BoardPostMapper">
+    <select id="findByBoardTypeWithPagination" resultType="com.udigo.hotel.board.model.dto.BoardPostDTO">
+        SELECT * FROM tbl_board_posts WHERE board_type = #{boardType}
+        ORDER BY created_at DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <select id="countByBoardType" resultType="int">
+        SELECT COUNT(*) FROM tbl_board_posts WHERE board_type = #{boardType}
+    </select>
+
+    <insert id="insertPost" parameterType="com.udigo.hotel.board.model.dto.BoardPostDTO">
+        INSERT INTO tbl_board_posts (member_code, board_type, title, content, created_at)
+        VALUES (#{memberCode}, #{boardType}, #{title}, #{content}, NOW())
+    </insert>
+
+    <update id="updatePost" parameterType="com.udigo.hotel.board.model.dto.BoardPostDTO">
+        UPDATE tbl_board_posts
+        SET title = #{title}, content = #{content}, updated_at = NOW()
+        WHERE post_id = #{postId}
+    </update>
+
+    <delete id="deletePost" parameterType="int">
+        DELETE FROM tbl_board_posts WHERE post_id = #{postId}
+    </delete>
+</mapper>

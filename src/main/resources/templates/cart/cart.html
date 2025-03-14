@@ -1,44 +1,26 @@
-<div th:if="${emptyCart}">
-    <p>장바구니가 비었습니다.</p>
-</div>
-<!-- 예시: 장바구니 항목 -->
-<div class="cart-item">
-    <input type="checkbox" class="cart-checkbox" data-id="1"> <!-- cartCode 1 -->
-    <span class="remove-item" data-id="1">삭제</span>
-    <span class="increase-quantity" data-id="1">+</span>
-    <span class="decrease-quantity" data-id="1">-</span>
-</div>
-
-<div th:if="${not emptyCart}">
-    <div th:each="cartItem : ${cartList}" class="cart-item">
-        <img th:src="@{'/image/' + ${cartItem.acm.acmPhoto1}}" alt="숙소 이미지">
-        <div class="cart-item-details">
-            <h5 th:text="${cartItem.acm.acmName}"></h5>
-            <p th:text="${cartItem.acm.location}"></p>
-            <span th:text="'기준 인원: ' + ${cartItem.acm.capacity}"></span>
-        </div>
-        <div class="cart-item-price">
-            <span th:text="${#numbers.formatInteger(cartItem.acm.acmPrice, 0, 'COMMA')} + '원'"></span>
-        </div>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장바구니</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+</head>
+<body>
+<!-- 헤더를 fragment로 불러옵니다. -->
+<div th:replace="~{fragments/header :: header}"></div>
+<main>
+    <div class="cart-container">
+        <h1>장바구니</h1>
+        <div class="cart-icon">🛒</div>
+        <p class="cart-message">장바구니가 비었습니다.<br>원하시는 숙소를 담아주세요.</p>
+        <a href="#" class="button">담으러 가기</a>
     </div>
-</div>
+</main>
+<!-- 푸터를 fragment로 불러옵니다. -->
+<div th:replace="~{fragments/footer :: footer}"></div>
 
-<div class="cart-summary">
-    <p>총 <span th:text="${cartList != null ? cartList.size() : 0}"></span>건</p>
-    <p>상품 금액:
-        <span th:text="${cartList != null and not #lists.isEmpty(cartList)
-                        ? #aggregates.sum(cartList.?[acm ne null]![acm.acmPrice])
-                        : 0} + '원'"></span>
-    </p>
-    <p>할인 금액: <span>0원</span></p>
-    <p class="total-price">결제 예정 금액:
-        <span th:text="${cartList != null and not #lists.isEmpty(cartList)
-                        ? #aggregates.sum(cartList.?[acm ne null]![acm.acmPrice])
-                        : 0} + '원'"></span>
-    </p>
-</div>
-
-<div th:if="${cartList != null and not #lists.isEmpty(cartList)}">
-    <span th:text="${#aggregates.sum(cartList.?[acm ne null]![acm.acmPrice])} + '원'"></span>
-    <a th:href="@{/checkout}" class="btn btn-primary btn-checkout">구매하기</a>
-</div>
+<script src="/js/header.js"></script>
+</body>
+</html>

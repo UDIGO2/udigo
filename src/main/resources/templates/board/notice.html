@@ -1,0 +1,52 @@
+<!-- src/main/resources/templates/board/notice.html -->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항</title>
+    <link rel="stylesheet" th:href="@{/css/board.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<div class="sidebar">
+    <a th:href="@{/board/notice}">공지사항</a>
+    <a th:href="@{/board/FAQ}">FAQ</a>
+    <a th:href="@{/board/ask}">1대1 문의</a>
+</div>
+
+<div class="content">
+    <h1>공지사항</h1>
+    <div th:each="post : ${posts}" class="post">
+        <h2 th:text="${post.title}" style="cursor: pointer;"
+            th:onclick="'toggleContent(' + ${post.postId} + ')'"></h2>
+        <span class="toggle-arrow" th:id="'arrow-' + ${post.postId}">&gt;</span>
+        <p th:text="'작성일: '+${#temporals.format(post.createdAt, 'yyyy/MM/dd')}"></p>
+        <div th:id="'content-' + ${post.postId}" class="post-content">
+            <p th:text="${post.content}"></p>
+        </div>
+    </div>
+
+    <div class="pagination">
+        <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+            <a th:href="@{'/board/notice?page=' + ${i}}" th:text="${i}"></a>
+        </span>
+    </div>
+</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script src="/js/header.js"></script>
+
+<script>
+        function toggleContent(postId) {
+        const content = document.getElementById('content-' + postId);
+        const arrow = document.getElementById('arrow-' + postId);
+        if (content) {
+        const isVisible = content.style.display === 'block';
+        content.style.display = isVisible ? 'none' : 'block';
+        arrow.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(90deg)';
+    }
+    }
+</script>
+</body>
+</html>

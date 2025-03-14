@@ -26,12 +26,16 @@ public class AcmService {
         return currentCount < totalCount;
     }
 
-    public List<AcmDTO> searchAcms(String location, String date, Integer guests) {
-        System.out.println("장소2--->"+location);
-        System.out.println("날짜2--->"+date);
-        System.out.println("인원수2--->"+guests);
-        System.out.println("결과2--->"+acmMapper.searchAcms(location, date, guests));
-        return acmMapper.searchAcms(location, date, guests);
+    public List<AcmDTO> searchAcms(String location, String checkInDate, String checkOutDate, Integer guests) {
+        return acmMapper.searchAcms(location, checkInDate, checkOutDate, guests);
     }
 }
+
+
+      /*  System.out.println("장소2--->"+location);
+        System.out.println("날짜2--->"+date);
+        System.out.println("인원수2--->"+guests);
+        System.out.println("결과2--->"+acmMapper.searchAcms(location, date, guests));*/
+
+
 

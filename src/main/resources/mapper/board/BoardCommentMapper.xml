@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.udigo.hotel.board.model.dao.BoardCommentMapper">
+    <insert id="insertComment" parameterType="com.udigo.hotel.board.model.dto.BoardCommentDTO">
+        INSERT INTO tbl_board_comments (post_id, content, created_at)
+        VALUES (#{postId}, #{content}, NOW())
+    </insert>
+
+    <select id="findByPostId" resultType="com.udigo.hotel.board.model.dto.BoardCommentDTO">
+        SELECT * FROM tbl_board_comments WHERE post_id = #{postId}
+    </select>
+</mapper>

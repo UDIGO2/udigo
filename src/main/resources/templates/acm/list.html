@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <title>ALL MENU</title>
     <link rel="stylesheet" th:href="@{/css/list.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
 </head>
+
 <body>
+<div th:replace="~{fragments/header :: header}"></div>
 <!-- 헤더 영역 -->
-<header th:replace="~{fragments/header :: header}"></header>
 
 <!-- 메인 컨텐츠 -->
 <main class="main-content">
@@ -38,7 +41,7 @@
     <div class="hotel-list">
         <div class="hotel-card" th:each="acm : ${acms}">
             <div class="hotel-image">
-                <img th:src="${acm.acmPhoto1}" th:alt="${acm.acmName}">
+                <img th:src="@{/image/acm/chuncheong/omuamua3.jpg}" th:alt="${acm.acmName}">
                 <button class="like-btn">
                     <i class="heart-icon"></i>
                 </button>
@@ -53,11 +56,11 @@
     <div class="view-more">
         <button type="button" class="view-more-btn">VIEW MORE</button>
     </div>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+    <script src="/js/header.js"></script>
+
 </main>
-
-<!-- 푸터 영역 -->
-<footer th:replace="~{fragments/footer :: footer}"></footer>
-
 <!-- JavaScript는 한 번만 포함 -->
 <script src="/js/main.js"></script>
 <script th:inline="javascript">
@@ -103,10 +106,10 @@
         const locationModal = createModal('지역 선택', `
                 <div>
                     <label><input type="radio" name="location" value="서울/경기"> 서울/경기</label><br>
-                    <label><input type="radio" name="location" value="강원도"> 강원도</label><br>
-                    <label><input type="radio" name="location" value="경상북도/남도"> 경상북도/남도</label><br>
-                    <label><input type="radio" name="location" value="전라북도/남도"> 전라북도/남도</label><br>
-                    <label><input type="radio" name="location" value="충청북도/남도"> 충청북도/남도</label><br>
+                    <label><input type="radio" name="location" value="강원"> 강원도</label><br>
+                    <label><input type="radio" name="location" value="경상"> 경상북도/남도</label><br>
+                    <label><input type="radio" name="location" value="전라"> 전라</label><br>
+                    <label><input type="radio" name="location" value="충청"> 충청</label><br>
                     <label><input type="radio" name="location" value="제주"> 제주</label>
                 </div>
             `, function() {
