@@ -2,14 +2,38 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>거래 내역 조회</title>
-  <link rel="stylesheet" href="/css/common.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/footer.css">
 </head>
 <body>
 
 <div th:replace="~{fragments/header :: header}"></div>
-<script src="/js/main.js"></script>
 
-<h1>거래 내역 조회</h1>
+
+
+
+<!-- 임시 장바구니 -->
+<ul id="cartItemList">
+  <li>
+    <input type="checkbox" name="cartItem" value="101" data-name="강남 호텔" data-price="120000">
+    강남 호텔 - 120,000원
+  </li>
+  <li>
+    <input type="checkbox" name="cartItem" value="102" data-name="해운대 리조트" data-price="150000">
+    해운대 리조트 - 150,000원
+  </li>
+</ul>
+
+<!-- 주문 버튼 (클래스 적용) -->
+<button class="order_btn">주문하기</button>
+
+
+<!-- 임시 장바구니 -->
+
+
+
+
+
 
 <h1>거래 내역 조회</h1>
 
@@ -39,5 +63,7 @@
 </table>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
-
+<script src="/js/header.js"></script>
+<!-- jQuery CDN 추가 (최신 버전) -->
+<script src="/js/order.js"></script>
 </body>

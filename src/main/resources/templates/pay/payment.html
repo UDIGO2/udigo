@@ -6,19 +6,30 @@
   <link rel="stylesheet" th:href="@{/css/paypage.css}">
   <link rel="stylesheet" th:href="@{/css/header.css}">
   <link rel="stylesheet" th:href="@{/css/footer.css}">
-
 </head>
 
 <body>
-
 <div th:replace="~{fragments/header :: header}"></div>
+
+
+
+
+
+
 
 <div class="pay_main">
   <!-- 예약 정보 -->
   <div class="mt-6 border-b pb-4">
+
+    <ul id="paymentPreviewList">
+
+      <!-- 결제할 숙소 목록이 여기에 표시됨 -->
+    </ul>
     <p class="text-gray-700"><strong>체크인:</strong> 2025-10-28(수) 16:00</p>
     <p class="text-gray-700"><strong>체크아웃:</strong> 2025-11-01(일) 09:00</p>
     <p class="text-gray-700"><strong>최대 인원:</strong> 2명</p>
+    <p><strong>총 결제 금액: <span id="totalPrice">0</span>원</strong></p>
+
   </div>
 
   <!-- 예약자 정보 -->
@@ -45,20 +56,7 @@
     <p class="text-xl font-bold text-blue-600">230,000원</p>
   </div>
 
-  <!-- 결제 수단 선택 -->
-  <div class="mt-6">
-    <h2 class="text-lg font-semibold">결제 수단 선택</h2>
-    <div class="bg-gray-100 p-4 rounded">
-      <label class="flex items-center space-x-2">
-        <input type="radio" name="payment" class="w-4 h-4">
-        <span>간편결제</span>
-      </label>
-      <label class="flex items-center space-x-2 mt-2">
-        <input type="radio" name="payment" class="w-4 h-4">
-        <span>카드결제</span>
-      </label>
-    </div>
-  </div>
+
 
   <!-- 환불 정책 -->
   <div class="mt-6 text-sm text-gray-600">
@@ -71,15 +69,14 @@
 
   <!-- 결제 버튼 -->
   <button class="payButton">결제하기</button>
-  <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
-  <script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script> <!-- js -->
-  <script src="/js/payment.js"></script>
 
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
+  <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="/js/header.js"></script>
-
+<script src="/js/payment.js"></script>
 </body>
 </html>

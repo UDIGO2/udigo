@@ -54,3 +54,12 @@ function verifyPayment(impUid, merchantUid) {
         alert("결제 검증 중 오류 발생!");
     });
 }
+
+
+// 장바구니 ---------------------------------------------
+
+// 장바구니 임시 구현
+document.addEventListener("DOMContentLoaded", function () {
+    loadCartItems();
+});
+

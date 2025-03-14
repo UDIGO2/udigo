@@ -3,7 +3,60 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.udigo.hotel.member.model.dao.MemberMapper">
-<!--<mapper namespace="com.udigo.hotel.mapper.PayMapper">-->
+
+
+    <!-- 장바구니에 담긴 숙소 ID 조회 -->
+    <select id="getCartItemsByMember" parameterType="string" resultType="map">
+        SELECT member_code, acm_id
+        FROM tbl_cart
+        WHERE member_code = #{memberCode}
+    </select>
+
+    <!-- 숙소 가격 조회 -->
+    <select id="getAccommodationPrice" parameterType="int" resultType="map">
+        SELECT acm_id, acm_price
+        FROM tbl_acm
+#         WHERE acm_id = 101
+        WHERE acm_id = #{acmId}
+    </select>
+
+<!--    <select id="getCartItems" resultType="CartDTO">-->
+<!--        SELECT-->
+<!--            c.member_code,-->
+<!--            a.acm_id,-->
+<!--            a.acm_name,-->
+<!--            a.acm_price-->
+<!--        FROM tbl_cart c-->
+<!--                 JOIN tbl_acm a ON c.acm_id = a.acm_id-->
+<!--        WHERE c.member_code = #{memberCode};  &#45;&#45; MyBatis에서 동적으로 바인딩-->
+<!--    </select>-->
+
+
+
+
+
+    <!--  결제창(프론트)에 숙소 명, 가격 정보 가져오기  -->
+<!--    <select id="getPaymentPreview" parameterType="map" resultType="map">-->
+<!--        SELECT-->
+<!--        m.member_code,-->
+<!--        m.member_name,-->
+<!--        a.acm_name,-->
+<!--        a.acm_price-->
+<!--        FROM tbl_cart c-->
+<!--        JOIN tbl_member m ON c.member_code = m.member_code-->
+<!--        JOIN tbl_acm a ON c.acm_id = a.acm_id-->
+<!--        WHERE c.member_code = #{memberCode}-->
+<!--        AND c.acm_id IN-->
+<!--        <foreach item="id" collection="checkedAccommodationIds" open="(" separator="," close=")">-->
+<!--            #{id}-->
+<!--        </foreach>-->
+<!--    </select>-->
+
+
+
+
+
+    <!--  <mapper namespace="com.udigo.hotel.mapper.PayMapper"> -->
 
 <!--    <insert id="insertPay" parameterType="com.udigo.hotel.dto.PayDTO">-->
 <!--        INSERT INTO tbl_pay(-->
