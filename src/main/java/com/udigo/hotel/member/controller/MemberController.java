@@ -2,13 +2,9 @@ package com.udigo.hotel.member.controller;
 
 import com.udigo.hotel.member.model.dto.MemberDTO;
 import com.udigo.hotel.member.model.service.MemberService;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -21,61 +17,25 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    /** 회원가입 페이지 이동 */
+    /** 회원가입 페이지 이동 **/
     @GetMapping("/signup")
-    public String signup() {
-        return "member/signup";
+    public String signupForm(Model model) {
+        model.addAttribute("member", new MemberDTO());
+        return "member/signup"; // signup.html 페이지로 이동
     }
 
-    /** 회원가입 처리 */
+    /** 회원가입 처리 **/
     @PostMapping("/signup")
-    public String signup(@ModelAttribute MemberDTO member,
-                         @ModelAttribute("confirmPassword") String confirmPassword,
-                         RedirectAttributes rttr) {
-
+    public String signup(@ModelAttribute MemberDTO member, RedirectAttributes redirectAttributes) {
         try {
-            memberService.signup(member, confirmPassword);
-            rttr.addFlashAttribute("successMessage", "회원가입이 완료되었습니다.");
-            return "redirect:/login"; // 🚀 회원가입 완료 후 로그인 페이지로 이동
-        } catch (Exception e) {
-            rttr.addFlashAttribute("errorMessage", "회원가입 실패: " + e.getMessage());
+            memberService.signup(member);
+            redirectAttributes.addFlashAttribute("successMessage", "회원가입이 완료되었습니다!");
             return "redirect:/member/signup";
+        } catch (IllegalArgumentException e) { // 아이디 중복 등 사용자 입력 오류
+            redirectAttributes.addFlashAttribute("errorMessage", "이미 사용 중인 아이디입니다. 다른 아이디를 입력해주세요.");
+        } catch (Exception e) { // 기타 모든 예외 (DB 오류 포함)
+            redirectAttributes.addFlashAttribute("errorMessage", "회원가입에 실패했습니다. 다시 시도해주세요.");
         }
-    }
-
-    /** 마이페이지 이동 */
-    @GetMapping("/mypage")
-    public String mypage(@AuthenticationPrincipal MemberDTO member, Model model) {
-
-        if (member == null) {
-            return "redirect:/login"; //  로그인되지 않은 경우 로그인 페이지로 이동
-        }
-
-        model.addAttribute("member", member);
-        model.addAttribute("currentPage", "mypage");
-
-        return "member/mypage";
-    }
-
-    /** 회원 정보 수정 */
-    @PostMapping("/update")
-    public String update(@ModelAttribute MemberDTO updateMember,
-                         @AuthenticationPrincipal MemberDTO member,
-                         RedirectAttributes rttr) {
-
-        if (member == null) {
-            rttr.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
-            return "redirect:/login"; //  로그인되지 않은 경우 로그인 페이지로 이동
-        }
-
-        try {
-            updateMember.setMemberCode(member.getMemberCode());
-            memberService.update(updateMember);
-            rttr.addFlashAttribute("successMessage", "회원정보가 수정되었습니다.");
-            return "redirect:/member/mypage";
-        } catch (Exception e) {
-            rttr.addFlashAttribute("errorMessage", "회원정보 수정 실패: " + e.getMessage());
-            return "redirect:/member/mypage";
-        }
+        return "redirect:/member/signup";
     }
 }

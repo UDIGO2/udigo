@@ -22,10 +22,13 @@ jpa:
     hibernate:
       format_sql: true  # SQL 쿼리 예쁘게 출력
   show-sql: true  # 실행되는 SQL을 콘솔에 출력
+  thymeleaf:
+    cache: false  # Thymeleaf 캐시 비활성화 (HTML 변경 사항 즉시 반영)
 
 mybatis:
   configuration:
     map-underscore-to-camel-case: true  # DB의 snake_case를 camelCase로 자동 변환
+    type-aliases-package: com.udigo.hotel
     default-fetch-size: 100
     default-statement-timeout: 30
   mapper-locations: classpath:/mapper/**/*.xml  # MyBatis 매퍼 XML 경로 (모든 하위 폴더 포함)
@@ -34,6 +37,8 @@ mybatis:
 logging:
   level:
     org.mybatis: DEBUG  # MyBatis SQL 로그 출력
+    org.springframework.security: info
+    com.udigo.hotel: debug
     jdbc.sqlonly: DEBUG
     jdbc.sqltiming: DEBUG
     jdbc.resultsettable: DEBUG

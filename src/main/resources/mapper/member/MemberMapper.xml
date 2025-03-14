@@ -1,60 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.udigo.hotel.member.model.dao.MemberMapper">
 
-    <!-- 회원 정보 매핑 -->
+    <!-- 회원 정보를 DTO에 매핑할 ResultMap -->
     <resultMap id="memberResultMap" type="com.udigo.hotel.member.model.dto.MemberDTO">
         <id property="memberCode" column="member_code"/>
         <result property="memberId" column="member_id"/>
-        <result property="password" column="password"/>
         <result property="memberName" column="member_name"/>
-        <result property="memberEmail" column="member_email"/>
+        <result property="email" column="email"/>
+        <result property="password" column="password"/>
         <result property="phoneNo" column="phone_no"/>
     </resultMap>
 
-    <!-- 회원 정보 조회 -->
-    <select id="findByMemberId" resultMap="memberResultMap">
-        SELECT * FROM tbl_member WHERE member_id = #{memberId}
-    </select>
-
-    <!-- 아이디 중복 확인 -->
-    <select id="existsByMemberId" resultType="boolean">
-        SELECT COUNT(*) > 0 FROM tbl_member WHERE member_id = #{memberId}
-    </select>
-
-    <!-- 이메일 중복 확인 -->
-    <select id="existsByEmail" resultType="boolean">
-        SELECT COUNT(*) > 0 FROM tbl_member WHERE member_email = #{memberEmail}
-    </select>
-
-    <!-- 회원 정보 저장 -->
-    <insert id="insertMember" useGeneratedKeys="true" keyProperty="memberCode">
-        INSERT INTO tbl_member (member_id, password, member_name, member_email, phone_no)
-        VALUES (#{memberId}, #{password}, #{memberName}, #{memberEmail}, #{phoneNo})
+    <!-- 회원가입 쿼리 -->
+    <insert id="insertMember" parameterType="com.udigo.hotel.member.model.dto.MemberDTO">
+        INSERT INTO tbl_member (member_id, member_name, email, password, phone_no)
+        VALUES (#{memberId}, #{memberName}, #{email}, #{password}, #{phoneNo})
     </insert>
 
-    <!-- 회원 권한 저장 -->
-    <insert id="insertMemberRole">
-        INSERT INTO tbl_member_role (member_code, authority_code)
-        VALUES (#{memberCode}, 2) <!-- 기본 ROLE_USER -->
-    </insert>
-
-    <!-- 회원 정보 수정 -->
-    <update id="updateMember">
-        UPDATE tbl_member
-        <set>
-            <if test="memberName != null">member_name = #{memberName},</if>
-            <if test="memberEmail != null">member_email = #{memberEmail},</if>
-            <if test="phoneNo != null">phone_no = #{phoneNo},</if>
-        </set>
-        WHERE member_code = #{memberCode}
-    </update>
-
-    <!-- 비밀번호 변경 -->
-    <update id="updateMemberPassword">
-        UPDATE tbl_member SET password = #{password} WHERE member_code = #{memberCode}
-    </update>
+    <!-- 회원 조회 (id 기반) -->
+    <select id="selectMemberById" parameterType="String" resultMap="memberResultMap">
+        SELECT member_code, member_id, member_name, email, password, phone_no
+        FROM tbl_member
+        WHERE member_id = #{memberId}
+    </select>
 
 </mapper>

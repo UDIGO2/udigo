@@ -6,203 +6,119 @@
     <title>회원 가입</title>
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
-
-    <style>
-
-        /* ↓↓↓ 만드시는 페이지 css에 맨 앞에 필수로 넣어주세요 ↓↓↓ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            font-weight: 500;
-        }
-        /* ↑↑↑ 모든 페이지에 css 맨 앞에 필수로 넣어주세요 ↑↑↑ */
-
-        .signup {
-            font-family: 'Noto Sans KR', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f8f9fa;
-        }
-        .signup-container {
-            width: 400px;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        .signup_h2 {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-        .form-group label {
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 5px;
-            display: block;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        .btn-container {
-            display: flex;
-            align-items: center;
-        }
-        .btn-container input {
-            flex: 1;
-        }
-        .btn-check {
-            width: 80px;
-            margin-left: 5px;
-            padding: 10px;
-            background-color: #ddd;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-            margin: 15px 0;
-        }
-        .btn-primary {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 12px;
-            font-size: 16px;
-            width: 100%;
-            cursor: pointer;
-        }
-        .login-link {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/signup.css}">
 </head>
 <body>
+<!-- ✅ 헤더 추가 -->
 <div th:replace="~{fragments/header :: header}"></div>
 
-<div class="signup">
-<div class="signup-container">
-    <h2 class="signup_h2">회원 가입</h2>
-    <form action="/member/signup" method="post">
-        <!-- 아이디 -->
-        <div class="form-group">
-            <label for="memberId">아이디</label>
-            <div class="btn-container">
-                <input type="text" id="memberId" name="memberId" placeholder="아이디" required>
-                <button type="button" class="btn-check" onclick="checkId()">중복 확인</button>
+<!-- ✅ 회원가입 폼을 감싸는 컨테이너 (여백 추가) -->
+<div id="signup-page">
+    <div class="signup-container">
+        <h2>회원 가입</h2>
+
+        <!-- 성공/실패 메시지 -->
+        <p th:if="${successMessage != null}" th:text="${successMessage}" class="message success"></p>
+        <p th:if="${errorMessage != null}" class="message error">회원가입에 실패했습니다. 다시 시도해주세요.</p>
+
+        <form th:action="@{/member/signup}" method="post" th:object="${member}">
+            <!-- 아이디 -->
+            <div class="form-group">
+                <label for="memberId">아이디</label>
+                <div class="btn-container">
+                    <input type="text" id="memberId" name="memberId" placeholder="아이디" required>
+                    <button type="button" class="btn-check">중복 확인</button>
+                </div>
             </div>
-        </div>
 
-        <!-- 이름 -->
-        <div class="form-group">
-            <label for="memberName">이름</label>
-            <input type="text" id="memberName" name="memberName" placeholder="이름" required>
-        </div>
-
-        <!-- 비밀번호 -->
-        <div class="form-group">
-            <label for="password">비밀번호</label>
-            <input type="password" id="password" name="password" placeholder="비밀번호" required>
-        </div>
-
-        <!-- 비밀번호 확인 -->
-        <div class="form-group">
-            <label for="confirmPassword">비밀번호 확인</label>
-            <input type="password" id="confirmPassword" placeholder="비밀번호 확인" required oninput="validatePassword()">
-        </div>
-
-        <!-- 이메일 -->
-        <div class="form-group">
-            <label for="memberEmail">이메일</label>
-            <div class="btn-container">
-                <input type="email" id="memberEmail" name="memberEmail" placeholder="이메일" required>
-                <button type="button" class="btn-check" onclick="checkEmail()">중복 확인</button>
+            <!-- 이름 -->
+            <div class="form-group">
+                <label for="memberName">이름</label>
+                <input type="text" id="memberName" name="memberName" placeholder="이름" required>
             </div>
+
+            <!-- 비밀번호 -->
+            <div class="form-group">
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" placeholder="비밀번호" required onkeyup="checkPasswordMatch()">
+            </div>
+
+            <!-- 비밀번호 확인 -->
+            <div class="form-group">
+                <label for="passwordConfirm">비밀번호 확인</label>
+                <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="비밀번호 확인" required onkeyup="checkPasswordMatch()">
+            </div>
+
+            <!-- 비밀번호 확인 메시지 -->
+            <small id="passwordMatchMessage" style="display: none;"></small>
+
+            <!-- 이메일 -->
+            <div class="form-group">
+                <label for="email">이메일</label>
+                <input type="email" id="email" name="email" placeholder="이메일" required>
+            </div>
+
+            <!-- 핸드폰 번호 -->
+            <div class="form-group">
+                <label for="phoneNo">핸드폰 번호</label>
+                <input type="text" id="phoneNo" name="phoneNo" placeholder="핸드폰 번호" required>
+            </div>
+
+            <!-- 이용약관 동의 -->
+            <div class="checkbox-group">
+                <input type="checkbox" id="termsAgree" required>
+                <label for="termsAgree">이용약관 및 개인정보 처리방침에 동의합니다.</label>
+            </div>
+
+            <!-- 회원가입 버튼 -->
+            <button type="submit" class="btn-primary">회원 가입</button>
+        </form>
+
+        <div class="login-link">
+            이미 계정이 있으신가요? <a href="/login">로그인 ></a>
         </div>
-
-        <!-- 핸드폰 번호 -->
-        <div class="form-group">
-            <label for="phoneNo">핸드폰 번호</label>
-            <input type="text" id="phoneNo" name="phoneNo" placeholder="핸드폰 번호" required>
-        </div>
-
-        <!-- 이용약관 동의 -->
-        <div class="checkbox-group">
-            <input type="checkbox" id="termsCheck" required>
-            <label for="termsCheck">이용약관 및 개인정보 처리방침에 동의합니다.</label>
-        </div>
-
-        <!-- 회원가입 버튼 -->
-        <button type="submit" class="btn-primary">회원 가입</button>
-    </form>
-
-    <div class="login-link">
-        이미 계정이 있으신가요? <a href="/login">로그인 ></a>
     </div>
 </div>
-</div>
+
+<!-- ✅ 푸터 추가 -->
 <div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- ✅ JavaScript 추가 -->
 <script src="/js/header.js"></script>
 
-<script>
-    function validatePassword() {
-        let password = document.getElementById("password").value;
-        let confirmPassword = document.getElementById("confirmPassword").value;
-        let message = document.getElementById("passwordMessage");
+<script th:inline="javascript">
+    var successMessage = /*[[${successMessage}]]*/ null;
+    var errorMessage = /*[[${errorMessage}]]*/ null;
 
-        if (password === confirmPassword) {
-            message.textContent = "✔ 비밀번호가 일치합니다.";
-            message.className = "validation-msg valid";
-        } else {
-            message.textContent = "❌ 비밀번호가 다릅니다.";
-            message.className = "validation-msg invalid";
+    document.addEventListener("DOMContentLoaded", function() {
+        if (successMessage && successMessage.trim() !== "" && successMessage.trim() !== "null") {
+            alert(successMessage);
         }
-    }
+        if (errorMessage && errorMessage.trim() !== "" && errorMessage.trim() !== "null") {
+            alert("회원가입에 실패했습니다. 다시 시도해주세요.");
+        }
+    });
 
-    function checkId() {
-        let memberId = document.getElementById("memberId").value;
+    // ✅ 비밀번호 확인 기능 추가
+    function checkPasswordMatch() {
+        var password = document.getElementById("password").value;
+        var passwordConfirm = document.getElementById("passwordConfirm").value;
+        var message = document.getElementById("passwordMatchMessage");
 
-        // 🚀 서버에서 아이디 중복 확인 요청 (예제)
-        fetch(`/api/check-id?memberId=${memberId}`)
-            .then(response => response.json())
-            .then(data => {
-                alert(data.exists ? "❌ 이미 사용 중인 아이디입니다." : "✔ 사용 가능한 아이디입니다!");
-            });
-    }
+        if (password === "" || passwordConfirm === "") {
+            message.style.display = "none";
+            return;
+        }
 
-    function checkEmail() {
-        let memberEmail = document.getElementById("memberEmail").value;
-
-        // 🚀 서버에서 이메일 중복 확인 요청 (예제)
-        fetch(`/api/check-email?memberEmail=${memberEmail}`)
-            .then(response => response.json())
-            .then(data => {
-                alert(data.exists ? "❌ 이미 사용 중인 이메일입니다." : "✔ 사용 가능한 이메일입니다!");
-            });
+        if (password === passwordConfirm) {
+            message.style.display = "block";
+            message.style.color = "green";
+            message.innerHTML = "✔ 비밀번호가 일치합니다.";
+        } else {
+            message.style.display = "block";
+            message.style.color = "red";
+            message.innerHTML = "❌ 비밀번호가 일치하지 않습니다.";
+        }
     }
 </script>
 </body>

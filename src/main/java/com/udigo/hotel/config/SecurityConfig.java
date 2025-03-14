@@ -1,6 +1,7 @@
 package com.udigo.hotel.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,6 +12,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity // Spring Security 활성화
+@ComponentScan(basePackages = "com.udigo.hotel")
+
 public class SecurityConfig {
 
     @Bean
