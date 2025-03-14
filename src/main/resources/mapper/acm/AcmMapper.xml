@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.udigo.hotel.acm.model.dao.AcmMapper">
 
-    <select id="selectInitialAcms" resultType="AcmDTO">
+    <select id="selectInitialAcms" resultType="com.udigo.hotel.acm.model.dto.AcmDTO">
         SELECT *
         FROM
             tbl_acm
@@ -11,7 +11,30 @@
         LIMIT 9
     </select>
 
-    <select id="selectNextAcms" resultType="AcmDTO">
+    <select id="searchAcms" resultType="com.udigo.hotel.acm.model.dto.AcmDTO">
+        SELECT *
+        FROM
+        tbl_acm a
+        WHERE 1 = 1
+        <if test="acmLocation != null and acmLocation != ''">
+            AND a.acm_location = #{acmLocation} #지역
+        </if>
+        <if test="maxGuest != null and maxGuest != ''">
+            AND a.max_guest = #{maxGuest} #최대인원
+        </if>
+        <if test="acmDate != null and acmDate != ''">
+            AND a.acm_id NOT IN ( #예약날짜
+            SELECT r.acm_id
+            FROM tbl_reservations r
+            WHERE #{acmDate} BETWEEN r.check_in AND r.check_out
+            )
+        </if>
+        ORDER BY
+        a.liked_count DESC
+        LIMIT 9
+    </select>
+
+    <select id="selectNextAcms" resultType="com.udigo.hotel.acm.model.dto.AcmDTO">
         SELECT *
         FROM
             tbl_acm

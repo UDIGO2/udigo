@@ -28,7 +28,8 @@ mybatis:
     map-underscore-to-camel-case: true  # DB의 snake_case를 camelCase로 자동 변환
     default-fetch-size: 100
     default-statement-timeout: 30
-  mapper-locations: classpath:mapper/*.xml  # MyBatis 매퍼 XML 경로
+  mapper-locations: classpath:/mapper/**/*.xml  # MyBatis 매퍼 XML 경로 (모든 하위 폴더 포함)
+#  mapper-locations: classpath:/mapper/*.xml --> 매퍼 경로 확인 해야함.
 
 logging:
   level:

@@ -60,6 +60,9 @@ public class AcmController {
             @RequestParam(required = false) Integer guests) {
 
         Map<String, Object> response = new HashMap<>();
+//        System.out.println("장소--->"+location);
+//        System.out.println("날짜--->"+date);
+//        System.out.println("인원수--->"+guests);
 
         try {
             List<AcmDTO> acms = acmService.searchAcms(location, date, guests);

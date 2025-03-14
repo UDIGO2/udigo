@@ -205,6 +205,7 @@
             fetch(`/acm/api/more?currentCount=${currentCount}`)
                 .then(response => response.json())
                 .then(data => {
+                    debugger;
                     if (data.success && data.acms.length > 0) {
                         // Add new accommodations
                         data.acms.forEach(acm => {

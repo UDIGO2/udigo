@@ -27,6 +27,10 @@ public class AcmService {
     }
 
     public List<AcmDTO> searchAcms(String location, String date, Integer guests) {
+        System.out.println("장소2--->"+location);
+        System.out.println("날짜2--->"+date);
+        System.out.println("인원수2--->"+guests);
+        System.out.println("결과2--->"+acmMapper.searchAcms(location, date, guests));
         return acmMapper.searchAcms(location, date, guests);
     }
 }
