@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 - 1대1 문의 관리</title>
+    <link rel="stylesheet" th:href="@{/css/board.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <style>
+        .post-actions {
+            position: absolute;
+            right: 50px;
+            top: 15px;
+        }
+        .reply-button, .delete-button {
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+            margin-left: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .reply-button {
+            color: #2196F3;
+        }
+        .delete-button {
+            color: #f44336;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        .status-completed {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .status-pending {
+            background-color: #f44336;
+            color: white;
+        }
+        .comment-section {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .comment-header {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<div class="sidebar">
+    <a th:href="@{/board/admin/notice}">공지사항 관리</a>
+    <a th:href="@{/board/admin/FAQ}">FAQ 관리</a>
+    <a th:href="@{/board/admin/ask}">1대1 문의 관리</a>
+</div>
+
+<div class="content">
+    <h1>1대1 문의 관리</h1>
+
+    <div th:each="post : ${posts}" class="post">
+        <h2 th:text="${post.title}" style="cursor: pointer;"
+            th:onclick="'toggleContent(' + ${post.postId} + ')'"></h2>
+        <span class="toggle-arrow" th:id="'arrow-' + ${post.postId}">&gt;</span>
+        <p>
+            <span th:text="'작성일: '+${#temporals.format(post.createdAt, 'yyyy/MM/dd')}"></span>
+            <span th:text="' | 작성자: '+${post.memberName}"></span>
+            <span th:if="${hasCommentMap.get(post.postId)}" class="status-badge status-completed">답변완료</span>
+            <span th:unless="${hasCommentMap.get(post.postId)}" class="status-badge status-pending">답변미완료</span>
+        </p>
+
+        <div class="post-actions">
+            <a th:href="@{'/board/admin/comment/add/' + ${post.postId}}" class="reply-button">답변달기</a>
+            <button class="delete-button" th:onclick="'confirmDelete(' + ${post.postId} + ', 3)'">삭제</button>
+        </div>
+
+        <div th:id="'content-' + ${post.postId}" class="post-content">
+            <p th:text="${post.content}"></p>
+
+            <!-- 답변 표시 영역 -->
+            <div th:if="${hasCommentMap.get(post.postId)}" class="comment-section">
+                <div class="comment-header">관리자 답변:</div>
+                <div th:each="comment : ${commentsMap.get(post.postId)}">
+                    <p th:text="${comment.content}"></p>
+                    <small th:text="'답변일: ' + ${#temporals.format(comment.createdAt, 'yyyy/MM/dd')}"></small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pagination">
+        <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+            <a th:href="@{'/board/admin/ask?page=' + ${i}}" th:text="${i}"></a>
+        </span>
+    </div>
+</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script src="/js/header.js"></script>
+
+<script>
+    function toggleContent(postId) {
+        const content = document.getElementById('content-' + postId);
+        const arrow = document.getElementById('arrow-' + postId);
+        if (content) {
+            const isVisible = content.style.display === 'block';
+            content.style.display = isVisible ? 'none' : 'block';
+            arrow.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(90deg)';
+        }
+    }
+
+    function confirmDelete(postId, boardType) {
+        if (confirm('정말 삭제하시겠습니까?')) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/board/admin/post/delete';
+
+            const postIdInput = document.createElement('input');
+            postIdInput.type = 'hidden';
+            postIdInput.name = 'postId';
+            postIdInput.value = postId;
+            form.appendChild(postIdInput);
+
+            const boardTypeInput = document.createElement('input');
+            boardTypeInput.type = 'hidden';
+            boardTypeInput.name = 'boardType';
+            boardTypeInput.value = boardType;
+            form.appendChild(boardTypeInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+</script>
+</body>
+</html>

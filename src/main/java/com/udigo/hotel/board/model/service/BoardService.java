@@ -46,4 +46,13 @@ public class BoardService {
     public List<BoardCommentDTO> getCommentsByPostId(int postId) {
         return boardCommentMapper.findByPostId(postId);
     }
+
+    public BoardPostDTO getPostById(int postId) {
+        return boardPostMapper.findById(postId);
+    }
+
+    public List<BoardPostDTO> getPostsByTypeWithMember(int boardType, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        return boardPostMapper.findByBoardTypeWithMemberAndPagination(boardType, offset, pageSize);
+    }
 }

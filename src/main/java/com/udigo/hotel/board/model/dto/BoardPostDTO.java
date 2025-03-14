@@ -11,6 +11,7 @@ public class BoardPostDTO {
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String memberName;
 
     public BoardPostDTO() {
     }
@@ -82,6 +83,14 @@ public class BoardPostDTO {
         this.updatedAt = updatedAt;
     }
 
+    public String getMemberName() {
+        return memberName;
+    }
+
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
+    }
+
     @Override
     public String toString() {
         return "BoardPostDTO{" +
@@ -92,6 +101,7 @@ public class BoardPostDTO {
                 ", content='" + content + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
+                ", memberName='" + memberName + '\'' +
                 '}';
     }
 }

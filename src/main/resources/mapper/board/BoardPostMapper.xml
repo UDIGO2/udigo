@@ -27,4 +27,18 @@
     <delete id="deletePost" parameterType="int">
         DELETE FROM tbl_board_posts WHERE post_id = #{postId}
     </delete>
+
+    <select id="findById" resultType="com.udigo.hotel.board.model.dto.BoardPostDTO">
+        SELECT * FROM tbl_board_posts WHERE post_id = #{postId}
+    </select>
+
+    <select id="findByBoardTypeWithMemberAndPagination" resultType="com.udigo.hotel.board.model.dto.BoardPostDTO">
+        SELECT p.*, m.member_name as memberName
+        FROM tbl_board_posts p
+        LEFT JOIN tbl_member m ON p.member_code = m.member_code
+        WHERE p.board_type = #{boardType}
+        ORDER BY p.created_at DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
 </mapper>

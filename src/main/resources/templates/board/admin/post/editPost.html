@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 수정</title>
+    <link rel="stylesheet" th:href="@{/css/board.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <!-- 스타일 유지 -->
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<div class="sidebar">
+    <a th:href="@{/board/admin/notice}">공지사항 관리</a>
+    <a th:href="@{/board/admin/FAQ}">FAQ 관리</a>
+    <a th:href="@{/board/admin/ask}">1대1 문의</a>
+</div>
+
+<div class="content">
+    <h1>게시글 수정</h1>
+
+    <div class="form-container">
+        <form th:action="@{/board/admin/post/edit}" method="post">
+            <input type="hidden" name="postId" th:value="${post.postId}">
+            <input type="hidden" name="memberCode" th:value="${post.memberCode}">
+            <input type="hidden" name="createdAt" th:value="${#temporals.format(post.createdAt, 'yyyy-MM-dd''T''HH:mm:ss')}">
+
+            <div class="form-group">
+                <label for="boardType">게시판 선택</label>
+                <select id="boardType" name="boardType" required>
+                    <option value="1" th:selected="${post.boardType == 1}">공지사항</option>
+                    <option value="2" th:selected="${post.boardType == 2}">FAQ</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" id="title" name="title" th:value="${post.title}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="content">내용</label>
+                <textarea id="content" name="content" th:text="${post.content}" required></textarea>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="submit-button">수정</button>
+                <button type="button" class="cancel-button" onclick="history.back()">취소</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script src="/js/header.js"></script>
+</body>
+</html>

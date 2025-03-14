@@ -14,4 +14,6 @@ public interface BoardPostMapper {
     void insertPost(BoardPostDTO post);
     void updatePost(BoardPostDTO post);
     void deletePost(int postId);
+    BoardPostDTO findById(int postId);
+    List<BoardPostDTO> findByBoardTypeWithMemberAndPagination(@Param("boardType") int boardType, @Param("offset") int offset, @Param("pageSize") int pageSize);
 }

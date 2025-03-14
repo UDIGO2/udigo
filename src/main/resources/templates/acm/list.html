@@ -41,7 +41,7 @@
     <div class="hotel-list">
         <div class="hotel-card" th:each="acm : ${acms}">
             <div class="hotel-image">
-                <img th:src="@{/image/acm/chuncheong/omuamua3.jpg}" th:alt="${acm.acmName}">
+                <img th:src="@{${acm.acmPhoto1}}" th:alt="${acm.acmName}">
                 <button class="like-btn">
                     <i class="heart-icon"></i>
                 </button>
@@ -244,8 +244,7 @@
                     }
                 })
                 .catch(error => {
-                    console.error('Error fetching accommodations:', error);
-                });
+                    console.error('Error fetching accommodations:', error);                });
         });
     });
 </script>
