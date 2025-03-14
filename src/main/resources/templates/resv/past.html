@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>이전 예약</title>
     <link rel="stylesheet" th:href="@{/css/myResv.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
 </head>
 <body>
+<div th:replace="~{fragments/header :: header}"></div>
 <div class="container">         
     <h1>이전 예약</h1>
 
@@ -27,6 +30,8 @@
         <p th:text="'체크아웃: ' + ${#temporals.format(reservation.checkOut, 'yyyy/MM/dd')}">체크아웃 날짜</p>
         <button class="details-button">상세 정보</button>
     </div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
 </body>
+<script src="/js/header.js"></script>
 </html>

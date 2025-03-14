@@ -1,3 +1,4 @@
+<!-- src/main/resources/templates/fragments/header.html -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -8,29 +9,27 @@
 
 <header th:fragment="header" class="header">
   <nav class="h_navbar">
-    <div class="h_logo"><a href="#"><img th:src="@{/image/header/h_logo.png}" alt="이미지"></a></div> <!-- 메인 페이지 -->
+    <div class="h_logo"><a href="/"><img th:src="@{/image/header/h_logo.png}" alt="이미지"></a></div>
     <ul class="h_nav-links">
-      <li><a href="/acm/list">Hotel</a> <!-- 호텔 -->
-      </li>
-      <li><a href="#">Board</a> <!-- 게시판 -->
+      <li><a href="/acm/list">Hotel</a></li>
+      <li><a href="/board/notice">Board</a>
         <ul>
-          <li><a href="#">게시판</a></li>  <!-- 게시판 -->
-          <li><a href="#">공지사항</a></li> <!-- 공지사항 -->
-          <li><a href="#">FAQ</a></li> <!-- FAQ -->
+          <li><a href="/board/notice">공지사항</a></li>
+          <li><a href="/board/FAQ">FAQ</a></li>
+          <li><a href="/board/ask">1:1 문의</a></li>
         </ul>
       </li>
-
-      <li><a href="reservations/past">Reservations</a> <!-- 예약 페이지 -->
+      <li><a href="/reservations/current">Reservations</a>
         <ul>
-          <li><a href="#">내 예약</a></li> <!-- 내 예약 -->
-          <li><a href="#">예약 정보</a></li> <!-- 예약 정보 -->
+          <li><a href="/reservations/current">현재 예약</a></li>
+          <li><a href="/reservations/past">이전 예약</a></li>
         </ul>
       </li>
     </ul>
 
     <div class="h_nav-buttons">
-      <button class="login-btn" onclick="location.href='/login'">로그인</button> <!-- 로그인 -->
-      <button class="h_my-page-btn h_hidden"><a th:href="@{/mypage}">마이페이지</a></button> <!-- 마이페이지 -->
+      <button class="login-btn" onclick="location.href='/login'">로그인</button>
+      <button class="h_my-page-btn h_hidden"><a th:href="@{/mypage}">마이페이지</a></button>
     </div>
   </nav>
 </header>

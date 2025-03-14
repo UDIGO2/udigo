@@ -1,6 +1,8 @@
+// src/main/resources/static/js/header.js
 document.addEventListener("DOMContentLoaded", function () {
     const navBar = document.querySelector(".h_navbar");
     const subMenus = document.querySelectorAll(".h_nav-links ul");
+    const content = document.querySelector(".content");
 
     const dropdownBackground = document.createElement("div");
     dropdownBackground.classList.add("h_dropdown-background");
@@ -19,14 +21,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 menu.classList.add("active");
             }, 50);
         });
+
+        // 메뉴가 열릴 때 content 아래로 밀기
+        content.style.transition = "margin-top 0.3s ease"; // 애니메이션 추가
+        content.style.marginTop = dropdownBackground.offsetHeight + 'px';
     });
 
     navBar.addEventListener("mouseleave", function () {
         dropdownBackground.classList.remove("active");
         subMenus.forEach(menu => {
             menu.classList.remove("active");
-
-        }, 200);
+        });
 
         setTimeout(() => {
             if (!navBar.matches(":hover")) {
@@ -34,9 +39,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 subMenus.forEach(menu => {
                     menu.style.display = "none";
                 });
+
+                // 메뉴가 닫힐 때 content 원래 위치로
+                content.style.marginTop = '0';
             }
-        }, 300); // 애니메이션 지속 시간과 동일하게 설정함.
+        }, 300);
     });
 });
-// 헤더 여기까지
-

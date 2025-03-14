@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>예약 취소</title>
     <link rel="stylesheet" th:href="@{/css/myResv.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
 </head>
 <body>
+<div th:replace="~{fragments/header :: header}"></div>
 <div class="container">
     <h1>예약 취소</h1>
 
@@ -28,6 +31,19 @@
         <a th:href="@{'/reservations/cancel/' + ${reservation.resvId}}" class="cancel-button">예약 취소</a>
         <button class="details-button">상세 정보</button>
     </div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
 </body>
+<script src="/js/header.js"></script>
+<script>
+    function toggleContent(postId) {
+        const content = document.getElementById('content-' + postId);
+        const arrow = document.getElementById('arrow-' + postId);
+        if (content) {
+            const isVisible = content.style.display === 'block';
+            content.style.display = isVisible ? 'none' : 'block';
+            arrow.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(90deg)';
+        }
+    }
+</script>
 </html>

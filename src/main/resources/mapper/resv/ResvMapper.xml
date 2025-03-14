@@ -25,21 +25,21 @@
         SELECT * FROM tbl_reservations
         WHERE member_code = #{memberCode}
           AND check_out &gt; #{now}
-          AND is_resv = 1
+          AND is_resv = true
     </select>
 
     <select id="findPastByMemberCode" resultMap="resvMap">
         SELECT * FROM tbl_reservations
         WHERE member_code = #{memberCode}
           AND check_out &lt;= #{now}
-          AND is_resv = 1
+          AND is_resv = true
     </select>
 
     <select id="findCancelableByMemberCode" resultMap="resvMap">
         SELECT * FROM tbl_reservations
         WHERE member_code = #{memberCode}
           AND check_in > #{now}
-          AND is_resv = 1
+          AND is_resv = true
     </select>
 
     <update id="cancelReservation">
