@@ -4,7 +4,7 @@
 
 <mapper namespace="com.udigo.hotel.member.model.dao.MemberMapper">
 
-    <!-- 회원 정보를 DTO에 매핑할 ResultMap -->
+    <!-- ✅ 회원 정보를 DTO에 매핑할 ResultMap -->
     <resultMap id="memberResultMap" type="com.udigo.hotel.member.model.dto.MemberDTO">
         <id property="memberCode" column="member_code"/>
         <result property="memberId" column="member_id"/>
@@ -14,14 +14,14 @@
         <result property="phoneNo" column="phone_no"/>
     </resultMap>
 
-    <!-- 회원가입 쿼리 -->
+    <!-- ✅ 회원가입 쿼리 -->
     <insert id="insertMember" parameterType="com.udigo.hotel.member.model.dto.MemberDTO">
         INSERT INTO tbl_member (member_id, member_name, email, password, phone_no)
         VALUES (#{memberId}, #{memberName}, #{email}, #{password}, #{phoneNo})
     </insert>
 
-    <!-- 회원 조회 (id 기반) -->
-    <select id="selectMemberById" parameterType="String" resultMap="memberResultMap">
+    <!-- ✅ 회원 조회 (id 기반) -->
+    <select id="findByMemberId" parameterType="String" resultMap="memberResultMap">
         SELECT member_code, member_id, member_name, email, password, phone_no
         FROM tbl_member
         WHERE member_id = #{memberId}

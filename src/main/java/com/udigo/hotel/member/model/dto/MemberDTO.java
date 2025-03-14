@@ -1,25 +1,34 @@
 package com.udigo.hotel.member.model.dto;
 
-public class MemberDTO {
-    private int memberCode;  // 회원 코드
-    private String memberId;  // 회원 ID
-    private String memberName; // 사용자명
-    private String email;  // 이메일
-    private String password;  // 비밀번호
-    private String phoneNo;  // 휴대폰 번호
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-    public MemberDTO() {
-    }
+import java.util.Collection;
+import java.util.List;
 
-    public MemberDTO(int memberCode, String memberId, String memberName, String email, String password, String phoneNo) {
+public class MemberDTO implements UserDetails {
+
+    private int memberCode;
+    private String memberId;
+    private String memberName;
+    private String email;
+    private String password;
+    private String phoneNo;
+    private List<GrantedAuthority> authorities; // 🔥 Spring Security 권한 정보 저장
+
+    public MemberDTO() {}
+
+    public MemberDTO(int memberCode, String memberId, String memberName, String email, String password, String phoneNo, List<GrantedAuthority> authorities) {
         this.memberCode = memberCode;
         this.memberId = memberId;
-        this.memberName = memberName; // 수정된 필드명 반영
+        this.memberName = memberName;
         this.email = email;
         this.password = password;
         this.phoneNo = phoneNo;
+        this.authorities = authorities;
     }
 
+    // ✅ Getter & Setter
     public int getMemberCode() {
         return memberCode;
     }
@@ -36,11 +45,11 @@ public class MemberDTO {
         this.memberId = memberId;
     }
 
-    public String getMemberName() { // 메서드명 수정
+    public String getMemberName() {
         return memberName;
     }
 
-    public void setMemberName(String memberName) { // 메서드명 수정
+    public void setMemberName(String memberName) {
         this.memberName = memberName;
     }
 
@@ -66,6 +75,40 @@ public class MemberDTO {
 
     public void setPhoneNo(String phoneNo) {
         this.phoneNo = phoneNo;
+    }
+
+    public void setAuthorities(List<GrantedAuthority> authorities) {
+        this.authorities = authorities;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return memberId;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     @Override
