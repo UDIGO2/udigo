@@ -20,12 +20,12 @@ public class MainController {
     // 회원별 결제 내역 조회
     @GetMapping("/payList")
     public String payListPage() {
-        return "payList";
+        return "pay/payList";
     }
 
     @GetMapping("/cart-main")
     public String cart() {
-        return "cartMain";  // 다른 뷰로 변경
+        return "cart/cart";  // 다른 뷰로 변경
     }
 
 }
