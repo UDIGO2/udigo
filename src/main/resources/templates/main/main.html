@@ -90,5 +90,13 @@
 
 <div th:replace="~{fragments/footer :: footer}"></div>
 <script src="/js/header.js"></script>
+
+<!-- 로그인 정보 콘솔 출력 스크립트 -->
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  var loggedInUser = /*[[${#authentication.principal.username}]]*/ 'guest';
+  console.log("현재 로그인 정보 (username):", loggedInUser);
+  /*]]>*/
+</script>
 </body>
 </html>
