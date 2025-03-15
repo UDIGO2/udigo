@@ -6,21 +6,49 @@
     <title>장바구니</title>
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/cart.css}">
 </head>
 <body>
 <!-- 헤더를 fragment로 불러옵니다. -->
 <div th:replace="~{fragments/header :: header}"></div>
+
 <main>
     <div class="cart-container">
         <h1>장바구니</h1>
         <div class="cart-icon">🛒</div>
         <p class="cart-message">장바구니가 비었습니다.<br>원하시는 숙소를 담아주세요.</p>
-        <a href="#" class="button">담으러 가기</a>
+
+        <!-- ✅ 메인 페이지로 이동하는 버튼 -->
+        <a href="/" class="button">담으러 가기</a>
+
+        <!-- ✅ 장바구니에 상품 추가하는 버튼 -->
+        <form th:action="@{/cart/add}" method="post" onsubmit="redirectToCart(event)">
+            <input type="hidden" name="acmId" value="1"> <!-- 예제 숙소 ID -->
+
+        </form>
     </div>
 </main>
+
 <!-- 푸터를 fragment로 불러옵니다. -->
 <div th:replace="~{fragments/footer :: footer}"></div>
 
 <script src="/js/header.js"></script>
+
+<!-- ✅ 상품 추가 후 장바구니로 이동하는 스크립트 -->
+<script>
+    function redirectToCart(event) {
+        event.preventDefault(); // 기본 제출 동작 막기
+
+        fetch(event.target.action, {
+            method: "POST",
+            body: new FormData(event.target)
+        }).then(response => {
+            if (response.ok) {
+                alert("상품이 장바구니에 추가되었습니다.");
+                window.location.href = "/cart"; // 장바구니 페이지로 이동
+            }
+        });
+    }
+</script>
 </body>
 </html>

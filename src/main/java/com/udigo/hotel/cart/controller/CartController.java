@@ -1,5 +1,8 @@
 package com.udigo.hotel.cart.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.udigo.hotel.cart.model.dto.CartDTO;
 import com.udigo.hotel.cart.model.service.CartService;
 import jakarta.servlet.http.HttpSession;
@@ -28,19 +31,16 @@ public class CartController {
     public String cartList(HttpSession session, Model model) {
         Integer memberCode = (Integer) session.getAttribute("memberCode");
 
-        List<CartDTO> cartItems;
+        List<CartDTO> cartItems = new ArrayList<>();
         if (memberCode != null) {
-            // 로그인한 경우, DB에서 장바구니 불러오기
+            // 로그인한 경우, DB에서 장바구니 데이터 불러오기
             cartItems = cartService.getCartItems(memberCode);
-        } else {
-            // 로그인하지 않은 경우, 세션에서 장바구니 불러오기
-            cartItems = (List<CartDTO>) session.getAttribute("cart");
-            if (cartItems == null) {
-                cartItems = new ArrayList<>();
-            }
         }
+
         model.addAttribute("cartItems", cartItems);
-        return "cart/cart";
+
+        // 장바구니가 비었으면 cart.html, 상품이 있으면 cartadd.html 반환
+        return cartItems.isEmpty() ? "cart/cart" : "cart/cartadd";
     }
 
     // 장바구니에 아이템 추가 (세션 기반)
@@ -62,24 +62,19 @@ public class CartController {
         }
 
         return "redirect:/cart";
-    }
 
-    // 장바구니에서 아이템 삭제 (세션 기반)
-    @PostMapping("/remove")
-    public String removeItemFromCart(@RequestParam int acmId, HttpSession session) {
-        Integer memberCode = (Integer) session.getAttribute("memberCode");
-
-        if (memberCode != null) {
-            // 로그인한 경우, DB에서 삭제
-            cartService.removeItemFromCart(acmId, memberCode);
-        } else {
-            // 로그인하지 않은 경우, 세션에서 삭제
-            List<CartDTO> cartItems = (List<CartDTO>) session.getAttribute("cart");
-            if (cartItems != null) {
-                cartItems.removeIf(item -> item.getAcmId() == acmId);
-                session.setAttribute("cart", cartItems);
-            }
+        // ✅ 장바구니에서 결제 페이지(`payment.html`)로 이동
+//        @PostMapping("/payment")
+//        public String payment(@RequestParam("cartItemsJson") String cartItemsJson, Model model) {
+//            List<CartDTO> cartItems = new ArrayList<>();
+//            try {
+//                ObjectMapper objectMapper = new ObjectMapper();
+//                cartItems = objectMapper.readValue(cartItemsJson, new TypeReference<List<CartDTO>>() {});
+//            } catch (JsonProcessingException e) {
+//                e.printStackTrace();
+//            }
+//
+//            model.addAttribute("cartItems", cartItems);
+//            return "payment"; // ✅ 결제 페이지(`payment.html`)로 이동
         }
-        return "redirect:/cart";
     }
-}
