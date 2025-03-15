@@ -2,6 +2,7 @@ package com.udigo.hotel.member.controller;
 
 import com.udigo.hotel.member.model.dto.MemberDTO;
 import com.udigo.hotel.member.model.service.MemberService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,5 +38,25 @@ public class MemberController {
             redirectAttributes.addFlashAttribute("errorMessage", "회원가입에 실패했습니다. 다시 시도해주세요.");
         }
         return "redirect:/member/signup";
+    }
+
+    @GetMapping("/mypage")
+    public String mypage(@AuthenticationPrincipal MemberDTO member,
+                         Model model) {
+
+        model.addAttribute("member", member);
+        model.addAttribute("memberId", member.getMemberId());
+        model.addAttribute("currentPage", "mypage");
+
+        return "member/mypage";
+    }
+
+    @GetMapping("/myinfo")
+    public String myinfo(@AuthenticationPrincipal MemberDTO member, Model model) {
+        if (member != null) {
+            model.addAttribute("member", member);
+            model.addAttribute("currentPage", "myinfo");
+        }
+        return "member/myinfo";
     }
 }

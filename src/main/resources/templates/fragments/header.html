@@ -30,7 +30,7 @@
           🛒 <span class="cart-count" th:text="${session.cartCount != null ? session.cartCount : 0}"></span>
         </a>
         <button class="h_my-page-btn">
-          <a th:href="@{/mypage}">마이페이지</a>
+          <button class="login-btn" onclick="location.href='/member/mypage'">마이페이지</button>
         </button>
         <form th:action="@{/auth/logout}" method="post" style="display:inline;">
           <th:block th:if="${_csrf != null}">
@@ -41,7 +41,7 @@
       </div>
 
       <!-- ✅ 비로그인 상태 -->
-      <div th:if="${#authorization.expression('isAnonymous()')}">
+      <div th:if="${#authorization.expression('isAnonymous()') }">
         <button class="login-btn" onclick="location.href='/auth/login'">로그인</button>
       </div>
     </div>

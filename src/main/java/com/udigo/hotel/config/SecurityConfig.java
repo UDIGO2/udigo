@@ -29,6 +29,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/css/**", "/js/**", "/image/**", "/reservations/**", "/acm/**", "/board/**").permitAll();
                     auth.requestMatchers("/search", "/hotel/**", "/regional-recommendations").permitAll();
                     auth.requestMatchers("/cart", "/payment", "/payList").authenticated();
+                    auth.requestMatchers("/mypage").authenticated();
                     auth.anyRequest().authenticated();
                 })
                 // ✅ 익명 사용자 인증 활성화 (비로그인 상태에서도 SecurityContext 유지)
