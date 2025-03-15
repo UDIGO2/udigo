@@ -4,11 +4,17 @@ import com.udigo.hotel.acm.model.dao.AcmMapper;
 import com.udigo.hotel.acm.model.dto.AcmDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AcmService {
+
 
     @Autowired
     private AcmMapper acmMapper;
@@ -28,6 +34,10 @@ public class AcmService {
 
     public List<AcmDTO> searchAcms(String location, String checkInDate, String checkOutDate, Integer guests) {
         return acmMapper.searchAcms(location, checkInDate, checkOutDate, guests);
+    }
+
+    public AcmDTO getAcmDetail(int acmId) {
+        return acmMapper.selectAcmDetail(acmId);
     }
 }
 

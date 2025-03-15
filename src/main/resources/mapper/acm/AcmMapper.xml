@@ -50,4 +50,10 @@
             tbl_acm
     </select>
 
+    <select id="selectAcmDetail" resultType="com.udigo.hotel.acm.model.dto.AcmDTO">
+        SELECT *
+        FROM tbl_acm
+        WHERE acm_id = #{acmId}
+    </select>
+
 </mapper>

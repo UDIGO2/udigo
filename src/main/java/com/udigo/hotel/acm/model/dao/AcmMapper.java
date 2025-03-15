@@ -24,4 +24,5 @@ public interface AcmMapper {
                             @Param("checkOutDate") String checkOutDate,
                             @Param("maxGuests") Integer guests);
 
+    AcmDTO selectAcmDetail(int acmId);
 }

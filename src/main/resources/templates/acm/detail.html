@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>숙소 상세</title>
+    <link rel="stylesheet" th:href="@{/css/detail.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container">
+    <!-- 왼쪽 섹션 - 숙소 정보 및 후기 -->
+    <div class="left-section">
+        <!-- 숙소 기본 정보 -->
+        <div class="accommodation-info">
+            <h1 th:text="${acm.acmName}">숙소 이름</h1>
+            <div class="location">
+                <i class="location-icon"></i>
+                <span th:text="${acm.acmAddress}">주소</span>
+            </div>
+
+            <!-- 이미지 갤러리 섹션 시작 -->
+            <!-- 숙소의 메인 이미지와 추가 이미지들을 표시하는 영역 -->
+            <div class="image-gallery">
+                <!-- 메인 이미지: 가장 큰 크기로 상단에 표시 -->
+                <div class="main-image">
+                    <img th:src="@{${acm.acmPhoto1}}" th:alt="${acm.acmName}">
+                </div>
+                <!-- 추가 이미지들: 하단에 작은 크기로 나열됨 -->
+                <!-- acmPhoto2~5 중 하나라도 존재하는 경우에만 추가 이미지 영역 표시 -->
+                <div class="sub-images" th:if="${acm.acmPhoto2 != null || acm.acmPhoto3 != null || acm.acmPhoto4 != null || acm.acmPhoto5 != null}">
+                    <!-- 각 추가 이미지는 null이 아닌 경우에만 표시 -->
+                    <img th:if="${acm.acmPhoto2 != null}" th:src="@{${acm.acmPhoto2}}" alt="추가 이미지">
+                    <img th:if="${acm.acmPhoto3 != null}" th:src="@{${acm.acmPhoto3}}" alt="추가 이미지">
+                    <img th:if="${acm.acmPhoto4 != null}" th:src="@{${acm.acmPhoto4}}" alt="추가 이미지">
+                    <img th:if="${acm.acmPhoto5 != null}" th:src="@{${acm.acmPhoto5}}" alt="추가 이미지">
+                </div>
+            </div>
+            <!-- 이미지 갤러리 섹션 끝 -->
+
+            <div class="price-info">
+                <span class="price" th:text="${#numbers.formatDecimal(acm.acmPrice, 0, 'COMMA', 0, 'POINT')} + '원'">가격</span>
+                <span class="per-night">/1박</span>
+            </div>
+
+            <div class="basic-info">
+                <div class="info-item">
+                    <i class="person-icon"></i>
+                    <span th:text="'최대 ' + ${acm.maxGuest} + '인'">최대 인원</span>
+                </div>
+                <div class="info-item">
+                    <i class="phone-icon"></i>
+                    <span th:text="${acm.acmPhone}">연락처</span>
+                </div>
+            </div>
+
+            <div class="description" th:text="${acm.acmInfo}">
+                숙소 설명
+            </div>
+        </div>
+
+        <!-- 예약 섹션 -->
+        <div class="booking-section">
+            <div class="booking-form">
+                <h2>예약하기</h2>
+                <div class="form-group">
+                    <label for="checkIn">체크인</label>
+                    <input type="date" id="checkIn" name="checkIn" required>
+                </div>
+                <div class="form-group">
+                    <label for="checkOut">체크아웃</label>
+                    <input type="date" id="checkOut" name="checkOut" required>
+                </div>
+                <div class="form-group">
+                    <label for="guests">인원</label>
+                    <select id="guests" name="guests">
+                        <option th:each="i : ${#numbers.sequence(1, acm.maxGuest)}"
+                                th:value="${i}"
+                                th:text="${i} + '명'">1명</option>
+                    </select>
+                </div>
+                <button type="submit" class="booking-btn">예약하기</button>
+            </div>
+        </div>
+
+        <!-- 후기 섹션 -->
+        <div class="reviews-section">
+            <h2>후기</h2>
+            <div class="reviews-list">
+                <!-- 후기 내용은 추후 추가 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 오른쪽 섹션 - 지도 -->
+    <div class="right-section">
+        <!-- 지도를 표시할 div -->
+        <div class="map-section">
+            <div id="staticMap" style="width:100%;height:400px;"></div>
+        </div>
+    </div>
+
+    <!-- 세로 구분선 -->
+    <div class="vertical-divider"></div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script th:src="@{/js/header.js}"></script>
+<!-- 카카오맵 API 스크립트를 body 끝부분으로 이동 -->
+<script type="text/javascript">
+    // 카카오맵 API 로드 함수
+    function loadKakaoMap() {
+        // 주소-좌표 변환 객체를 생성
+        var geocoder = new kakao.maps.services.Geocoder();
+
+        // 주소로 좌표를 검색
+        geocoder.addressSearch('[[${acm.acmAddress}]]', function(result, status) {
+            // 정상적으로 검색이 완료됐으면
+            if (status === kakao.maps.services.Status.OK) {
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                // 지도 옵션 설정
+                var staticMapContainer = document.getElementById('staticMap'),
+                    staticMapOption = {
+                        center: coords, // 변환된 좌표를 지도의 중심으로 설정
+                        level: 3, // 확대 레벨
+                        marker: {
+                            position: coords, // 마커 위치를 변환된 좌표로 설정
+                            text: '[[${acm.acmName}]]' // 숙소 이름을 마커 텍스트로 표시
+                        }
+                    };
+
+                // 지도 생성
+                var staticMap = new kakao.maps.StaticMap(staticMapContainer, staticMapOption);
+            }
+        });
+    }
+</script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=66ee0366c34ede131d6dce128078a011&libraries=services&onload=loadKakaoMap"></script>
+</body>
+</html>

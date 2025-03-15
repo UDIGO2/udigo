@@ -199,9 +199,9 @@ INSERT INTO tbl_acm (acm_location, acm_name, acm_address , acm_price, acm_info, 
 VALUES ('제주','제주 신라호텔','제주특별자치도 서귀포시 특별자치도, 중문관광로72번길 75', 250000,
         '내 집과 같은 편안함으로 공간 이상의 가치가 숨쉬고 있는 제주 신라호텔.',
         '064-735-5114', NOW(), 4,800,
-        '/image/acm/jeju/sinla.jpg',
+        '/image/acm/jeju/sinla1.jpg',
         '/image/acm/jeju/sinla2.jpg',
-        '/image/acm/jeju/sinla3.jpg'
+        '/image/acm/jeju/sinla.jpg'
        );
 
 INSERT INTO tbl_acm (acm_location, acm_name, acm_address , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3 , acm_photo4)

@@ -33,7 +33,7 @@ public class AcmController {
     // View More API - 추가 숙소 데이터 로드
     @GetMapping("/api/more")
     @ResponseBody
-    public Map<String, Object> getMoreAcms(@RequestParam(defaultValue = "9") int currentCount) {
+    public Map<String, Object> getMoreAcms(@RequestParam(defaultValue = "6") int currentCount) {
         Map<String, Object> response = new HashMap<>();
 
         try {
@@ -75,5 +75,20 @@ public class AcmController {
         }
 
         return response;
+    }
+
+    // 숙소 상세 페이지
+    @GetMapping("/detail/{acmId}")
+    public String getAcmDetail(@PathVariable("acmId") int acmId, Model model) {
+        try {
+            AcmDTO acmDetail = acmService.getAcmDetail(acmId);
+            if (acmDetail != null) {
+                model.addAttribute("acm", acmDetail);
+                return "acm/detail";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/acm/list";  // 에러 발생 시 목록으로 리다이렉트
     }
 }
