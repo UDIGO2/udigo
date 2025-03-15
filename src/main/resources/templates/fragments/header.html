@@ -1,25 +1,20 @@
-<!-- src/main/resources/templates/fragments/header.html -->
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
-
 <header th:fragment="header" class="header">
   <nav class="h_navbar">
-    <div class="h_logo"><a href="/"><img th:src="@{/image/header/h_logo.png}" alt="이미지"></a></div>
+    <div class="h_logo">
+      <a href="/"><img th:src="@{/image/header/h_logo.png}" alt="이미지"></a>
+    </div>
     <ul class="h_nav-links">
       <li><a href="/acm/list">Hotel</a></li>
-      <li><a href="/board/notice">Board</a>
+      <li>
+        <a href="/board/notice">Board</a>
         <ul>
           <li><a href="/board/notice">공지사항</a></li>
           <li><a href="/board/FAQ">FAQ</a></li>
           <li><a href="/board/ask">1:1 문의</a></li>
         </ul>
       </li>
-      <li><a href="/reservations/current">Reservations</a>
+      <li>
+        <a href="/reservations/current">Reservations</a>
         <ul>
           <li><a href="/reservations/current">현재 예약</a></li>
           <li><a href="/reservations/past">이전 예약</a></li>
@@ -28,10 +23,24 @@
     </ul>
 
     <div class="h_nav-buttons">
-      <button class="login-btn" onclick="location.href='/auth/login'">로그인</button>
-      <button class="h_my-page-btn h_hidden"><a th:href="@{/mypage}">마이페이지</a></button>
+      <!-- ✅ 로그인한 경우 -->
+      <div th:if="${#authorization.expression('isAuthenticated()')}">
+        <span class="welcome-message" th:text="|${#authentication.principal.username}님 환영합니다!|">사용자명</span>
+        <button class="h_my-page-btn">
+          <a th:href="@{/mypage}">마이페이지</a>
+        </button>
+        <form th:action="@{/auth/logout}" method="post" style="display:inline;">
+          <th:block th:if="${_csrf != null}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+          </th:block>
+          <button type="submit" class="logout-btn">로그아웃</button>
+        </form>
+      </div>
+
+      <!-- ✅ 비로그인 상태 -->
+      <div th:if="${#authorization.expression('isAnonymous()')}">
+        <button class="login-btn" onclick="location.href='/auth/login'">로그인</button>
+      </div>
     </div>
   </nav>
 </header>
-
-</body>

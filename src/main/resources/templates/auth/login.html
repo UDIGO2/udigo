@@ -8,41 +8,27 @@
     <link rel="stylesheet" th:href="@{/css/login.css}">
 </head>
 <body>
+
 <!-- ✅ 헤더 추가 -->
 <div th:replace="~{fragments/header :: header}"></div>
 
-<!-- ✅ 로그인 폼을 감싸는 컨테이너 (여백 추가) -->
+<!-- ✅ 로그인 폼 컨테이너 -->
 <div id="login-page">
     <div class="login-container">
         <h2>로그인</h2>
-
-        <!-- ✅ 로그인 실패 시 알림창 추가 -->
-        <script th:if="${param.error}">
-            alert("[로그인 실패] 아이디 또는 비밀번호를 확인해주세요.");
-        </script>
-
-        <!-- ✅ 로그인 성공 시 알림창 띄우고 메인 페이지로 이동 -->
-        <script th:if="${param.success}">
-            alert("[로그인 성공] 환영합니다!");
-            window.location.href = "/"; // ✅ 메인 페이지로 자동 이동
-        </script>
 
         <form th:action="@{/auth/login}" method="post">
             <th:block th:if="${_csrf != null}">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
             </th:block>
-
-
             <div class="form-group">
                 <label for="memberId">아이디</label>
                 <input type="text" id="memberId" name="memberId" required>
             </div>
-
             <div class="form-group">
                 <label for="password">비밀번호</label>
                 <input type="password" id="password" name="password" required>
             </div>
-
             <button type="submit" id="loginBtn">로그인</button>
         </form>
 
@@ -57,23 +43,11 @@
 
 <!-- ✅ JavaScript 추가 -->
 <script src="/js/header.js"></script>
-
 <script th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function() {
-        var successMessage = /*[[${successMessage}]]*/ null;
-        var errorMessage = /*[[${errorMessage}]]*/ null;
+        var successMessage = /*[[${successMessage}]]*/ 'null';
+        var errorMessage = /*[[${errorMessage}]]*/ 'null';
 
-        // 🚀 로그인 버튼 클릭 이벤트 등록
-        var loginButton = document.getElementById("loginBtn");
-        if (loginButton) {
-            loginButton.addEventListener("click", function() {
-                console.log("✅ 로그인 버튼이 클릭되었습니다!");
-            });
-        } else {
-            console.error("🚨 로그인 버튼을 찾을 수 없습니다! id='loginBtn' 확인 필요!");
-        }
-
-        // 🚀 성공 / 실패 메시지 표시
         if (successMessage && successMessage.trim() !== "" && successMessage.trim() !== "null") {
             alert(successMessage);
         }
@@ -82,5 +56,6 @@
         }
     });
 </script>
+
 </body>
 </html>

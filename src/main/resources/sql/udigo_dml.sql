@@ -1,23 +1,24 @@
 INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked)
-VALUES (1,'admin', 'admin', 'admin@naver.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', NULL, NOW(), TRUE, FALSE);
+VALUES (1,'admin', 'admin', 'admin@naver.com', '$2b$12$1C5njm.3fcbzVILGq/K0l.f8LUSdVKyksThdTZm85CYcJpCVv0hBO', NULL, NOW(), TRUE, FALSE);
 
 INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked)
-VALUES (101,'member01', '김건우', 'gunwoo@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '010-3868-8803', NOW(), FALSE, FALSE);
+VALUES (101,'member01', '김건우', 'gunwoo@naver.com', '$2b$12$1C5njm.3fcbzVILGq/K0l.f8LUSdVKyksThdTZm85CYcJpCVv0hBO', '010-3868-8803', NOW(), FALSE, FALSE);
 
 INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked)
-VALUES (102,'member02', '김나영', 'nayoung@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '016-3494-8126', NOW(), FALSE, FALSE);
+VALUES (102,'member02', '김나영', 'nayou5g@naver.com', '$2b$12$1C5njm.3fcbzVILGq/K0l.f8LUSdVKyksThdTZm85CYcJpCVv0hBO', '016-3494-8126', NOW(), FALSE, FALSE);
 
 INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked)
-VALUES (103,'member03', '박송이', 'songyi@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '011-1190-2653', NOW(), FALSE, FALSE);
+VALUES (103,'member03', '박송이', 'songyi@naver.com', '$2b$12$1C5njm.3fcbzVILGq/K0l.f8LUSdVKyksThdTZm85CYcJpCVv0hBO', '011-1190-2653', NOW(), FALSE, FALSE);
 
 INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked)
-VALUES (104,'member04', '박성현', 'sunghyun@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '011-2245-7620', NOW(), FALSE, FALSE);
+VALUES (104,'member04', '박성현', 'sunghyun@naver.com', '$2b$12$1C5njm.3fcbzVILGq/K0l.f8LUSdVKyksThdTZm85CYcJpCVv0hBO', '011-2245-7620', NOW(), FALSE, FALSE);
 
 INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked)
-VALUES (105,'member05', '조수민', 'sumin@naver.com', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '011-7339-7957', NOW(), FALSE, FALSE);
+VALUES (105,'member05', '조수민', 'sumin@naver.com', '$2b$12$1C5njm.3fcbzVILGq/K0l.f8LUSdVKyksThdTZm85CYcJpCVv0hBO', '011-7339-7957', NOW(), FALSE, FALSE);
 
 INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked)
-VALUES (106,'member06', '허아름', 'areum@daum.net', '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', '016-4814-3905', NOW(), FALSE, FALSE);
+VALUES (106,'member06', '허아름', 'areum@daum.net', '$2b$12$1C5njm.3fcbzVILGq/K0l.f8LUSdVKyksThdTZm85CYcJpCVv0hBO', '016-4814-3905', NOW(), FALSE, FALSE);
+
 
 INSERT INTO tbl_roles (role_code, role_name) VALUES (1, 'ADMIN');
 INSERT INTO tbl_roles (role_code, role_name) VALUES (2, 'member');

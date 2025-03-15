@@ -8,7 +8,7 @@ public class MainController {
 
     @GetMapping("/")
     public String mainPage() {
-        return "/main/main";  // templates/main/main.html을 반환
+        return "main/main";  // templates/main/main.html을 반환
     }
 
     // 결제 페이지
