@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 후기 - UDIGO</title>
+    <link rel="stylesheet" th:href="@{/css/myReview.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+</head>
+
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<!-- 메인 컨텐츠 -->
+<main class="main-content">
+    <h1 class="page-title">내 후기</h1>
+
+    <!-- 리뷰 목록 -->
+    <div class="review-list">
+        <div class="review-item" th:each="review : ${reviews}">
+            <div class="review-content">
+                <div class="review-image">
+                    <img th:src="${review.rePhoto1}" alt="숙소 이미지">
+                </div>
+                <div class="review-info">
+                    <h3 th:text="${review.acmId}">숙소 이름</h3>
+                    <p class="review-text" th:text="${review.content}">리뷰 내용</p>
+                    <div class="review-date">
+                        <span th:text="'작성일자 | ' + ${#temporals.format(review.writtenAt, 'yyyy.MM.dd')}">작성일자</span>
+                    </div>
+                    <button class="delete-btn" th:data-review-id="${review.reviewId}">×</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+    <script src="/js/header.js"></script>
+</main>
+
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        // 삭제 버튼 이벤트 리스너
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', async function(e) {
+                const reviewId = e.target.getAttribute('data-review-id');
+                debugger;
+                if (confirm('리뷰를 삭제하시겠습니까?')) {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/review/delete';
+
+                    const postIdInput = document.createElement('input');
+                    postIdInput.type = 'hidden';
+                    postIdInput.name = 'reviewId';
+                    postIdInput.value = reviewId;
+                    form.appendChild(postIdInput);
+
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        });
+
+        // 리뷰 아이템 호버 효과
+        const reviewItems = document.querySelectorAll('.review-item');
+        reviewItems.forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+                this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+                this.style.transition = 'all 0.3s ease';
+            });
+
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'none';
+                this.style.boxShadow = 'none';
+            });
+        });
+    });
+</script>
+</body>
+</html>

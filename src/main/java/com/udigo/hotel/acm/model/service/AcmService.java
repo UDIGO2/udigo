@@ -33,6 +33,16 @@ public class AcmService {
     }
 
     public List<AcmDTO> searchAcms(String location, String checkInDate, String checkOutDate, Integer guests) {
+        System.out.println("지역2--->"+location);
+        System.out.println("날짜2--->"+checkInDate);
+        System.out.println("인원수2--->"+guests);
+        switch (location) {
+            case "경상북도/남도" -> location = "경상";
+            case "전라북도/남도" -> location = "전라";
+            case "충청북도/남도" -> location = "충청";
+            case "강원도" -> location = "강원";
+        }
+        System.out.println("결과--->"+acmMapper.searchAcms(location, checkInDate, checkOutDate, guests));
         return acmMapper.searchAcms(location, checkInDate, checkOutDate, guests);
     }
 
@@ -41,7 +51,7 @@ public class AcmService {
     }
 
     public List<AcmDTO> getAcmsFromCart(List<Integer> acmIds) {
-      return acmMapper.selectAcmIds(acmIds);
+        return acmMapper.selectAcmIds(acmIds);
     }
 }
 
@@ -50,6 +60,3 @@ public class AcmService {
         System.out.println("날짜2--->"+date);
         System.out.println("인원수2--->"+guests);
         System.out.println("결과2--->"+acmMapper.searchAcms(location, date, guests));*/
-
-
-

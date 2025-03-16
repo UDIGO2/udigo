@@ -16,12 +16,12 @@
         FROM tbl_acm a
         WHERE 1 = 1
         <if test="acmLocation != null and acmLocation != ''">
-            AND a.acm_location = #{acmLocation}
+            AND a.acm_location like #{acmLocation}
         </if>
-        <if test="maxGuests != null">
-            AND a.max_guest >= #{maxGuests}
+        <if test="maxGuests != null and maxGuests != ''">
+            AND a.max_guest <![CDATA[<=]]> #{maxGuests}
         </if>
-        <if test="checkInDate != null and checkOutDate != null">
+        <if test="checkInDate != null and checkOutDate != null and checkInDate != '' and checkOutDate != ''">
             AND NOT EXISTS (
             SELECT 1
             FROM tbl_reservations r

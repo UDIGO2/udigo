@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.udigo.hotel.review.dao.ReviewMapper">
+
+    <select id="findReviewsByMember" resultType="com.udigo.hotel.review.dto.ReviewDTO">
+        /* ReviewMapper.findReviewsByMember */
+        SELECT
+            r.review_id,
+            r.member_code,
+            r.acm_id,
+            r.resv_id,
+            r.content,
+            r.written_at,
+            a.acm_name
+        FROM
+            tbl_reviews r
+                LEFT JOIN tbl_acm a ON r.acm_id = a.acm_id
+        WHERE
+            r.member_code = #{memberCode}
+        ORDER BY
+            r.written_at DESC
+    </select>
+
+    <select id="findReviewsByWrite" resultType="com.udigo.hotel.review.dto.ReviewDTO">
+        /* ReviewMapper.findReviewsByMember */
+        SELECT
+            r.review_id,
+            r.member_code,
+            r.acm_id,
+            r.resv_id,
+            r.content,
+            r.written_at,
+            a.acm_name,
+            a.acm_price,
+            b.check_in,
+            b.check_out
+        FROM
+            tbl_reviews r
+                LEFT JOIN tbl_acm a ON r.acm_id = a.acm_id
+                LEFT JOIN tbl_reservations b ON r.resv_id = b.resv_id
+        WHERE
+            b.resv_id = #{resvId}
+        AND
+            r.acm_id = #{acmId}
+        ORDER BY
+            r.written_at DESC
+    </select>
+
+    <delete id="deleteReview">
+        /* ReviewMapper.deleteReview */
+        DELETE FROM tbl_reviews
+        WHERE review_id = #{reviewId}
+          AND member_code = #{memberCode}
+    </delete>
+
+</mapper>

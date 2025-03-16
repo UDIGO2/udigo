@@ -62,17 +62,18 @@ public class AcmController {
 
         Map<String, Object> response = new HashMap<>();
 
-        try {
+        //try {
+            System.out.println("지역-->" + location);
             List<AcmDTO> acms = acmService.searchAcms(location, checkInDate, checkOutDate, guests);
             response.put("acms", acms);
             response.put("success", !acms.isEmpty());
             if (acms.isEmpty()) {
                 response.put("message", "조건에 맞는 숙소가 없습니다.");
             }
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "검색 중 오류가 발생했습니다.");
-        }
+        //} catch (Exception e) {
+        //    response.put("success", false);
+        //    response.put("message", "검색 중 오류가 발생했습니다.");
+        //}
 
         return response;
     }

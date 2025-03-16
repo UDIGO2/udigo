@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Write Review</title>
+    <link rel="stylesheet" th:href="@{/css/writeReview.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main class="main-content">
+    <div class="review-container">
+        <!-- 이용 정보 섹션 -->
+        <div class="usage-info">
+            <h2 class="section-title">이용 정보/결제 내역</h2>
+            <div class="info-content">
+                <div class="accommodation-info">
+                    <div class="image-gallery">
+<!--                        <img th:src="${reservation.acmMainImage}" alt="숙소 이미지" class="main-image">
+                        <div class="sub-images">
+                            <img th:each="image : ${reservation.acmSubImages}"
+                                 th:src="${image}"
+                                 alt="숙소 상세 이미지">
+                        </div>-->
+                    </div>
+                    <div class="accommodation-details">
+                        <h3 th:text="${review.acmName}">Wilderness Club at Big Ceddar</h3>
+                    </div>
+                </div>
+
+                <div class="reservation-details">
+                    <div class="stay-period">
+                        <h4>이용 날짜</h4>
+                        <p th:text="${review.checkIn + ' - ' + review.checkOut}">10월 28일 - 11월 1일</p>
+                    </div>
+                    <div class="payment-amount">
+                        <h4>결제 금액</h4>
+                        <p><span th:text="${#numbers.formatInteger(review.acmPrice, 0, 'COMMA')}">30,000</span>원</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 후기 작성 폼 -->
+        <form th:action="@{/review/write}" method="post" enctype="multipart/form-data" class="review-form">
+            <input type="hidden" name="resvId" th:value="${review.resvId}">
+            <input type="hidden" name="acmId" th:value="${review.acmId}">
+
+            <!-- 사진 업로드 섹션 -->
+            <div class="photo-upload-section">
+                <div class="upload-container">
+                    <div class="upload-box" id="uploadBox1">
+                        <input type="file" name="photos" id="photo1" accept="image/*" class="file-input">
+                        <div class="upload-placeholder">
+                            <span class="plus-icon">+</span>
+                        </div>
+                        <img id="preview1" class="preview-image" style="display: none;">
+                    </div>
+                    <div class="upload-box" id="uploadBox2">
+                        <input type="file" name="photos" id="photo2" accept="image/*" class="file-input">
+                        <div class="upload-placeholder">
+                            <span class="plus-icon">+</span>
+                        </div>
+                        <img id="preview2" class="preview-image" style="display: none;">
+                    </div>
+                    <div class="upload-box" id="uploadBox3">
+                        <input type="file" name="photos" id="photo3" accept="image/*" class="file-input">
+                        <div class="upload-placeholder">
+                            <span class="plus-icon">+</span>
+                        </div>
+                        <img id="preview3" class="preview-image" style="display: none;">
+                    </div>
+                </div>
+                <p class="upload-notice">사진 파일 최대 3장 업로드 가능</p>
+            </div>
+
+            <!-- 후기 내용 입력 -->
+            <div class="review-content-section">
+                <textarea name="content" placeholder="후기를 작성해주세요." required></textarea>
+            </div>
+
+            <!-- 등록 버튼 -->
+            <div class="button-section">
+                <button type="submit" class="submit-btn">등록 완료</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<!-- 푸터 프래그먼트 -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:inline="javascript">
+    // 이미지 미리보기 기능
+    function handleFileSelect(fileInput, previewId) {
+        const preview = document.getElementById(previewId);
+        const file = fileInput.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                fileInput.parentElement.querySelector('.upload-placeholder').style.display = 'none';
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // 파일 입력 이벤트 리스너 등록
+    document.getElementById('photo1').addEventListener('change', function() {
+        handleFileSelect(this, 'preview1');
+    });
+    document.getElementById('photo2').addEventListener('change', function() {
+        handleFileSelect(this, 'preview2');
+    });
+    document.getElementById('photo3').addEventListener('change', function() {
+        handleFileSelect(this, 'preview3');
+    });
+</script>
