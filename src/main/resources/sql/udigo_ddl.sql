@@ -282,4 +282,6 @@ CREATE TABLE `tbl_member_roles` (
                                   CONSTRAINT `FK_tbl_member_TO_tbl_member_roles_1` FOREIGN KEY (`member_code`) REFERENCES `tbl_member` (`member_code`),
                                   CONSTRAINT `FK_tbl_roles_TO_tbl_member_roles_1` FOREIGN KEY (`role_code`) REFERENCES `tbl_roles` (`role_code`)
 );
+ALTER TABLE tbl_member ADD COLUMN role VARCHAR(20) DEFAULT 'USER';
+
 

@@ -2,8 +2,10 @@ package com.udigo.hotel.member.model.service;
 
 import com.udigo.hotel.member.model.dao.MemberMapper;
 import com.udigo.hotel.member.model.dto.MemberDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MemberService {
@@ -38,4 +40,18 @@ public class MemberService {
             throw new RuntimeException("회원가입 실패: " + e.getMessage());
         }
     }
-}
+    public MemberDTO findByEmail(String email) {
+        return memberMapper.findByEmail(email);
+    }
+
+
+
+    public MemberDTO findByMemberId(String memberId) {
+        return memberMapper.findByMemberId(memberId);
+    }
+
+    @Transactional
+    public void updateMember(MemberDTO memberDTO) {
+        memberMapper.updateMember(memberDTO);
+
+    }}
