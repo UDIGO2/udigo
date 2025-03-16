@@ -34,7 +34,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChainConfigure(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/", "/member/signup", "/member/api/**", "/auth/login").permitAll();
+                    auth.requestMatchers("/", "/auth/**", "/member/signup", "/member/api/**", "/auth/login").permitAll();
                     auth.requestMatchers("/css/**", "/js/**", "/image/**", "/reservations/**", "/acm/**", "/board/**").permitAll();
                     auth.requestMatchers("/search", "/hotel/**", "/regional-recommendations").permitAll();
                     auth.requestMatchers("/cart", "/payment", "/payList").authenticated();

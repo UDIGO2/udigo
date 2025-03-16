@@ -13,7 +13,18 @@ spring:
     mode: HTML
     encoding: UTF-8
     cache: false                   # Thymeleaf 캐시 비활성화 (HTML 변경 사항 즉시 반영)
-
+  mail: # ✅ 이메일(SMTP) 설정 추가
+    host: smtp.gmail.com  # SMTP 서버 (Gmail 사용)
+    port: 587
+    username: "udigopwd@gmail.com"  # ✅ 본인 Gmail 주소
+    password: "mhhe uoup velx nmit"  # ✅ Gmail 앱 비밀번호 (2단계 인증 필요)
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
 
 jpa:
   hibernate:
