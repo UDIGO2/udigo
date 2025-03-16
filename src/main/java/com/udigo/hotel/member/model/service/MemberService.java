@@ -50,6 +50,7 @@ public class MemberService {
         return memberMapper.findByEmail(email);
     }
 
+
     /** ✅ 아이디로 회원 조회 */
     public MemberDTO findByMemberId(String memberId) {
         return memberMapper.findByMemberId(memberId);

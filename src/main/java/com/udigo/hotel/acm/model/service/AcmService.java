@@ -39,6 +39,10 @@ public class AcmService {
     public AcmDTO getAcmDetail(int acmId) {
         return acmMapper.selectAcmDetail(acmId);
     }
+
+    public List<AcmDTO> getAcmsFromCart(List<Integer> acmIds) {
+      return acmMapper.selectAcmIds(acmIds);
+    }
 }
 
 

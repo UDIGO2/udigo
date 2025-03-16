@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>문의하기</title>
+    <link rel="stylesheet" th:href="@{/css/board.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<div class="sidebar">
+    <a th:href="@{/board/notice}">공지사항</a>
+    <a th:href="@{/board/FAQ}">FAQ</a>
+    <a th:href="@{/board/ask}">1대1 문의</a>
+</div>
+
+<div class="content">
+    <h1>문의하기</h1>
+
+    <form th:action="@{/board/ask/write}" th:object="${post}" method="post" class="inquiry-form">
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text" id="title" th:field="*{title}" required
+                   placeholder="문의 제목을 입력해주세요" maxlength="100">
+        </div>
+
+        <div class="form-group">
+            <label for="content">문의내용</label>
+            <textarea id="content" th:field="*{content}" required
+                      placeholder="문의하실 내용을 상세히 적어주세요" rows="10"></textarea>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn-submit">등록하기</button>
+            <a th:href="@{/board/ask}" class="btn-cancel">취소</a>
+        </div>
+    </form>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script src="/js/header.js"></script>
+
+<style>
+    .inquiry-form {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .form-group input[type="text"],
+    .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 200px;
+    }
+
+    .button-group {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .btn-submit,
+    .btn-cancel {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        text-decoration: none;
+        margin: 0 5px;
+    }
+
+    .btn-submit {
+        background-color: #007bff;
+        color: white;
+        border: none;
+    }
+
+    .btn-submit:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-cancel {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .btn-cancel:hover {
+        background-color: #545b62;
+    }
+
+    input:focus,
+    textarea:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0,123,255,0.3);
+    }
+
+    /* 반응형 디자인 */
+    @media (max-width: 768px) {
+        .inquiry-form {
+            padding: 10px;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea {
+            font-size: 14px;
+        }
+
+        .btn-submit,
+        .btn-cancel {
+            width: 100%;
+            margin: 5px 0;
+        }
+    }
+</style>
+</body>
+</html>

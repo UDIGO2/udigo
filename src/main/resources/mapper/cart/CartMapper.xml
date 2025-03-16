@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.udigo.hotel.cart.model.mapper.CartMapper">
+<mapper namespace="com.udigo.hotel.cart.model.dao.CartMapper">
 
     <!-- 장바구니 목록 조회 -->
     <select id="selectCartItems" parameterType="int" resultType="com.udigo.hotel.cart.model.dto.CartDTO">
@@ -13,15 +13,19 @@
     </select>
 
     <!-- 장바구니에 추가 -->
-    <insert id="insertCartItem">
-        INSERT INTO udigo.tbl_cart (member_code, acm_id)
+    <insert id="insertCartItem" parameterType="com.udigo.hotel.cart.model.dto.CartParamDTO">
+        INSERT INTO tbl_cart (member_code, acm_id)
         VALUES (#{memberCode}, #{acmId})
     </insert>
 
     <!-- 장바구니에서 삭제 -->
-    <delete id="deleteCartItem">
+    <delete id="deleteCartItems" parameterType="java.util.List">
         DELETE FROM tbl_cart
-        WHERE acm_id = #{acmId} AND member_code = #{memberCode}
+        WHERE (acm_id, member_code) IN
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            (#{item.acmId}, #{item.memberCode})
+        </foreach>
     </delete>
+
 
 </mapper>

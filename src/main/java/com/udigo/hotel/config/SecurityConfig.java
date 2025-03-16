@@ -21,7 +21,6 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
 
-    // 생성자 주입
     public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
         this.customUserDetailsService = customUserDetailsService;
     }
@@ -36,10 +35,24 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/", "/auth/**", "/member/signup", "/member/api/**", "/auth/login").permitAll();
                     auth.requestMatchers("/css/**", "/js/**", "/image/**", "/reservations/**", "/acm/**", "/board/**").permitAll();
+                    // 변경된 부분: 권한 설정 수정 및 추가
+                    auth.requestMatchers("/", "/member/signup", "/member/api/**", "/auth/login").permitAll();
+                    auth.requestMatchers("/css/**", "/js/**", "/image/**").permitAll();  // 정적 리소스
                     auth.requestMatchers("/search", "/hotel/**", "/regional-recommendations").permitAll();
+
+                    // 게시판 관련 권한 설정 추가
+                    auth.requestMatchers("/board/notice", "/board/FAQ").permitAll();  // 공지사항, FAQ는 모두 접근 가능
+                    auth.requestMatchers("/board/ask/**").authenticated();  // 1:1 문의는 로그인 필요
+                    auth.requestMatchers("/board/admin/**").hasRole("ADMIN");  // 관리자 페이지는 ADMIN 권한 필요
+
+                    // 예약 관련 권한 설정 수정
+                    auth.requestMatchers("/reservations/list").permitAll();  // 예약 목록 조회는 모두 가능
+                    auth.requestMatchers("/reservations/**").authenticated();  // 그 외 예약 기능은 로그인 필요
+
+                    // 기타 인증 필요 페이지
                     auth.requestMatchers("/cart", "/payment", "/payList").authenticated();
-                    auth.requestMatchers("/mypage").authenticated();
-                    auth.requestMatchers("/board/admin/**").hasRole("ADMIN");
+                    auth.requestMatchers("/member/mypage", "/member/myinfo").authenticated();
+
                     auth.anyRequest().authenticated();
                 })
                 .anonymous(Customizer.withDefaults())
@@ -57,8 +70,10 @@ public class SecurityConfig {
                             .invalidateHttpSession(true)
                             .logoutSuccessUrl("/");
                 })
+                // CSRF 설정 (필요한 경우 활성화)
                 .csrf(csrf -> csrf.disable())
-                .userDetailsService(customUserDetailsService);  // CustomUserDetailsService 직접 지정
+                // CustomUserDetailsService 설정
+                .userDetailsService(customUserDetailsService);
 
         return http.build();
     }

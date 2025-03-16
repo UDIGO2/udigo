@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+.cart-add-container {
+    padding: 40px 70px;
+}
+.cart-add-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cart-add-body-header {
+    display: flex;
+    margin-top: 60px;
+}
+
+.cart-add-body-header-name {
+    font-weight: bold;
+    padding-left: 10px;
+}
+
+.cart-add-body {
+}
+
+.cart-add-body-line {
+    margin: 30px 0;
+    width: 100%;
+    height: 1px;
+    background-color: darkgray;
+}
+
+.cart-add-body-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+}
+
+.cart-add-price-result {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cart-add-purchase {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 500px;
+    height: 77px;
+    font-size: 32px;
+    color: white;
+    background-color: #2a90d9;
+    border-radius: 10px;
+    cursor: pointer;
+}
