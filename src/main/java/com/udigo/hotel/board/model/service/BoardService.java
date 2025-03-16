@@ -55,4 +55,15 @@ public class BoardService {
         int offset = (page - 1) * pageSize;
         return boardPostMapper.findByBoardTypeWithMemberAndPagination(boardType, offset, pageSize);
     }
+    // 특정 회원의 특정 타입 게시글 조회
+    public List<BoardPostDTO> getPostsByTypeAndMember(int boardType, int memberCode, int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        return boardPostMapper.findByBoardTypeAndMember(boardType, memberCode, offset, pageSize);
+    }
+
+    // 특정 회원의 특정 타입 게시글 수 조회
+    public int countPostsByTypeAndMember(int boardType, int memberCode) {
+        return boardPostMapper.countByBoardTypeAndMember(boardType, memberCode);
+    }
+
 }

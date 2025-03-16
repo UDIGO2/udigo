@@ -1,0 +1,110 @@
+#myinfo-page {
+    font-family: 'Noto Sans KR', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 160px); /* 헤더, 푸터 공간 확보 */
+    padding: 80px 0; /* 위아래 여백 추가 */
+    background-color: #f9fafb;
+}
+
+/* 전체 컨테이너 스타일 */
+.myinfo-container {
+    width: 400px;
+    background: white;
+    padding: 60px; /* 여백 증가 */
+    border-radius: 15px; /* 둥근 모서리 */
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15); /* 그림자 효과 */
+}
+
+/* 제목 스타일 */
+.myinfo-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* 상단 버튼 (쿠폰 관리, 회원 탈퇴) */
+.myinfo-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.myinfo-header button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.myinfo-header button:hover {
+    background-color: #0056b3;
+}
+
+/* 입력 필드 스타일 */
+.info-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+}
+
+.info-form label {
+    font-size: 1.2rem; /* 라벨 크기 증가 */
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.info-form input {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.2rem; /* 입력 필드 글자 크기 증가 */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    height: 30px; /* 입력 필드 높이 증가 */
+}
+
+.check-btn {
+    background-color: #ddd;
+    border: none;
+    padding: 12px 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 1.1rem;
+}
+
+.info-group .check-btn:hover {
+    background-color: #0056b3;
+}
+
+/* 수정하기 버튼 */
+.update-btn {
+    width: 100%;
+    background-color: #007bff;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.4rem; /* 버튼 글자 크기 증가 */
+    margin-top: 25px;
+    font-weight: bold;
+}
+
+.update-btn:hover {
+    background-color: #0056b3;
+}
+
+
+

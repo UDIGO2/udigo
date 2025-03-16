@@ -41,4 +41,22 @@
         LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
+    <!-- 특정 회원의 특정 타입 게시글 조회 -->
+    <select id="findByBoardTypeAndMember" resultType="com.udigo.hotel.board.model.dto.BoardPostDTO">
+        SELECT p.*, m.member_name as memberName
+        FROM tbl_board_posts p
+                 LEFT JOIN tbl_member m ON p.member_code = m.member_code
+        WHERE p.board_type = #{boardType}
+          AND p.member_code = #{memberCode}
+        ORDER BY p.created_at DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <!-- 특정 회원의 특정 타입 게시글 수 카운트 -->
+    <select id="countByBoardTypeAndMember" resultType="int">
+        SELECT COUNT(*)
+        FROM tbl_board_posts
+        WHERE board_type = #{boardType}
+          AND member_code = #{memberCode}
+    </select>
 </mapper>

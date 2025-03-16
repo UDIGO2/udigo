@@ -71,9 +71,9 @@ body {
 }
 
 .user-icon {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    /*border-radius: 50%; -다른 이미지 사용시 주석해제하기*/
     margin-right: 1rem;
 }
 

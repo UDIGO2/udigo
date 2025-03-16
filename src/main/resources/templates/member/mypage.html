@@ -5,39 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyPage - UDIGO</title>
     <link rel="stylesheet" th:href="@{/css/mypage.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
 
 </head>
 <body>
-<header>
-    <nav class="navbar">
-        <div class="logo">UDIGO</div>
-        <div class="nav-links">
-            <a href="#">Hotel</a>
-            <a href="#">Motel</a>
-            <a href="#">FAQ</a>
-            <a href="#">About us</a>
-        </div>
-        <div class="language-selector">
-            <img src="language-icon.png" alt="Language" class="language-icon">
-            <span>마이페이지</span>
-        </div>
-    </nav>
-</header>
+<!-- ✅ 헤더 추가 -->
+<div th:replace="~{fragments/header :: header}"></div>
 
 <main class="mypage-container">
     <h1>MyPage</h1>
 
     <div class="user-profile">
-        <img src="user-icon.png" alt="User" class="user-icon">
+        <img th:src="@{/image/mypage/member.png}" alt="User" class="user-icon">
         <div class="user-info">
-            <h2>user님</h2>
-            <p>환영합니다.</p>
+            <h2 th:text="${memberId + '님'}">사용자</h2>
         </div>
         <a href="#" class="password-change">비밀번호 변경 ></a>
     </div>
 
     <div class="my-info">
-        <a href="#" class="info-link">내 정보 ></a>
+        <a href="/member/myinfo" class="info-link">내 정보 ></a>
     </div>
 
     <section class="reservation-section">
@@ -66,44 +54,8 @@
     <a href="#" class="logout">로그아웃 ></a>
 </main>
 
-<footer>
-    <div class="footer-content">
-        <div class="footer-section">
-            <h4>사업자 정보</h4>
-            <ul>
-                <li><a href="#">Page title</a></li>
-                <li><a href="#">Page title</a></li>
-                <li><a href="#">Page title</a></li>
-            </ul>
-        </div>
-        <div class="footer-section">
-            <h4>고객센터</h4>
-            <ul>
-                <li><a href="#">Page title</a></li>
-                <li><a href="#">Page title</a></li>
-                <li><a href="#">Page title</a></li>
-            </ul>
-        </div>
-        <div class="footer-section">
-            <h4>본사 주소</h4>
-            <ul>
-                <li><a href="#">Page title</a></li>
-                <li><a href="#">Page title</a></li>
-                <li><a href="#">Page title</a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <div class="logo">UDIGO</div>
-        <div class="social-links">
-            <a href="#" class="social-icon phone"></a>
-            <a href="#" class="social-icon facebook"></a>
-            <a href="#" class="social-icon youtube"></a>
-            <a href="#" class="social-icon instagram"></a>
-            <a href="#" class="social-icon telegram"></a>
-        </div>
-    </div>
-</footer>
+<div th:replace="~{fragments/footer :: footer}"></div>
+
 <script src="mypage.js"></script>
 </body>
 </html>

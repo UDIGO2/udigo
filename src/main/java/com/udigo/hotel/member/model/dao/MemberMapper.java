@@ -11,4 +11,8 @@ public interface MemberMapper {
 
     /** ✅ member_id를 기반으로 회원 정보 조회 */
     MemberDTO findByMemberId(String memberId);
+
+    MemberDTO findByEmail(String email);
+
+    void updateMember(MemberDTO memberDTO);
 }

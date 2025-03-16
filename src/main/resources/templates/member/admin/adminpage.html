@@ -26,10 +26,9 @@
   <h1>adminPage</h1>
 
   <div class="admin-profile">
-    <img src="admin-icon.png" alt="Admin" class="admin-icon">
+    <img th:src="@{/image/mypage/member.png}" alt="Admin" class="admin-icon">
     <div class="admin-info">
-      <h2>admin님</h2>
-      <p>환영합니다.</p>
+      <h2 th:text="${memberId + '님'}">사용자</h2>
     </div>
   </div>
 

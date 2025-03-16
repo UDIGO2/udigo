@@ -43,3 +43,13 @@ public class MemberService {
       return  memberMapper.findByMemberId(memberId);
     }
 }
+    public MemberDTO findByEmail(String email) {
+        return memberMapper.findByEmail(email);
+    }
+
+
+    @Transactional
+    public void updateMember(MemberDTO memberDTO) {
+        memberMapper.updateMember(memberDTO);
+
+    }}

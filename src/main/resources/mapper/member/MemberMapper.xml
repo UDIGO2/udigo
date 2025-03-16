@@ -21,10 +21,44 @@
     </insert>
 
     <!-- ✅ 회원 조회 (id 기반) -->
-    <select id="findByMemberId" parameterType="String" resultMap="memberResultMap">
-        SELECT member_code, member_id, member_name, email, password, phone_no
+    <select id="findByMemberId" resultType="com.udigo.hotel.member.model.dto.MemberDTO">
+        SELECT
+            member_code,
+            member_id,
+            password,
+            member_name,
+            phone_no,
+            CASE
+                WHEN member_code = 1 THEN 'ADMIN'
+                ELSE 'USER'
+                END as role
         FROM tbl_member
         WHERE member_id = #{memberId}
     </select>
+
+    <select id="findByEmail" resultType="com.udigo.hotel.member.model.dto.MemberDTO">
+        SELECT
+        member_code,
+        email,
+        password,
+        member_name,
+        CASE
+        WHEN member_code = 1 THEN 'ADMIN'
+        ELSE 'USER'
+        END as role,
+        phone_no
+        <!-- 다른 필드들... -->
+        FROM tbl_member
+        WHERE email = #{email}
+    </select>
+
+    <!-- 회원 정보 수정 -->
+    <update id="updateMember" parameterType="com.udigo.hotel.member.model.dto.MemberDTO">
+        UPDATE tbl_member
+        SET
+            member_name = #{memberName},
+            phone_no = #{phone}
+        WHERE member_code = #{memberCode}
+    </update>
 
 </mapper>

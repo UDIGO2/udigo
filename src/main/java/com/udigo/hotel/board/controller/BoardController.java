@@ -4,7 +4,10 @@ package com.udigo.hotel.board.controller;
 import com.udigo.hotel.board.model.dto.BoardCommentDTO;
 import com.udigo.hotel.board.model.dto.BoardPostDTO;
 import com.udigo.hotel.board.model.service.BoardService;
+import com.udigo.hotel.member.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,14 +54,29 @@ public class BoardController {
 
     @GetMapping("/ask")
     public String getAskPage(@RequestParam(defaultValue = "1") int page, Model model) {
-        int pageSize = 10;
-        List<BoardPostDTO> posts = boardService.getPostsByType(3, page, pageSize);
-        int totalPosts = boardService.countPostsByType(3);
-        int totalPages = (int) Math.ceil((double) totalPosts / pageSize);
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (!(auth.getPrincipal() instanceof CustomUserDetails)) {
+                return "redirect:/auth/login";
+            }
 
-        model.addAttribute("posts", posts);
-        model.addAttribute("totalPages", totalPages);
-        return "board/ask";
+            CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+            int memberCode = userDetails.getMemberCode();
+
+            int pageSize = 10;
+            List<BoardPostDTO> posts = boardService.getPostsByTypeAndMember(3, memberCode, page, pageSize);
+            int totalPosts = boardService.countPostsByTypeAndMember(3, memberCode);
+            int totalPages = (int) Math.ceil((double) totalPosts / pageSize);
+
+            model.addAttribute("posts", posts);
+            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("currentPage", page);
+
+            return "board/ask";
+        } catch (Exception e) {
+            // 로그 추가
+            return "redirect:/auth/login";
+        }
     }
 
     // 관리자 공지사항 페이지
