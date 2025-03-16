@@ -11,4 +11,32 @@
     <select id="findByPostId" resultType="com.udigo.hotel.board.model.dto.BoardCommentDTO">
         SELECT * FROM tbl_board_comments WHERE post_id = #{postId}
     </select>
+
+    <select id="getCommentsByPostId" parameterType="int" resultType="com.udigo.hotel.board.model.dto.BoardCommentDTO">
+        SELECT * FROM tbl_board_comments
+        WHERE post_id = #{postId}
+        ORDER BY created_at ASC
+    </select>
+
+    <insert id="addComment" parameterType="com.udigo.hotel.board.model.dto.BoardCommentDTO">
+        INSERT INTO tbl_board_comments (
+            post_id,
+            content,
+            created_at
+        ) VALUES (
+            #{postId},
+            #{content},
+            #{createdAt}
+        )
+    </insert>
+
+    <update id="updateComment" parameterType="com.udigo.hotel.board.model.dto.BoardCommentDTO">
+        UPDATE tbl_board_comments
+        SET content = #{content}
+        WHERE comment_id = #{commentId}
+    </update>
+
+    <delete id="deleteComment" parameterType="int">
+        DELETE FROM tbl_board_comments WHERE comment_id = #{commentId}
+    </delete>
 </mapper>

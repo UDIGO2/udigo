@@ -1,9 +1,8 @@
-<!-- src/main/resources/templates/board/notice.html -->
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>공지사항</title>
+    <title>1:1 문의</title>
     <link rel="stylesheet" th:href="@{/css/board.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
@@ -18,22 +17,54 @@
 
 <div class="content">
     <h1>1:1 문의</h1>
-    <div th:each="post : ${posts}" class="post">
-        <h2 th:text="${post.title}" style="cursor: pointer;"
-            th:onclick="'toggleContent(' + ${post.postId} + ')'"></h2>
-        <span class="toggle-arrow" th:id="'arrow-' + ${post.postId}">&gt;</span>
-        <p th:text="'작성일: '+${#temporals.format(post.createdAt, 'yyyy/MM/dd')}"></p>
-        <div th:id="'content-' + ${post.postId}" class="post-content">
-            <p th:text="${post.content}"></p>
-        </div>
+
+    <!-- 문의하기 버튼 -->
+    <div class="write-button">
+        <a th:href="@{/board/ask/write}" class="btn-write">문의하기</a>
     </div>
 
-    <div class="pagination">
-        <span th:each="i : ${#numbers.sequence(1, totalPages)}">
-            <a th:href="@{'/board/ask?page=' + ${i}}" th:text="${i}"></a>
-        </span>
+    <!-- 문의 내역이 없을 경우 -->
+    <div th:if="${#lists.isEmpty(posts)}" class="no-posts">
+        <p>1대1 문의 내역이 없습니다.</p>
+    </div>
+
+    <!-- 문의 목록 -->
+    <div th:if="${not #lists.isEmpty(posts)}">
+        <div th:each="post : ${posts}" class="post">
+            <h2 th:text="${post.title}" style="cursor: pointer;"
+                th:onclick="'toggleContent(' + ${post.postId} + ')'"></h2>
+            <span class="toggle-arrow" th:id="'arrow-' + ${post.postId}">&gt;</span>
+            <p class="post-info">
+                <span th:text="'작성일: '+${#temporals.format(post.createdAt, 'yyyy/MM/dd')}"></span>
+                <span th:text="${post.hasComment()} ? '답변완료' : '답변대기'"
+                      th:class="${post.hasComment()} ? 'status-complete' : 'status-waiting'"></span>
+            </p>
+            <div th:id="'content-' + ${post.postId}" class="post-content" style="display: none;">
+                <div class="inquiry-content">
+                    <h4>문의내용:</h4>
+                    <p th:text="${post.content}"></p>
+                </div>
+                <div th:if="${post.comment != null}" class="answer-content">
+                    <h4>답변:</h4>
+                    <p th:text="${post.comment.content}"></p>
+                    <p class="answer-date"
+                       th:if="${post.comment.createdAt != null}"
+                       th:text="'답변일: ' + ${#temporals.format(post.comment.createdAt, 'yyyy/MM/dd')}"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 페이지네이션 -->
+        <div class="pagination" th:if="${totalPages > 1}">
+            <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+                <a th:href="@{'/board/ask?page=' + ${i}}"
+                   th:text="${i}"
+                   th:class="${i == currentPage ? 'active' : ''}"></a>
+            </span>
+        </div>
     </div>
 </div>
+
 <div th:replace="~{fragments/footer :: footer}"></div>
 <script src="/js/header.js"></script>
 
@@ -48,5 +79,69 @@
         }
     }
 </script>
+
+<style>
+    .btn-write {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .no-posts {
+        text-align: center;
+        padding: 50px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        margin: 20px 0;
+    }
+
+    .status-complete, .status-waiting {
+        padding: 5px 10px;
+        border-radius: 3px;
+        margin-left: 10px;
+        font-size: 0.9em;
+    }
+
+    .status-complete {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .status-waiting {
+        background-color: #ffc107;
+        color: black;
+    }
+
+    .post-content {
+        margin-top: 10px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+    }
+
+    .answer-content {
+        margin-top: 15px;
+        padding: 15px;
+        background-color: #e9ecef;
+        border-radius: 5px;
+    }
+
+    .answer-date {
+        text-align: right;
+        color: #6c757d;
+        font-size: 0.9em;
+        margin-top: 10px;
+    }
+
+    .toggle-arrow {
+        display: inline-block;
+        margin-left: 10px;
+        transition: transform 0.3s;
+    }
+</style>
 </body>
 </html>
