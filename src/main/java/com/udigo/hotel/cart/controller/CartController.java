@@ -9,6 +9,7 @@ import com.udigo.hotel.cart.model.dto.CartParamDTO;
 import com.udigo.hotel.cart.model.service.CartService;
 import com.udigo.hotel.member.model.dto.MemberDTO;
 import com.udigo.hotel.member.model.service.MemberService;
+import com.udigo.hotel.member.security.CustomUserDetails;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,10 +36,32 @@ public class CartController {
         this.acmService = acmService;
     }
 
-    // TODO: 참고
+//    // TODO: 참고
+//    private int getMemberCode() {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        MemberDTO memberDTO = memberService.findMemberById(auth.getMemberId());
+//        return memberDTO.getMemberCode();
+//    }
+
+    /* 오류 때문에 이걸로 바꿔 놓긴했는데 확인부탁드립니다! */
     private int getMemberCode() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        MemberDTO memberDTO = memberService.findMemberById(auth.getName());
+
+        // 인증되지 않은 사용자일 경우 기본값 반환
+        if (auth == null || !auth.isAuthenticated() || auth.getPrincipal().equals("anonymousUser")) {
+            throw new IllegalStateException("인증되지 않은 사용자입니다.");
+        }
+
+        // 현재 로그인한 사용자 정보 가져오기 (CustomUserDetails로 변환)
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+
+        // memberId를 이용해 DB에서 memberCode 조회
+        MemberDTO memberDTO = memberService.findByMemberId(userDetails.getMemberId());
+
+        if (memberDTO == null) {
+            throw new IllegalStateException("사용자 정보를 찾을 수 없습니다.");
+        }
+
         return memberDTO.getMemberCode();
     }
 

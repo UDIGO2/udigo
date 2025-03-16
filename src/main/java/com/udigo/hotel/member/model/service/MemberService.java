@@ -56,6 +56,7 @@ public class MemberService {
         return memberMapper.findByMemberId(memberId);
     }
 
+
     /** ✅ 회원 정보 수정 */
     @Transactional
     public void updateMember(MemberDTO memberDTO) {
@@ -119,4 +120,7 @@ public class MemberService {
             throw new RuntimeException("비밀번호 변경 실패: " + e.getMessage());
         }
     }
+
+
+
 }
