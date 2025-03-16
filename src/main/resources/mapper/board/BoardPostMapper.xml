@@ -1,62 +1,136 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.udigo.hotel.board.model.dao.BoardPostMapper">
-    <select id="findByBoardTypeWithPagination" resultType="com.udigo.hotel.board.model.dto.BoardPostDTO">
-        SELECT * FROM tbl_board_posts WHERE board_type = #{boardType}
-        ORDER BY created_at DESC
-        LIMIT #{pageSize} OFFSET #{offset}
-    </select>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.udigo.hotel.board.model.dao.BoardMapper">
 
-    <select id="countByBoardType" resultType="int">
-        SELECT COUNT(*) FROM tbl_board_posts WHERE board_type = #{boardType}
-    </select>
+    <!-- ResultMap 정의 -->
+    <resultMap id="BoardPostResultMap" type="com.udigo.hotel.board.model.dto.BoardPostDTO">
+        <id property="postId" column="post_id"/>
+        <result property="memberCode" column="member_code"/>
+        <result property="boardType" column="board_type"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="memberName" column="member_name"/>
+        <association property="comment" javaType="com.udigo.hotel.board.model.dto.BoardCommentDTO">
+            <id property="commentId" column="comment_id"/>
+            <result property="content" column="comment_content"/>
+            <result property="createdAt" column="comment_created_at"/>
+        </association>
+    </resultMap>
 
-    <insert id="insertPost" parameterType="com.udigo.hotel.board.model.dto.BoardPostDTO">
-        INSERT INTO tbl_board_posts (member_code, board_type, title, content, created_at)
-        VALUES (#{memberCode}, #{boardType}, #{title}, #{content}, NOW())
-    </insert>
-
-    <update id="updatePost" parameterType="com.udigo.hotel.board.model.dto.BoardPostDTO">
-        UPDATE tbl_board_posts
-        SET title = #{title}, content = #{content}, updated_at = NOW()
-        WHERE post_id = #{postId}
-    </update>
-
-    <delete id="deletePost" parameterType="int">
-        DELETE FROM tbl_board_posts WHERE post_id = #{postId}
-    </delete>
-
-    <select id="findById" resultType="com.udigo.hotel.board.model.dto.BoardPostDTO">
-        SELECT * FROM tbl_board_posts WHERE post_id = #{postId}
-    </select>
-
-    <select id="findByBoardTypeWithMemberAndPagination" resultType="com.udigo.hotel.board.model.dto.BoardPostDTO">
-        SELECT p.*, m.member_name as memberName
+    <!-- 게시글 조회 쿼리 -->
+    <select id="getPostsByType" parameterType="map" resultMap="BoardPostResultMap">
+        SELECT p.*
         FROM tbl_board_posts p
-        LEFT JOIN tbl_member m ON p.member_code = m.member_code
         WHERE p.board_type = #{boardType}
         ORDER BY p.created_at DESC
-        LIMIT #{pageSize} OFFSET #{offset}
+        LIMIT #{offset}, #{pageSize}
     </select>
 
-    <!-- 특정 회원의 특정 타입 게시글 조회 -->
-    <select id="findByBoardTypeAndMember" resultType="com.udigo.hotel.board.model.dto.BoardPostDTO">
-        SELECT p.*, m.member_name as memberName
+    <select id="getPostsByTypeWithMember" parameterType="map" resultMap="BoardPostResultMap">
+        SELECT p.*, m.member_name
         FROM tbl_board_posts p
                  LEFT JOIN tbl_member m ON p.member_code = m.member_code
         WHERE p.board_type = #{boardType}
-          AND p.member_code = #{memberCode}
         ORDER BY p.created_at DESC
-        LIMIT #{pageSize} OFFSET #{offset}
+        LIMIT #{offset}, #{pageSize}
     </select>
 
-    <!-- 특정 회원의 특정 타입 게시글 수 카운트 -->
-    <select id="countByBoardTypeAndMember" resultType="int">
+    <select id="getPostsWithComments" parameterType="map" resultMap="BoardPostResultMap">
+        SELECT
+            p.*,
+            m.member_name,
+            c.comment_id,
+            c.content as comment_content,
+            c.created_at as comment_created_at
+        FROM tbl_board_posts p
+                 LEFT JOIN tbl_member m ON p.member_code = m.member_code
+                 LEFT JOIN tbl_board_comments c ON p.post_id = c.post_id
+        WHERE p.board_type = #{boardType}
+          AND p.member_code = #{memberCode}
+        ORDER BY p.created_at DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="getPostById" parameterType="int" resultMap="BoardPostResultMap">
+        SELECT
+            p.*,
+            m.member_name,
+            c.comment_id,
+            c.content as comment_content,
+            c.created_at as comment_created_at
+        FROM tbl_board_posts p
+                 LEFT JOIN tbl_member m ON p.member_code = m.member_code
+                 LEFT JOIN tbl_board_comments c ON p.post_id = c.post_id
+        WHERE p.post_id = #{postId}
+    </select>
+
+    <!-- 게시글 수 카운트 -->
+    <select id="countPostsByType" parameterType="int" resultType="int">
+        SELECT COUNT(*)
+        FROM tbl_board_posts
+        WHERE board_type = #{boardType}
+    </select>
+
+    <select id="countPostsByTypeAndMember" parameterType="map" resultType="int">
         SELECT COUNT(*)
         FROM tbl_board_posts
         WHERE board_type = #{boardType}
           AND member_code = #{memberCode}
     </select>
+
+    <!-- 게시글 CRUD -->
+    <insert id="addPost" parameterType="com.udigo.hotel.board.model.dto.BoardPostDTO">
+        INSERT INTO tbl_board_posts (
+            member_code, board_type, title, content, created_at
+        ) VALUES (
+                     #{memberCode}, #{boardType}, #{title}, #{content}, #{createdAt}
+                 )
+    </insert>
+
+    <update id="updatePost" parameterType="com.udigo.hotel.board.model.dto.BoardPostDTO">
+        UPDATE tbl_board_posts
+        SET title = #{title},
+            content = #{content},
+            updated_at = #{updatedAt}
+        WHERE post_id = #{postId}
+    </update>
+
+    <delete id="deletePost" parameterType="int">
+        DELETE FROM tbl_board_posts
+        WHERE post_id = #{postId}
+    </delete>
+
+    <!-- 댓글 관련 쿼리 -->
+    <select id="getCommentsByPostId" parameterType="int" resultType="com.udigo.hotel.board.model.dto.BoardCommentDTO">
+        SELECT *
+        FROM tbl_board_comments
+        WHERE post_id = #{postId}
+        ORDER BY created_at DESC
+    </select>
+
+    <insert id="addComment" parameterType="com.udigo.hotel.board.model.dto.BoardCommentDTO">
+        INSERT INTO tbl_board_comments (
+            post_id, content, created_at
+        ) VALUES (
+                     #{postId}, #{content}, #{createdAt}
+                 )
+    </insert>
+
+    <update id="updateComment" parameterType="com.udigo.hotel.board.model.dto.BoardCommentDTO">
+        UPDATE tbl_board_comments
+        SET content = #{content}
+        WHERE comment_id = #{commentId}
+    </update>
+
+    <delete id="deleteComment" parameterType="int">
+        DELETE FROM tbl_board_comments
+        WHERE comment_id = #{commentId}
+    </delete>
+
+    <delete id="deleteCommentsByPostId" parameterType="int">
+        DELETE FROM tbl_board_comments
+        WHERE post_id = #{postId}
+    </delete>
 </mapper>

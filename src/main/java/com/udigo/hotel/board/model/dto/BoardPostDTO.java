@@ -1,4 +1,3 @@
-// src/main/java/com/udigo/hotel/board/model/dto/BoardPostDTO.java
 package com.udigo.hotel.board.model.dto;
 
 import java.time.LocalDateTime;
@@ -11,22 +10,10 @@ public class BoardPostDTO {
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private String memberName;
+    private String memberName;  // 작성자 이름
+    private BoardCommentDTO comment;  // 답변 정보
 
-    public BoardPostDTO() {
-    }
-
-    public BoardPostDTO(int postId, int memberCode, int boardType, String title, String content, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.postId = postId;
-        this.memberCode = memberCode;
-        this.boardType = boardType;
-        this.title = title;
-        this.content = content;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-
-    }
-
+    // Getters and Setters
     public int getPostId() {
         return postId;
     }
@@ -91,17 +78,16 @@ public class BoardPostDTO {
         this.memberName = memberName;
     }
 
-    @Override
-    public String toString() {
-        return "BoardPostDTO{" +
-                "postId=" + postId +
-                ", memberCode=" + memberCode +
-                ", boardType=" + boardType +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", memberName='" + memberName + '\'' +
-                '}';
+    public BoardCommentDTO getComment() {
+        return comment;
+    }
+
+    public void setComment(BoardCommentDTO comment) {
+        this.comment = comment;
+    }
+
+    // 답변 여부 확인 메소드
+    public boolean hasComment() {
+        return comment != null;
     }
 }

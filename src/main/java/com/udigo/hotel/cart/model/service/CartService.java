@@ -2,6 +2,7 @@ package com.udigo.hotel.cart.model.service;
 
 import com.udigo.hotel.cart.model.dao.CartMapper;
 import com.udigo.hotel.cart.model.dto.CartDTO;
+import com.udigo.hotel.cart.model.dto.CartParamDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,11 +23,11 @@ public class CartService {
 
     // 장바구니에 추가
     public void addItemToCart(int memberCode, int acmId) {
-        cartMapper.insertCartItem(memberCode, acmId);
+        cartMapper.insertCartItem(new CartParamDTO(memberCode, acmId));
     }
 
     // 장바구니에서 삭제
-    public void removeItemFromCart(int acmId, int memberCode) {
-        cartMapper.deleteCartItem(acmId, memberCode);
+    public void deleteItemFromCart(List<CartParamDTO> dtos) {
+        cartMapper.deleteCartItems(dtos);
     }
 }

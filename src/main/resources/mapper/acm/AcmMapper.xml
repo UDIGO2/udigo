@@ -55,4 +55,14 @@
         WHERE acm_id = #{acmId}
     </select>
 
+    <select id="selectAcmIds" resultType="com.udigo.hotel.acm.model.dto.AcmDTO">
+        SELECT *
+        FROM tbl_acm
+        WHERE acm_id IN
+        <foreach item="id" collection="acmIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
 </mapper>
