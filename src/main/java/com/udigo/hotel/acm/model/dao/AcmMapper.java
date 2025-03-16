@@ -25,4 +25,6 @@ public interface AcmMapper {
                             @Param("maxGuests") Integer guests);
 
     AcmDTO selectAcmDetail(int acmId);
+
+    List<AcmDTO> selectAcmIds(List<Integer> acmIds);
 }

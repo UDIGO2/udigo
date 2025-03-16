@@ -3,63 +3,69 @@ package com.udigo.hotel.cart.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.udigo.hotel.acm.model.service.AcmService;
 import com.udigo.hotel.cart.model.dto.CartDTO;
+import com.udigo.hotel.cart.model.dto.CartParamDTO;
 import com.udigo.hotel.cart.model.service.CartService;
+import com.udigo.hotel.member.model.dto.MemberDTO;
+import com.udigo.hotel.member.model.service.MemberService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/cart")
+@RequestMapping( method = RequestMethod.GET,value = "/cart")
 public class CartController {
 
     private final CartService cartService;
+    private final MemberService memberService;
+    private final AcmService acmService;
 
-    public CartController(CartService cartService) {
+    public CartController(CartService cartService, MemberService memberService, AcmService acmService) {
         this.cartService = cartService;
+        this.memberService = memberService;
+        this.acmService = acmService;
+    }
+
+    // TODO: 참고
+    private int getMemberCode() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        MemberDTO memberDTO = memberService.findMemberById(auth.getName());
+        return memberDTO.getMemberCode();
     }
 
     // 장바구니 목록 조회 (로그인 없이 세션 기반으로)
     @GetMapping
-    public String cartList(HttpSession session, Model model) {
-        Integer memberCode = (Integer) session.getAttribute("memberCode");
+    public String cartList(Model model) {
+        List<CartDTO> cartItems = cartService.getCartItems(getMemberCode());
 
-        List<CartDTO> cartItems = new ArrayList<>();
-        if (memberCode != null) {
-            // 로그인한 경우, DB에서 장바구니 데이터 불러오기
-            cartItems = cartService.getCartItems(memberCode);
+        if (cartItems.isEmpty()) {
+            model.addAttribute("cartItems", new ArrayList<>());
+        } else {
+            List<Integer> cartIds = cartItems.stream().map(CartDTO::getAcmId).collect(Collectors.toList());
+
+            model.addAttribute("cartItems", acmService.getAcmsFromCart(cartIds));
         }
 
-        model.addAttribute("cartItems", cartItems);
-
-        // 장바구니가 비었으면 cart.html, 상품이 있으면 cartadd.html 반환
-        return cartItems.isEmpty() ? "cart/cart" : "cart/cartadd";
+        return "cart/cart";
     }
 
     // 장바구니에 아이템 추가 (세션 기반)
     @PostMapping("/add")
-    public String addItemToCart(@RequestParam int acmId, HttpSession session) {
-        Integer memberCode = (Integer) session.getAttribute("memberCode");
+    public String addItemToCart(@RequestBody Map<String, Object> requestBody) {
+        int acmId = (int) requestBody.get("acmId");
 
-        if (memberCode != null) {
-            // 로그인한 경우, DB에 추가
-            cartService.addItemToCart(memberCode, acmId);
-        } else {
-            // 로그인하지 않은 경우, 세션에 저장
-            List<CartDTO> cartItems = (List<CartDTO>) session.getAttribute("cart");
-            if (cartItems == null) {
-                cartItems = new ArrayList<>();
-            }
-            cartItems.add(new CartDTO(0, 0, acmId)); // 임시 cartCode, memberCode=0으로 설정
-            session.setAttribute("cart", cartItems);
-        }
+        System.out.println("acmId" + acmId);
+
+        cartService.addItemToCart(getMemberCode(), acmId);
 
         return "redirect:/cart";
 
@@ -76,5 +82,20 @@ public class CartController {
 //
 //            model.addAttribute("cartItems", cartItems);
 //            return "payment"; // ✅ 결제 페이지(`payment.html`)로 이동
-        }
     }
+
+    @DeleteMapping("/delete")
+    public String deleteItems(@RequestBody List<Integer> requestBody) {
+
+        int memberCode = getMemberCode();
+
+        List<CartParamDTO> cartParamItems = new ArrayList<>();
+        for (Integer acmId : requestBody) {
+            cartParamItems.add(new CartParamDTO(memberCode, acmId));  // 직접 추가
+        }
+
+        cartService.deleteItemFromCart(cartParamItems);
+
+        return "cart/cartadd";
+    }
+}

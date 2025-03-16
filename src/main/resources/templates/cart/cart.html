@@ -7,13 +7,14 @@
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/cart.css}">
+    <link rel="stylesheet" th:href="@{/css/cartadd.css}">
 </head>
 <body>
 <!-- 헤더를 fragment로 불러옵니다. -->
 <div th:replace="~{fragments/header :: header}"></div>
 
 <main>
-    <div class="cart-container">
+    <div th:if="${#lists.size(cartItems) == 0}" class="cart-container">
         <h1>장바구니</h1>
         <div class="cart-icon">🛒</div>
         <p class="cart-message">장바구니가 비었습니다.<br>원하시는 숙소를 담아주세요.</p>
@@ -26,6 +27,44 @@
             <input type="hidden" name="acmId" value="1"> <!-- 예제 숙소 ID -->
 
         </form>
+    </div>
+
+
+
+
+
+    <div th:if="${#lists.size(cartItems) > 0}" class="cart-add-container">
+        <div class="cart-add-header">
+            <div>
+                <label for="all">
+                    <input type="checkbox" name="all" value="all" onclick='selectAll(this)' id="all">
+                    전체선택
+                </label>
+            </div>
+            <div>장바구니</div>
+            <div style="cursor: pointer" onclick="deleteItems()">선택 삭제</div>
+        </div>
+        <div class="cart-add-body" th:each="item : ${cartItems}">
+            <label style="cursor: pointer" th:for="${item.acmId}">
+                <div class="cart-add-body-header">
+                    <input type="checkbox" name="acmName" th:value="${item.acmPrice}" th:id="${item.acmId}" onclick="getCheckBoxValues()">
+                    <div class="cart-add-body-header-name" th:text="${item.acmName}"></div>
+                </div>
+                <div class="cart-add-body-line"></div>
+                <div class="cart-add-body-content">
+                    <img th:src="@{${item.acmPhoto1}}" width="300px" height="240px">
+                    <div th:text="${#numbers.formatDecimal(item.acmPrice, 0, 'COMMA', 0, 'POINT')} + '원'"></div>
+                </div>
+            </label>
+        </div>
+        <div class="cart-add-footer">
+            <div th:text="'총' + '건'"></div>
+            <div class="cart-add-price-result">
+                <div>결제 금액예상</div>
+                <div id="total-price"></div>
+            </div>
+            <div class="cart-add-purchase" onclick="goToPurchase()">구매하기</div>
+        </div>
     </div>
 </main>
 
@@ -49,6 +88,120 @@
             }
         });
     }
+
+    function getSelectedItems() {
+        let selectedItems = Array.from(document.querySelectorAll('input[name="acmName"]:checked'));
+
+        return selectedItems.map(checkbox => Number(checkbox.id));
+    }
+
+    function goToPurchase() {
+        let selectedIds = getSelectedItems();
+
+        console.log(selectedIds)
+
+        fetch("/payment", {     // 맵핑 주소
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(
+                selectedIds
+            ),
+        });
+    }
+
+
+    function deleteItems(event) {
+        let selectedIds = getSelectedItems();
+
+        console.log(selectedIds);
+
+        fetch("/cart/delete", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(
+                selectedIds
+            ),
+        }).then(response => {
+            location.reload();
+        })
+    }
+
+    function selectAll(selectAll)  {
+        const checkboxes
+            = document.querySelectorAll('input[type="checkbox"]');
+
+        checkboxes.forEach((checkbox) => {
+            checkbox.checked = selectAll.checked
+        })
+
+        getCheckBoxValues();
+    }
+
+    function getCheckBoxValues() {
+        let selectedItems = Array.from(document.querySelectorAll('input[name="acmName"]:checked'));
+
+
+
+        let totalPrice = selectedItems
+            .map(checkbox => Number(checkbox.value))
+            .reduce((acc, curr) => acc + curr, 0);
+
+        document.getElementById('total-price').innerText = totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원';
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        updateTotalPrice();
+
+        // 개별 삭제 버튼 클릭 시 장바구니 업데이트
+        document.querySelectorAll(".delete-item").forEach(button => {
+            button.addEventListener("click", function () {
+                setTimeout(updateTotalPrice, 500);
+            });
+        });
+
+        // 전체 삭제 버튼
+        document.getElementById("clear-cart").addEventListener("click", function () {
+            if (confirm("정말로 장바구니를 비우시겠습니까?")) {
+                fetch("/cart/deleteAll", { method: "POST" })
+                    .then(response => {
+                        if (response.ok) {
+                            alert("장바구니를 비웠습니다.");
+                            location.reload();
+                        }
+                    });
+            }
+        });
+
+        // 총 가격 계산 함수
+        function updateTotalPrice() {
+            let totalPrice = 0;
+            document.querySelectorAll(".item-price").forEach(item => {
+                totalPrice += parseInt(item.getAttribute("data-price")) || 0;
+            });
+            document.getElementById("total-price").textContent = totalPrice.toLocaleString() + "원";
+        }
+
+        // ✅ 결제하기 버튼 클릭 시 장바구니 정보 JSON으로 변환 후 전송
+        document.getElementById("checkout").addEventListener("click", function (event) {
+            event.preventDefault(); // 기본 제출 동작 막기
+
+            let cartItems = [];
+            document.querySelectorAll("tbody tr").forEach(row => {
+                let acmId = row.querySelector("input[name='acmId']").value;
+                let acmName = row.cells[1].textContent;
+                let acmPrice = row.cells[2].textContent.replace("원", "").trim();
+                cartItems.push({ acmId, acmName, acmPrice });
+            });
+
+            document.getElementById("cartItemsJson").value = JSON.stringify(cartItems);
+            document.getElementById("payment-form").submit();
+        });
+
+    });
 </script>
 </body>
 </html>
