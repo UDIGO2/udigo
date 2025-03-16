@@ -111,30 +111,67 @@
 
         // 지역 선택 모달
         const locationModal = createModal('지역 선택', `
-        <div>
-            <label><input type="radio" name="location" value="서울/경기"> 서울/경기</label><br>
-            <label><input type="radio" name="location" value="강원"> 강원도</label><br>
-            <label><input type="radio" name="location" value="경상"> 경상북도/남도</label><br>
-            <label><input type="radio" name="location" value="전라"> 전라북도/남도</label><br>
-            <label><input type="radio" name="location" value="충청"> 충청북도/남도</label><br>
-            <label><input type="radio" name="location" value="제주"> 제주</label><br>
-        </div>
-    `, function() {
-            const selectedLocation = document.querySelector('input[name="location"]:checked').value;
-            let displayLocation = selectedLocation;
-            switch (selectedLocation) {
-                case '경상':
-                    displayLocation = '경상북도/남도';
-                    break;
-                case '전라':
-                    displayLocation = '전라북도/남도';
-                    break;
-                case '충청':
-                    displayLocation = '충청북도/남도';
-                    break;
+    <div>
+        <label><input type="radio" name="location" value="서울/경기"> 서울/경기</label><br>
+        <label><input type="radio" name="location" value="강원"> 강원도</label><br>
+        <label><input type="radio" name="location" value="경상"> 경상북도/남도</label><br>
+        <label><input type="radio" name="location" value="전라"> 전라북도/남도</label><br>
+        <label><input type="radio" name="location" value="충청"> 충청북도/남도</label><br>
+        <label><input type="radio" name="location" value="제주"> 제주</label><br>
+    </div>
+`, function() {
+            const selectedRadio = document.querySelector('input[name="location"]:checked');
+            if (selectedRadio) {
+                const dbValue = selectedRadio.value; // DB에 저장된 값
+                let displayValue = dbValue; // 화면에 표시할 값
+
+                // 화면 표시용 값 매핑
+                switch (dbValue) {
+                    case '경상':
+                        displayValue = '경상북도/남도';
+                        break;
+                    case '전라':
+                        displayValue = '전라북도/남도';
+                        break;
+                    case '충청':
+                        displayValue = '충청북도/남도';
+                        break;
+                    case '강원':
+                        displayValue = '강원도';
+                        break;
+                }
+
+                // input에는 DB 값을 저장하고, data-display 속성에 표시용 값을 저장
+                const locationInput = document.querySelector('#location-filter input');
+                locationInput.value = dbValue; // DB 값 저장
+                locationInput.setAttribute('data-display', displayValue); // 표시용 값 저장
+                locationInput.placeholder = displayValue; // 화면에 표시
             }
-            document.querySelector('#location-filter input').value = displayLocation; // Display full name in the UI
         });
+
+// 검색 버튼 클릭 이벤트 리스너에서
+        document.querySelector('.search-btn').addEventListener('click', function() {
+            this.classList.add('clicked');
+
+            setTimeout(() => {
+                this.classList.remove('clicked');
+            }, 400);
+
+            const searchParams = new URLSearchParams();
+
+            // location 값은 input의 value(DB 값)를 사용
+            const location = document.querySelector('#location-filter input').value;
+            const checkInDate = document.getElementById('check-in-date')?.value;
+            const checkOutDate = document.getElementById('check-out-date')?.value;
+            const guestsValue = document.querySelector('#guest-filter input').value;
+
+            if (location) searchParams.append('location', location);
+            if (checkInDate) searchParams.append('checkInDate', checkInDate);
+            if (checkOutDate) searchParams.append('checkOutDate', checkOutDate);
+            if (guestsValue) {
+                const guests = guestsValue.replace(/\D/g, '');
+                if (guests) searchParams.append('guests', guests);
+            }
 
         // 날짜 선택 모달
         const dateModal = createModal('날짜 선택', `
@@ -184,7 +221,6 @@
             openModal(guestModal);
         });
 
-        // 검색 버튼 클릭 이벤트
         document.querySelector('.search-btn').addEventListener('click', function() {
             // 클릭 애니메이션 추가
             this.classList.add('clicked');
@@ -194,41 +230,54 @@
                 this.classList.remove('clicked');
             }, 400);
 
-            const location = document.querySelector('#location-filter input').value || '';
-            const checkInDate = document.getElementById('check-in-date').value || '';
-            const checkOutDate = document.getElementById('check-out-date').value || '';
-            const guests = document.querySelector('#guest-filter input').value.replace(/\D/g, '') || '';
+            // 검색 파라미터 객체 생성
+            const searchParams = new URLSearchParams();
 
-            fetch(`/acm/search?location=${location}&checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&guests=${guests}`)
+            // 각 필드가 있을 때만 파라미터 추가
+            const location = document.querySelector('#location-filter input').value;
+            const checkInDate = document.getElementById('check-in-date')?.value;
+            const checkOutDate = document.getElementById('check-out-date')?.value;
+            const guestsValue = document.querySelector('#guest-filter input').value;
+
+            if (location) searchParams.append('location', location);
+            if (checkInDate) searchParams.append('checkInDate', checkInDate);
+            if (checkOutDate) searchParams.append('checkOutDate', checkOutDate);
+            if (guestsValue) {
+                const guests = guestsValue.replace(/\D/g, '');
+                if (guests) searchParams.append('guests', guests);
+            }
+
+            // 검색 요청 보내기
+            fetch(`/acm/search?${searchParams.toString()}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success && data.acms.length > 0) {
+                        const acmList = document.querySelector('.hotel-list');
                         acmList.innerHTML = '';
 
                         data.acms.forEach(acm => {
                             const acmCard = `
-                            <div class="hotel-card">
-                                <a href="/acm/detail/${acm.acmId}" class="hotel-link" style="text-decoration: none; color: inherit;">
-                                    <div class="hotel-image">
-                                        <img src="${acm.acmPhoto1}" alt="${acm.acmName}">
-                                    </div>
-                                    <div class="hotel-info">
-                                        <h3>${acm.acmName}</h3>
-                                        <p>${acm.acmInfo}</p>
-                                    </div>
-                                </a>
-                            </div>
-                        `;
+                        <div class="hotel-card">
+                            <a href="/acm/detail/${acm.acmId}" class="hotel-card-link">
+                                <div class="hotel-image">
+                                    <img src="${acm.acmPhoto1}" alt="${acm.acmName}">
+                                </div>
+                                <div class="hotel-info">
+                                    <h3>${acm.acmName}</h3>
+                                    <p>${acm.acmInfo}</p>
+                                </div>
+                            </a>
+                        </div>
+                    `;
                             acmList.insertAdjacentHTML('beforeend', acmCard);
                         });
-
-                        initializeLikeButtons();
                     } else {
                         alert('조건에 맞는 숙소가 없습니다.');
                     }
                 })
                 .catch(error => {
                     console.error('Error fetching accommodations:', error);
+                    alert('검색 중 오류가 발생했습니다.');
                 });
         });
 
