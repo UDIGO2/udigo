@@ -19,6 +19,7 @@ VALUES (105,'member05', '조수민', 'sumin@naver.com', '$2b$12$1C5njm.3fcbzVILG
 INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked)
 VALUES (106,'member06', '허아름', 'areum@daum.net', '$2b$12$1C5njm.3fcbzVILGq/K0l.f8LUSdVKyksThdTZm85CYcJpCVv0hBO', '016-4814-3905', NOW(), FALSE, FALSE);
 
+UPDATE tbl_member SET role = 'ADMIN' WHERE member_code = 1;
 
 INSERT INTO tbl_roles (role_code, role_name) VALUES (1, 'ADMIN');
 INSERT INTO tbl_roles (role_code, role_name) VALUES (2, 'member');

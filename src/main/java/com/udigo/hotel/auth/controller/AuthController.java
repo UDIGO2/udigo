@@ -32,6 +32,7 @@ public class AuthController {
             model.addAttribute("errorMessage", "아이디 또는 비밀번호가 잘못되었습니다.");
         }
 
+
         // 🔹 로그인 전 페이지 저장 (Referer 활용)
         String referer = request.getHeader("Referer");
         if (referer != null && !referer.contains("/auth/login")) {
@@ -62,4 +63,6 @@ public class AuthController {
         }
         return "redirect:/auth/login";
     }
+
+
 }

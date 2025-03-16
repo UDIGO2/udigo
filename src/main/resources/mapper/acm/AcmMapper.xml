@@ -13,8 +13,7 @@
 
     <select id="searchAcms" resultType="com.udigo.hotel.acm.model.dto.AcmDTO">
         SELECT *
-        FROM
-        tbl_acm a
+        FROM tbl_acm a
         WHERE 1 = 1
         <if test="acmLocation != null and acmLocation != ''">
             AND a.acm_location = #{acmLocation}
@@ -23,15 +22,15 @@
             AND a.max_guest >= #{maxGuests}
         </if>
         <if test="checkInDate != null and checkOutDate != null">
-            AND a.acm_id NOT IN (
-            SELECT r.acm_id
+            AND NOT EXISTS (
+            SELECT 1
             FROM tbl_reservations r
-            WHERE
-            r.check_in &lt; #{checkOutDate} AND r.check_out &gt; #{checkInDate}
+            WHERE r.acm_id = a.acm_id
+            AND r.check_in &lt; #{checkOutDate}
+            AND r.check_out &gt; #{checkInDate}
             )
         </if>
-        ORDER BY
-        a.liked_count DESC
+        ORDER BY a.liked_count DESC
         LIMIT 9
     </select>
 

@@ -15,6 +15,7 @@ public class MemberDTO implements UserDetails {
     private String password;
     private String phoneNo;
     private List<GrantedAuthority> authorities; // 🔥 Spring Security 권한 정보 저장
+    private String role;
 
     public MemberDTO() {}
 
@@ -109,6 +110,13 @@ public class MemberDTO implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getRole() {
+        return role;
+    }
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override
