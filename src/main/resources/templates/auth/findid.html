@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>아이디 찾기</title>
+    <link rel="stylesheet" th:href="@{/css/findid.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+</head>
+<body>
+<!-- ✅ 헤더 추가 -->
+<div th:replace="~{fragments/header :: header}"></div>
+
+<h2>아이디 찾기</h2>
+
+<!-- ✅ 아이디 찾기 폼 -->
+<div id="findid-page">
+    <form id="findid-form" action="/auth/findid" method="post">
+        <label for="email">이메일:</label>
+        <input type="email" id="email" name="email" required>
+        <button type="submit">아이디 찾기</button>
+    </form>
+</div>
+
+<!-- ✅ 모달창 (아이디 찾기 결과) -->
+<div id="modal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <p id="modal-message"></p>
+        <button onclick="closeModal()" class="modal-btn">확인</button>
+    </div>
+</div>
+
+<script>
+    window.onload = function () {
+        var findId = "[[${findId != null ? findId : ''}]]"; // ✅ `null` 방지
+        var modal = document.getElementById("modal");
+        var message = document.getElementById("modal-message");
+
+        console.log("찾은 아이디:", findId); // ✅ 콘솔에서 확인
+
+        if (findId && findId !== "null" && findId !== "") {
+            if (findId === "등록된 이메일이 없습니다.") {
+                message.innerText = findId; // 이메일이 없을 때 메시지 표시
+            } else {
+                message.innerText = "찾은 아이디: " + findId; // ✅ 찾은 아이디 출력
+            }
+            modal.style.display = "block"; // ✅ 모달창 띄우기
+        }
+    };
+
+    // ✅ 모달 닫기 및 로그인 페이지로 이동
+    function closeModal() {
+        var modal = document.getElementById("modal");
+        if (modal) {
+            modal.style.display = "none";
+        }
+        window.location.href = "/auth/login"; // 로그인 페이지로 이동
+    }
+</script>
+
+<!-- ✅ 푸터 추가 -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

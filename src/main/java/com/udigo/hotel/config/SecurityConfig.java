@@ -33,6 +33,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChainConfigure(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/", "/auth/**", "/member/signup", "/member/api/**", "/auth/login").permitAll();
+                    auth.requestMatchers("/css/**", "/js/**", "/image/**", "/reservations/**", "/acm/**", "/board/**").permitAll();
                     // 변경된 부분: 권한 설정 수정 및 추가
                     auth.requestMatchers("/", "/member/signup", "/member/api/**", "/auth/login").permitAll();
                     auth.requestMatchers("/css/**", "/js/**", "/image/**").permitAll();  // 정적 리소스

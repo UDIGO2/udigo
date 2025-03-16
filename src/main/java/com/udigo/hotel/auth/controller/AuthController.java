@@ -1,12 +1,15 @@
 package com.udigo.hotel.auth.controller;
 
+import com.udigo.hotel.member.model.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -62,6 +65,52 @@ public class AuthController {
             return "main/main"; // ✅ Flash Attribute를 없애고 Model을 직접 사용
         }
         return "redirect:/auth/login";
+    }
+
+    @Autowired
+    private MemberService memberService;
+
+    // 아이디 찾기 페이지
+    @GetMapping("/findid")
+    public String findIdPage() {
+        return "auth/findid";
+    }
+
+    @PostMapping("/findid")
+    public String findId(@RequestParam("email") String email, Model model) {
+        String findId = String.valueOf(memberService.findIdByEmail(email));
+
+        // 🔥 디버깅 로그 추가 (서버 콘솔에서 확인)
+        System.out.println("찾은 아이디: " + findId);
+
+        if (findId != null && !findId.isEmpty()) {
+            model.addAttribute("findId", findId); // ✅ Thymeleaf에 전달
+        } else {
+            model.addAttribute("error", "등록된 이메일이 없습니다.");
+        }
+
+        return "auth/findid"; // ✅ 같은 페이지로 이동하여 모달창 띄우기
+    }
+
+    /** ✅ 비밀번호 찾기 페이지 */
+    @GetMapping("/findpass")
+    public String showFindPasswordPage() {
+        return "auth/findpass";
+    }
+
+    /** ✅ 비밀번호 찾기 요청 처리 */
+    @PostMapping("/findpass")
+    public String processFindPassword(@RequestParam("memberId") String memberId,
+                                      @RequestParam("email") String email, Model model) {
+        String tempPassword = memberService.findPassword(memberId, email);
+
+        if (tempPassword == null || tempPassword.isEmpty()) {
+            model.addAttribute("error", "존재하지 않는 회원 정보입니다.");
+        } else {
+            model.addAttribute("success", "임시 비밀번호가 이메일로 발송되었습니다.");
+        }
+
+        return "auth/findpass";
     }
 
 
