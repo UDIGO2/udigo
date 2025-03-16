@@ -26,8 +26,9 @@
       <!-- ✅ 로그인한 경우 -->
       <div th:if="${#authorization.expression('isAuthenticated()')}">
         <span class="welcome-message" th:text="|${#authentication.principal.username}님 환영합니다!|">사용자명</span>
-        <a href="/cart" class="cart-icon">
-          🛒 <span class="cart-count" th:text="${session.cartCount != null ? session.cartCount : 0}"></span>
+        <a href="/cart">
+          🛒
+          <span class="cart-count" th:text="${session.cartCount != null ? session.cartCount : 0}"></span>
         </a>
         <button class="h_my-page-btn">
           <a th:href="@{/mypage}">마이페이지</a>

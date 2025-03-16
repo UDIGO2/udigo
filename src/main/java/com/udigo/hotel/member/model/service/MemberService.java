@@ -38,4 +38,8 @@ public class MemberService {
             throw new RuntimeException("회원가입 실패: " + e.getMessage());
         }
     }
+
+    public MemberDTO findMemberById(String memberId) {
+      return  memberMapper.findByMemberId(memberId);
+    }
 }

@@ -44,6 +44,7 @@
             <div class="price-info">
                 <span class="price" th:text="${#numbers.formatDecimal(acm.acmPrice, 0, 'COMMA', 0, 'POINT')} + '원'">가격</span>
                 <span class="per-night">/1박</span>
+                <span style="font-size: 30px" th:onclick="addToCart()">장바구니 추가하기</span>
             </div>
 
             <div class="basic-info">
@@ -109,8 +110,29 @@
 
 <div th:replace="~{fragments/footer :: footer}"></div>
 <script th:src="@{/js/header.js}"></script>
+<!--<script th:inline="javascript">-->
+<!--    -->
+<!--</script>-->
 <!-- 카카오맵 API 스크립트를 body 끝부분으로 이동 -->
 <script type="text/javascript">
+    function addToCart() {
+
+        const acmId = Number('[[${acm.acmId}]]')
+
+        console.log(typeof acmId)
+
+
+        fetch("/cart/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                acmId: acmId
+            }),
+        })
+    }
+
     // 카카오맵 API 로드 함수
     function loadKakaoMap() {
         // 주소-좌표 변환 객체를 생성
