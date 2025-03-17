@@ -49,6 +49,10 @@ public class SecurityConfig {
                     auth.requestMatchers("/reservations/list").permitAll();  // 예약 목록 조회는 모두 가능
                     auth.requestMatchers("/reservations/**").authenticated();  // 그 외 예약 기능은 로그인 필요
 
+                    // ✅ 관리자 페이지 설정
+                    auth.requestMatchers("/admin/**").hasRole("ADMIN");  // 관리자는 /admin/** 경로 접근 가능
+                    auth.requestMatchers("/member/admin/**").hasRole("ADMIN");  // ✅ 관리자 전용 회원 관리 페이지 설정
+
                     // 기타 인증 필요 페이지
                     auth.requestMatchers("/cart", "/payment", "/payList").authenticated();
                     auth.requestMatchers("/member/mypage", "/member/myinfo").authenticated();

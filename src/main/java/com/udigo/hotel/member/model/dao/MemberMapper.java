@@ -4,6 +4,8 @@ import com.udigo.hotel.member.model.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface MemberMapper {
 
@@ -24,6 +26,8 @@ public interface MemberMapper {
 
     /** ✅ 임시 비밀번호 저장 */
     void updatePassword(@Param("memberId") String memberId, @Param("password") String password);
+
+    List<MemberDTO> selectAllMembers();
 }
 
 

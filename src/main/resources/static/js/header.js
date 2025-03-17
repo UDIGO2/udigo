@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // 메뉴가 열릴 때 content 아래로 밀기
         content.style.transition = "margin-top 0.3s ease"; // 애니메이션 추가
-        content.style.marginTop = dropdownBackground.offsetHeight + 'px';
+        // content.style.marginTop = dropdownBackground.offsetHeight + 'px';
     });
 
     navBar.addEventListener("mouseleave", function () {

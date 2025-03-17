@@ -75,4 +75,8 @@
         UPDATE tbl_member SET password = #{password} WHERE member_id = #{memberId}
     </update>
 
+    <select id="selectAllMembers" resultType="com.udigo.hotel.member.model.dto.MemberDTO">
+        SELECT member_code, member_id, member_name FROM tbl_member;
+    </select>
+
 </mapper>
