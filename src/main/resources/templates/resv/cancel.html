@@ -14,9 +14,13 @@
     <h1>예약 취소</h1>
 
     <div class="nav-tabs">
-        <a href="/reservations/current">현재 예약</a>
-        <a href="/reservations/past">이전 예약</a>
-        <a href="/reservations/cancel" class="active">예약 취소</a>
+        <a href="/resv/current">현재 예약</a>
+        <a href="/resv/past">이전 예약</a>
+        <a href="/resv/cancel" class="active">예약 취소</a>
+    </div>
+
+    <div class="info-text">
+        * 체크인 3일 전까지만 취소가 가능합니다.
     </div>
 
     <div th:if="${#lists.isEmpty(reservations)}">
@@ -24,26 +28,50 @@
     </div>
 
     <div th:each="reservation : ${reservations}" class="reservation-card">
-        <h2 th:text="${reservation.acmId}">숙소 ID</h2>
-        <p th:text="'투숙 인원: ' + ${reservation.guestCount} + '명'">투숙 인원</p>
-        <p th:text="'체크인: ' + ${#temporals.format(reservation.checkIn, 'yyyy/MM/dd')}">체크인 날짜</p>
-        <p th:text="'체크아웃: ' + ${#temporals.format(reservation.checkOut, 'yyyy/MM/dd')}">체크아웃 날짜</p>
-        <a th:href="@{'/reservations/cancel/' + ${reservation.resvId}}" class="cancel-button">예약 취소</a>
-        <button class="details-button">상세 정보</button>
+        <div class="resv-image">
+            <img th:src="@{${reservation.acmPhoto1}}" th:alt="${reservation.acmName}">
+        </div>
+        <div class="resv-info">
+            <h2 th:text="${reservation.acmName}">숙소명</h2>
+            <p th:text="'투숙 인원: ' + ${reservation.guestCount} + '명'">투숙 인원</p>
+            <p th:text="'체크인: ' + ${#temporals.format(reservation.checkIn, 'yyyy/MM/dd')}">체크인 날짜</p>
+            <p th:text="'체크아웃: ' + ${#temporals.format(reservation.checkOut, 'yyyy/MM/dd')}">체크아웃 날짜</p>
+            <div class="button-container">
+                <a th:href="@{'/acm/detail/' + ${reservation.acmId}}" class="details-button">상세 정보</a>
+                <button class="cancel-button"
+                        th:onclick="'cancelReservation(' + ${reservation.resvId} + ')'">
+                    취소된 예약
+                </button>
+            </div>
+        </div>
     </div>
-    <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
-</body>
+<div th:replace="~{fragments/footer :: footer}"></div>
 <script src="/js/header.js"></script>
 <script>
-    function toggleContent(postId) {
-        const content = document.getElementById('content-' + postId);
-        const arrow = document.getElementById('arrow-' + postId);
-        if (content) {
-            const isVisible = content.style.display === 'block';
-            content.style.display = isVisible ? 'none' : 'block';
-            arrow.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(90deg)';
+    function cancelReservation(resvId) {
+        if (confirm('정말로 예약을 취소하시겠습니까?')) {
+            fetch(`/resv/cancel/${resvId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('예약이 취소되었습니다.');
+                        location.reload();
+                    } else {
+                        alert(data.message || '예약 취소에 실패했습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('예약 취소 중 오류가 발생했습니다.');
+                });
         }
     }
 </script>
+</body>
 </html>

@@ -46,4 +46,81 @@
         UPDATE tbl_reservations SET is_resv = 0 WHERE resv_id = #{resvId}
     </update>
 
+    <!-- 현재 예약 조회 -->
+    <select id="selectCurrentResv" resultType="com.udigo.hotel.resv.model.dto.ResvDTO">
+        SELECT
+            r.resv_id,
+            r.member_code,
+            r.acm_id,
+            r.check_in,
+            r.check_out,
+            r.guest_count,
+            r.is_resv,
+            a.acm_name,
+            a.acm_photo1
+        FROM
+            tbl_reservations r
+                JOIN tbl_acm a ON r.acm_id = a.acm_id
+        WHERE
+            r.member_code = #{memberCode}
+          AND r.check_out >= CURDATE()
+          AND r.is_resv = 1
+        ORDER BY
+            r.check_in ASC
+    </select>
+
+    <!-- 이전 예약 조회 -->
+    <select id="selectPastResv" resultType="com.udigo.hotel.resv.model.dto.ResvDTO">
+        SELECT
+        r.resv_id,
+        r.member_code,
+        r.acm_id,
+        r.check_in,
+        r.check_out,
+        r.guest_count,
+        r.is_resv,
+        r.created_at,
+        a.acm_name,
+        a.acm_photo1
+        FROM
+        tbl_reservations r
+        JOIN tbl_acm a ON r.acm_id = a.acm_id
+        WHERE
+        r.member_code = #{memberCode}
+        AND (r.check_out &lt; CURDATE() OR r.is_resv = 0)
+        ORDER BY
+        r.check_in DESC
+    </select>
+
+    <!-- 취소 가능한 예약 조회 -->
+    <select id="selectCancelableResv" resultType="com.udigo.hotel.resv.model.dto.ResvDTO">
+        SELECT
+            r.resv_id,
+            r.member_code,
+            r.acm_id,
+            r.check_in,
+            r.check_out,
+            r.guest_count,
+            r.is_resv,
+            r.created_at,
+            a.acm_name,
+            a.acm_photo1
+        FROM
+            tbl_reservations r
+                JOIN tbl_acm a ON r.acm_id = a.acm_id
+        WHERE
+            r.member_code = #{memberCode}
+          AND r.check_in &gt; DATE_ADD(CURDATE(), INTERVAL 3 DAY)
+          AND r.is_resv = 1
+        ORDER BY
+            r.check_in ASC
+    </select>
+
+    <!-- 예약 취소 처리 -->
+    <update id="updateResvCancel">
+        UPDATE tbl_reservations
+        SET is_resv = 0
+        WHERE resv_id = #{resvId}
+          AND member_code = #{memberCode}
+    </update>
 </mapper>

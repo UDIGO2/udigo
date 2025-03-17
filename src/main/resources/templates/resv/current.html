@@ -14,9 +14,9 @@
     <h1>내 예약</h1>
 
     <div class="nav-tabs">
-        <a href="/reservations/current" class="active">현재 예약</a>
-        <a href="/reservations/past">이전 예약</a>
-        <a href="/reservations/cancel">예약 취소</a>
+        <a href="/resv/current" class="active">현재 예약</a>
+        <a href="/resv/past">이전 예약</a>
+        <a href="/resv/cancel">예약 취소</a>
     </div>
 
     <div th:if="${#lists.isEmpty(reservations)}">
@@ -24,15 +24,21 @@
     </div>
 
     <div th:each="reservation : ${reservations}" class="reservation-card">
-        <h2 th:text="${reservation.acmId}">숙소 ID</h2>
-        <p th:text="'투숙 인원: ' + ${reservation.guestCount} + '명'">투숙 인원</p>
-        <p th:text="'체크인: ' + ${#temporals.format(reservation.checkIn, 'yyyy/MM/dd')}">체크인 날짜</p>
-        <p th:text="'체크아웃: ' + ${#temporals.format(reservation.checkOut, 'yyyy/MM/dd')}">체크아웃 날짜</p>
-        <a th:href="@{'/reservations/cancel/' + ${reservation.resvId}}" class="cancel-button">예약 취소</a>
-        <button class="details-button">상세 정보</button>
+        <div class="resv-image">
+            <img th:src="@{${reservation.acmPhoto1}}" th:alt="${reservation.acmName}">
+        </div>
+        <div class="resv-info">
+            <h2 th:text="${reservation.acmName}">숙소명</h2>
+            <p th:text="'투숙 인원: ' + ${reservation.guestCount} + '명'">투숙 인원</p>
+            <p th:text="'체크인: ' + ${#temporals.format(reservation.checkIn, 'yyyy/MM/dd')}">체크인 날짜</p>
+            <p th:text="'체크아웃: ' + ${#temporals.format(reservation.checkOut, 'yyyy/MM/dd')}">체크아웃 날짜</p>
+            <div class="button-container">
+                <a th:href="@{'/acm/detail/' + ${reservation.acmId}}" class="details-button">상세 정보</a>
+            </div>
+        </div>
     </div>
-    <div th:replace="~{fragments/footer :: footer}"></div>
-<script src="/js/header.js"></script>
 </div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script src="/js/header.js"></script>
 </body>
 </html>

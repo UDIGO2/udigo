@@ -200,7 +200,7 @@ CREATE TABLE `tbl_reservations` (
                                     `check_in` DATETIME NOT NULL COMMENT '체크인 날짜',
                                     `check_out` DATETIME NOT NULL COMMENT '체크아웃 날짜',
                                     `guest_count` INT NOT NULL COMMENT '숙박인원',
-                                    `is_resv` BOOLEAN NOT NULL DEFAULT FALSE COMMENT '예약 상태',
+                                    `is_resv` INT NOT NULL DEFAULT FALSE COMMENT '예약 상태',
                                     `created_at` DATETIME NOT NULL COMMENT '생성일자',
                                     CONSTRAINT `FK_tbl_acm_TO_tbl_reservations_1` FOREIGN KEY (`acm_id`) REFERENCES `tbl_acm` (`acm_id`),
                                     CONSTRAINT `FK_tbl_member_TO_tbl_reservations_1` FOREIGN KEY (`member_code`) REFERENCES `tbl_member` (`member_code`)

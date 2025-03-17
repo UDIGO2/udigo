@@ -18,5 +18,10 @@ public interface ResvMapper {
 
     List<ResvDTO> findCancelableByMemberCode(@Param("memberCode") int memberCode, @Param("now") LocalDateTime now);
 
+    List<ResvDTO> selectCurrentResv(int memberCode);
+    List<ResvDTO> selectPastResv(int memberCode);
+    List<ResvDTO> selectCancelableResv(int memberCode);
+    void updateResvCancel(@Param("resvId") int resvId, @Param("memberCode") int memberCode);
+
     void cancelReservation(@Param("resvId") int resvId);
 }

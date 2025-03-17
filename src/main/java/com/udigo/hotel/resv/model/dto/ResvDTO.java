@@ -9,13 +9,15 @@ public class ResvDTO {
     private LocalDateTime checkIn;
     private LocalDateTime checkOut;
     private int guestCount;
-    private boolean isResv;
+    private int isResv;
     private LocalDateTime createdAt;
+    private String acmName;
+    private String acmPhoto1;
 
     public ResvDTO() {
     }
 
-    public ResvDTO(int resvId, int acmId, int memberCode, LocalDateTime checkIn, LocalDateTime checkOut, int guestCount, boolean isResv, LocalDateTime createdAt) {
+    public ResvDTO(int resvId, int acmId, int memberCode, LocalDateTime checkIn, LocalDateTime checkOut, int guestCount, int isResv, LocalDateTime createdAt, String acmName, String acmPhoto1) {
         this.resvId = resvId;
         this.acmId = acmId;
         this.memberCode = memberCode;
@@ -24,6 +26,36 @@ public class ResvDTO {
         this.guestCount = guestCount;
         this.isResv = isResv;
         this.createdAt = createdAt;
+        this.acmName = acmName;
+        this.acmPhoto1 = acmPhoto1;
+    }
+
+//    public ResvDTO(int resvId, int acmId, int memberCode, LocalDateTime checkIn, LocalDateTime checkOut, int guestCount, boolean isResv, LocalDateTime createdAt) {
+//        this.resvId = resvId;
+//        this.acmId = acmId;
+//        this.memberCode = memberCode;
+//        this.checkIn = checkIn;
+//        this.checkOut = checkOut;
+//        this.guestCount = guestCount;
+//        this.isResv = isResv;
+//        this.createdAt = createdAt;
+//    }
+
+
+    public String getAcmName() {
+        return acmName;
+    }
+
+    public void setAcmName(String acmName) {
+        this.acmName = acmName;
+    }
+
+    public String getAcmPhoto1() {
+        return acmPhoto1;
+    }
+
+    public void setAcmPhoto1(String acmPhoto1) {
+        this.acmPhoto1 = acmPhoto1;
     }
 
     public int getResvId() {
@@ -74,11 +106,11 @@ public class ResvDTO {
         this.guestCount = guestCount;
     }
 
-    public boolean isResv() {
+    public int isResv() {
         return isResv;
     }
 
-    public void setResv(boolean resv) {
+    public void setResv(int resv) {
         isResv = resv;
     }
 
@@ -89,6 +121,7 @@ public class ResvDTO {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
 
     @Override
     public String toString() {
@@ -101,6 +134,8 @@ public class ResvDTO {
                 ", guestCount=" + guestCount +
                 ", isResv=" + isResv +
                 ", createdAt=" + createdAt +
+                ", acmName='" + acmName + '\'' +
+                ", acmPhoto1='" + acmPhoto1 + '\'' +
                 '}';
     }
 }

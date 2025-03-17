@@ -4,6 +4,7 @@ import com.udigo.hotel.resv.model.dto.ResvDTO;
 import com.udigo.hotel.resv.model.dao.ResvMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,6 +14,23 @@ public class ResvService {
 
     @Autowired
     private ResvMapper resvMapper;
+
+    public List<ResvDTO> getCurrentResv(int memberCode) {
+        return resvMapper.selectCurrentResv(memberCode);
+    }
+
+    public List<ResvDTO> getPastResv(int memberCode) {
+        return resvMapper.selectPastResv(memberCode);
+    }
+
+    public List<ResvDTO> getCancelableResv(int memberCode) {
+        return resvMapper.selectCancelableResv(memberCode);
+    }
+
+    @Transactional
+    public void cancelReservation(int resvId, int memberCode) {
+        resvMapper.updateResvCancel(resvId, memberCode);
+    }
 
     // 모든 예약 조회
     public List<ResvDTO> getAllReservations() {
