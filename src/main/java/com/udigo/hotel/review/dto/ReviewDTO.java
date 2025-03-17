@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 public class ReviewDTO {
 
+    //다시 셋팅해야함
+
     private int reviewId;
     private int memberCode;
     private int acmId;
@@ -17,11 +19,14 @@ public class ReviewDTO {
     private String rePhoto3;
     private LocalDateTime checkIn;
     private LocalDateTime checkOut;
+    private String acmPhoto1;
+    private String acmPhoto2;
+    private String acmPhoto3;
 
     public ReviewDTO() {
     }
 
-    public ReviewDTO(int reviewId, int memberCode, int acmId, int acmPrice, int resvId, String content, String acmName, LocalDateTime writtenAt, String rePhoto1, String rePhoto2, String rePhoto3, LocalDateTime checkIn, LocalDateTime checkOut) {
+    public ReviewDTO(int reviewId, int memberCode, int acmId, int acmPrice, int resvId, String content, String acmName, LocalDateTime writtenAt, String rePhoto1, String rePhoto2, String rePhoto3, LocalDateTime checkIn, LocalDateTime checkOut, String acmPhoto1, String acmPhoto2, String acmPhoto3) {
         this.reviewId = reviewId;
         this.memberCode = memberCode;
         this.acmId = acmId;
@@ -35,6 +40,9 @@ public class ReviewDTO {
         this.rePhoto3 = rePhoto3;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
+        this.acmPhoto1 = acmPhoto1;
+        this.acmPhoto2 = acmPhoto2;
+        this.acmPhoto3 = acmPhoto3;
     }
 
     public int getReviewId() {
@@ -141,6 +149,30 @@ public class ReviewDTO {
         this.checkOut = checkOut;
     }
 
+    public String getAcmPhoto1() {
+        return acmPhoto1;
+    }
+
+    public void setAcmPhoto1(String acmPhoto1) {
+        this.acmPhoto1 = acmPhoto1;
+    }
+
+    public String getAcmPhoto2() {
+        return acmPhoto2;
+    }
+
+    public void setAcmPhoto2(String acmPhoto2) {
+        this.acmPhoto2 = acmPhoto2;
+    }
+
+    public String getAcmPhoto3() {
+        return acmPhoto3;
+    }
+
+    public void setAcmPhoto3(String acmPhoto3) {
+        this.acmPhoto3 = acmPhoto3;
+    }
+
     @Override
     public String toString() {
         return "ReviewDTO{" +
@@ -157,6 +189,9 @@ public class ReviewDTO {
                 ", rePhoto3='" + rePhoto3 + '\'' +
                 ", checkIn=" + checkIn +
                 ", checkOut=" + checkOut +
+                ", acmPhoto1='" + acmPhoto1 + '\'' +
+                ", acmPhoto2='" + acmPhoto2 + '\'' +
+                ", acmPhoto3='" + acmPhoto3 + '\'' +
                 '}';
     }
 }

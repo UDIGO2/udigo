@@ -33,7 +33,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     testImplementation 'org.springframework.security:spring-security-test'
-    implementation 'com.sun.mail:jakarta.mail:2.0.1' // -> 메일 기능 사용을 위한 의존성 주입 : jakarta.mail
     implementation 'commons-io:commons-io:2.16.1' // -> 파일 업로드를 위한 의존성 주입
 
     implementation 'org.springframework.boot:spring-boot-starter-mail'
