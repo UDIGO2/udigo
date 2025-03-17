@@ -8,6 +8,10 @@ public class PayDTO {
     private int payId;
     private int memberCode;
     private int acmId;
+    private String acmName;
+    private int guestCount;
+    private String checkIn;
+    private String checkOut;
     private String payMethod;
     private String payStatus;
     private String payType;
@@ -20,10 +24,14 @@ public class PayDTO {
     public PayDTO() {
     }
 
-    public PayDTO(int payId, int memberCode, int acmId, String payMethod, String payStatus, String payType, LocalDateTime payDate, int payPrice, int discount, String transactionId, String payProvider) {
+    public PayDTO(int payId, int memberCode, int acmId, String acmName, int guestCount, String checkIn, String checkOut, String payMethod, String payStatus, String payType, LocalDateTime payDate, int payPrice, int discount, String transactionId, String payProvider) {
         this.payId = payId;
         this.memberCode = memberCode;
         this.acmId = acmId;
+        this.acmName = acmName;
+        this.guestCount = guestCount;
+        this.checkIn = checkIn;
+        this.checkOut = checkOut;
         this.payMethod = payMethod;
         this.payStatus = payStatus;
         this.payType = payType;
@@ -57,6 +65,22 @@ public class PayDTO {
     public void setAcmId(int acmId) {
         this.acmId = acmId;
     }
+
+    public String getAcmName() { return acmName; }
+
+    public void setAcmName(String acmName) { this.acmName = acmName; }
+
+    public int getGuestCount() { return guestCount; }
+
+    public void setGuestCount(int guestCount) { this.guestCount = guestCount; }
+
+    public String getCheckIn() { return checkIn; }
+
+    public void setCheckIn(String checkIn) { this.checkIn = checkIn; }
+
+    public String getCheckOut() { return checkOut; }
+
+    public void setCheckOut(String checkOut) { this.checkOut = checkOut; }
 
     public String getPayMethod() {
         return payMethod;
@@ -128,6 +152,10 @@ public class PayDTO {
                 "payId=" + payId +
                 ", memberCode=" + memberCode +
                 ", acmId=" + acmId +
+                ", acmName='" + acmName + '\'' +
+                ", guestCount=" + guestCount +
+                ", checkIn='" + checkIn + '\'' +
+                ", checkOut='" + checkOut + '\'' +
                 ", payMethod='" + payMethod + '\'' +
                 ", payStatus='" + payStatus + '\'' +
                 ", payType='" + payType + '\'' +

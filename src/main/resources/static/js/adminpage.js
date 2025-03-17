@@ -1,3 +1,15 @@
+document.addEventListener("DOMContentLoaded", function () {
+});
+// 로그인 상태 확인
+let memberCode = localStorage.getItem("memberCode");
+
+if (memberCode) {
+    console.log(`✅ 현재 로그인된 사용자: ${memberCode}`);
+} else {
+    console.log("❌ 로그인되지 않음.");
+}
+
+
 // DOM Elements
 document.addEventListener('DOMContentLoaded', function() {
     // ✅ Navigation handling

@@ -23,6 +23,13 @@ public class MainController {
         return "pay/payList";
     }
 
+    // 회원별 결제 내역 조회
+    @GetMapping("/admin/adminpay")
+    public String adminPay() {
+        return "pay/admin/adminpay";
+    }
+
+
     @GetMapping("/cart-main")
     public String cart() {
         return "cart/cart";  // 다른 뷰로 변경

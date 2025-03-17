@@ -98,17 +98,13 @@
     function goToPurchase() {
         let selectedIds = getSelectedItems();
 
-        console.log(selectedIds)
+        console.log(selectedIds);
 
-        fetch("/payment", {     // 맵핑 주소
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(
-                selectedIds
-            ),
-        });
+        // 선택된 IDs를 쿼리 파라미터 형식으로 변환
+        let queryParam = selectedIds.join(",");
+
+        // window.location.href로 쿼리 파라미터를 추가하여 페이지 이동
+        window.location.href = "/payment?selectedIds=" + queryParam;
     }
 
 

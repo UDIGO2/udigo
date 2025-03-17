@@ -1,34 +1,38 @@
 package com.udigo.hotel.pay.model.dao;
 
-import com.udigo.hotel.pay.model.dto.PayDTO;
+import com.udigo.hotel.acm.model.dto.AcmDTO;
+import com.udigo.hotel.member.model.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.springframework.boot.json.JsonWriter;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
 
 @Mapper
 public interface PayMapper {
-    void insertPay(PayDTO payDTO);
-    List<PayDTO> selectPayByMemberCode(int memberCode);
+    //  ============================
+    //   Payment
+    //  ============================
 
-    //장바구니에서 체크한 값(숙소)만 조회
-    List<Map<String, Object>> getCheckedCartItemsForPayment(Map<String, Object> paramMap);
+    // 사용자가 체크한 장바구니 아이템 조회
+    AcmDTO getCartItems(int acmId);
 
-    //
-    List<Map<String, Object>> getPaymentPreview(Map<String, Object> paramMap);
+    // 접속한 사용자 정보 조회
+    MemberDTO getMemberInfo(int memberCode);
 
-    // 회원이 장바구니에 담은 숙소 목록 조회
-    List<Map<String, Object>> getCartItemsByMember(String memberCode);
+    // 결제 정보 저장
+    void savePaymentRecord(Map<String, Object> paymentData);
 
-    // 숙소 ID로 가격 조회
-    Map<String, Object> getAccommodationPrice(int acmId);
+    // 가장 최근 insert된 PayId 값 반환
+    int getLastPayId();
 
-//    @Mapper
-//    public interface MemberMapper {
-//        @Select("SELECT member_code, member_name, meme_phone FROM member WHERE member_code = #{memberCode}")
-//        JsonWriter.Member findByMemberCode(String memberCode);
-//    }
+    // 예약 정보 저장
+    void saveReservationRecord(Map<String, Object> paymentData);
 
+    //  ============================
+    //   PayList
+    //  ============================
+
+    // 접속한 사용자가 예약했던 숙소 내역 조회
+    List<Map<String, Object>> getPayListItems(int memberCode);
 }

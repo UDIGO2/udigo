@@ -6,6 +6,7 @@ import com.udigo.hotel.cart.model.dto.CartParamDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CartService {
@@ -29,5 +30,9 @@ public class CartService {
     // 장바구니에서 삭제
     public void deleteItemFromCart(List<CartParamDTO> dtos) {
         cartMapper.deleteCartItems(dtos);
+    }
+
+    public List<Map<String, Object>> findCartItemsByMemberCode(int memberCode) {
+        return List.of();
     }
 }

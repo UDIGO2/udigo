@@ -1,54 +1,53 @@
 package com.udigo.hotel.pay.model.service;
 
+import com.udigo.hotel.acm.model.dto.AcmDTO;
+import com.udigo.hotel.member.model.dto.MemberDTO;
 import com.udigo.hotel.pay.model.dao.PayMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
+import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 @Service
-//@RequiredArgsConstructor
 public class PayService {
+    private final PayMapper payMapper;
 
+    // ✅ 생성자 주입 방식
     @Autowired
-    private PayMapper payMapper;
-
-
-    // 장바구니에서 체크한 숙소만 결제할 때 조회하는 메서드
-    public List<Map<String, Object>> getCheckedCartItemsForPayment(String memberCode, List<Integer> checkedAccommodationIds) {
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("memberCode", memberCode);
-        paramMap.put("checkedAccommodationIds", checkedAccommodationIds);
-
-        return payMapper.getCheckedCartItemsForPayment(paramMap);
+    public PayService(PayMapper payMapper) {
+        this.payMapper = payMapper;
     }
 
-    // 💡 결제 미리보기 (숙소명 & 가격 가져오기)
-    public List<Map<String, Object>> getPaymentPreview(String memberCode, List<Integer> checkedAccommodationIds) {
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("memberCode", memberCode);
-        paramMap.put("checkedAccommodationIds", checkedAccommodationIds);
+    //  ============================
+    //   Payment
+    //  ============================
 
-        return payMapper.getPaymentPreview(paramMap); // 실제 쿼리 실행하도록 함
+    // 사용자가 체크한 장바구니 아이템 조회
+    public AcmDTO getCartItems(int acmId) {
+        return payMapper.getCartItems(acmId);
     }
 
-    public List<Map<String, Object>> getCheckedAccommodations(String memberCode) {
-        // 장바구니에 담긴 숙소 ID 조회
-        List<Map<String, Object>> cartItems = payMapper.getCartItemsByMember(memberCode);
+    // 접속한 사용자 정보 가져오기
+    public MemberDTO getMemberInfo(int memberCode) {
+        return payMapper.getMemberInfo(memberCode);
+    }
 
-        // 각 숙소의 가격을 조회하여 추가
-        for (Map<String, Object> item : cartItems) {
-            int acmId = (int) item.get("acm_id"); // 숙소 ID 가져오기
-            Map<String, Object> priceInfo = payMapper.getAccommodationPrice(acmId); // 숙소 가격 조회
+    // 결제 정보 저장
+    public void savePaymentRecord(Map<String, Object> paymentData) {
+        payMapper.savePaymentRecord(paymentData); // 결제 정보 저장
+        int payId = payMapper.getLastPayId(); // 결제 ID 정보 가져오기
+        paymentData.put("payId", payId); // 결제 ID 저장
+        payMapper.saveReservationRecord(paymentData); // 예약 정보 저장
+    }
 
-            if (priceInfo != null && priceInfo.containsKey("price")) {
-                item.put("price", priceInfo.get("price")); // 가격 추가
-            } else {
-                item.put("price", 0); // 가격이 없는 경우 기본값 설정
-            }
-        }
-        return cartItems;
+    //  ============================
+    //   PayList
+    //  ============================
+
+    // 접속한 사용자가 예약했던 숙소 내역 조회
+    public List<Map<String, Object>> getPayListItems(int memberCode) {
+        return  payMapper.getPayListItems(memberCode);
     }
 }

@@ -1,80 +1,112 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.udigo.hotel.member.model.dao.MemberMapper">
 
+<mapper namespace="com.udigo.hotel.pay.model.dao.PayMapper">
 
-    <!-- 장바구니에 담긴 숙소 ID 조회 -->
-    <select id="getCartItemsByMember" parameterType="string" resultType="map">
-        SELECT member_code, acm_id
-        FROM tbl_cart
-        WHERE member_code = #{memberCode}
-    </select>
+    <!--  멤버 정보 DTO에 매핑  -->
+    <resultMap id="memberResultMap" type="com.udigo.hotel.member.model.dto.MemberDTO">
+        <id property="memberCode" column="member_code"/>
+        <result property="memberId" column="member_id"/>
+        <result property="memberName" column="member_name"/>
+        <result column="phoneNo" property="phone_no" />
+    </resultMap>
 
-    <!-- 숙소 가격 조회 -->
-    <select id="getAccommodationPrice" parameterType="int" resultType="map">
-        SELECT acm_id, acm_price
+    <!-- 카트 정보 DTO에 매핑 -->
+    <resultMap id="acmResultMap" type="com.udigo.hotel.acm.model.dto.AcmDTO">
+        <id property="acmId" column="acm_id"/>
+        <result property="acmName" column="acm_name"/>
+        <result property="acmPrice" column="acm_price"/>
+        <result column="acmPhoto1" property="acm_photo1" />
+    </resultMap>
+
+    <!--  결제 정보 DTO에 매핑  -->
+    <resultMap id="payResultMap" type="com.udigo.hotel.pay.model.dto.PayDTO">
+        <id property="payId" column="pay_id"/>
+        <result property="memberCode" column="member_code"/>
+        <result property="acmId" column="acm_id"/>
+        <result property="acmName" column="acm_name" />
+        <result property="guestCount" column="guest_count" />
+        <result property="checkIn" column="check_in" />
+        <result property="checkOut" column="check_out" />
+        <result property="payMethod" column="pay_method"/>
+        <result property="payStatus" column="pay_status"/>
+        <result property="payType" column="pay_type"/>
+        <result property="payDate" column="pay_date"/>
+        <result property="payPrice" column="pay_price"/>
+        <result property="discount" column="discount"/>
+        <result property="payRef" column="pay_ref"/>
+        <result property="transactionId" column="transaction_id"/>
+        <result property="payProvider" column="pay_provider"/>
+    </resultMap>
+
+    <!-- ============================ -->
+    <!-- Payment 페이지 -->
+    <!-- ============================ -->
+
+    <!-- 카트에 담긴 숙소 정보 조회 -->
+    <select id="getCartItems" parameterType="int" resultMap="acmResultMap">
+        SELECT
+            acm_id, acm_name, acm_price, acm_photo1
         FROM tbl_acm
-#         WHERE acm_id = 101
         WHERE acm_id = #{acmId}
     </select>
 
-<!--    <select id="getCartItems" resultType="CartDTO">-->
-<!--        SELECT-->
-<!--            c.member_code,-->
-<!--            a.acm_id,-->
-<!--            a.acm_name,-->
-<!--            a.acm_price-->
-<!--        FROM tbl_cart c-->
-<!--                 JOIN tbl_acm a ON c.acm_id = a.acm_id-->
-<!--        WHERE c.member_code = #{memberCode};  &#45;&#45; MyBatis에서 동적으로 바인딩-->
-<!--    </select>-->
+    <!-- 현재 접속한 회원의 정보 조회 -->
+    <select id="getMemberInfo" parameterType="int" resultMap="memberResultMap">
+        SELECT
+            member_code, member_id, member_name, phone_no
+        FROM tbl_member
+        WHERE member_code = #{member_code}
+    </select>
 
+    <!-- 결제 정보 저장 -->
+    <insert id="savePaymentRecord" parameterType="map">
+        INSERT INTO tbl_pay (
+            member_code, acm_id, pay_method, pay_status, pay_type,
+            pay_date, pay_price, discount, pay_ref, transaction_id, pay_provider
+        )
+        VALUES (
+            #{memberCode}, #{acmId}, #{payMethod}, #{payStatus}, #{payType},
+            NOW(), #{payPrice}, #{discount}, #{payRef}, #{transactionId}, #{payProvider}
+        )
+    </insert>
 
+    <!-- 가장 최근 INSERT 된 PayId 조회 -->
+    <select id="getLastPayId" resultType="int">
+        SELECT LAST_INSERT_ID()
+    </select>
 
+    <!-- 예약 정보 저장 -->
+    <insert id="saveReservationRecord" parameterType="map">
+        INSERT INTO tbl_reservations (
+            acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+        )
+        VALUES (
+            #{acmId}, #{memberCode}, #{checkIn}, #{checkOut}, #{guestCount}, #{isResv}, NOW(), #{payId}
+        )
+    </insert>
 
+    <!-- ============================ -->
+    <!-- PayList 페이지 -->
+    <!-- ============================ -->
 
-    <!--  결제창(프론트)에 숙소 명, 가격 정보 가져오기  -->
-<!--    <select id="getPaymentPreview" parameterType="map" resultType="map">-->
-<!--        SELECT-->
-<!--        m.member_code,-->
-<!--        m.member_name,-->
-<!--        a.acm_name,-->
-<!--        a.acm_price-->
-<!--        FROM tbl_cart c-->
-<!--        JOIN tbl_member m ON c.member_code = m.member_code-->
-<!--        JOIN tbl_acm a ON c.acm_id = a.acm_id-->
-<!--        WHERE c.member_code = #{memberCode}-->
-<!--        AND c.acm_id IN-->
-<!--        <foreach item="id" collection="checkedAccommodationIds" open="(" separator="," close=")">-->
-<!--            #{id}-->
-<!--        </foreach>-->
-<!--    </select>-->
-
-
-
-
-
-    <!--  <mapper namespace="com.udigo.hotel.mapper.PayMapper"> -->
-
-<!--    <insert id="insertPay" parameterType="com.udigo.hotel.dto.PayDTO">-->
-<!--        INSERT INTO tbl_pay(-->
-<!--        member_code, acm_id, pay_method, pay_status, pay_type,-->
-<!--        pay_date, pay_price, discount, transaction_id, pay_provider-->
-<!--        )-->
-<!--        VALUES (-->
-<!--        #{memberCode}, #{acmId}, #{payMethod}, #{payStatus}, #{payType},-->
-<!--        NOW(), #{payPrice}, #{discount}, #{transactionId}, #{payProvider}-->
-<!--        )-->
-<!--    </insert>-->
-
-<!--    <select id="selectPayByMemberCode"-->
-<!--            parameterType="int"-->
-<!--            resultType="com.udigo.hotel.dto.PayDTO">-->
-<!--        SELECT *-->
-<!--        FROM tbl_pay-->
-<!--        WHERE member_code = #{memberCode}-->
-<!--    </select>-->
+    <!-- PayList 페이지에 보여질 숙소 예약 정보 조회 -->
+    <select id="getPayListItems" parameterType="int" resultType="map">
+        SELECT
+            p.pay_date as payDate,
+            a.acm_name as acmName,
+            r.guest_count as guestCount,
+            r.check_in as checkIn,
+            r.check_out as checkOut,
+            p.pay_price as payPrice
+        FROM
+            tbl_pay p
+                JOIN tbl_reservations r ON p.pay_id = r.pay_id  -- tbl_pay와 tbl_reservations를 pay_id로 JOIN
+                JOIN tbl_acm a ON p.acm_id = a.acm_id           -- tbl_pay와 tbl_acm을 acm_id로 JOIN
+        WHERE
+            r.member_code = #{memberCode}                 -- 회원 코드로 필터링 (파라미터로 전달된 값)
+    </select>
 
 </mapper>

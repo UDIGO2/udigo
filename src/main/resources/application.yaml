@@ -1,5 +1,7 @@
 server:
   port: 8080  # 애플리케이션 실행 포트
+  servlet:
+    context-path: ""
 
 spring:
   datasource:
@@ -56,7 +58,18 @@ logging:
     jdbc.resultsettable: DEBUG
     jdbc.audit: DEBUG
 
+
+# 결제 이니시스 관련
 portone:
   api-key: "2251047428401785"
   api-secret: "L90uRj0lhzhp5i8lx7gIOLDienExUpT4bFxZh8L2yieoWF5zIUxCTF3KFakRUfBqEBnb8FCXIhKTMTDa"
   base-url: "https://api.iamport.kr"
+
+
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+  web:
+    resources:
+      add-mappings: true
+

@@ -1,12 +1,25 @@
-// src/main/resources/static/js/header.js
 document.addEventListener("DOMContentLoaded", function () {
+    console.log("📌 DOM 로드 완료! (header.js)");
+
     const navBar = document.querySelector(".h_navbar");
     const subMenus = document.querySelectorAll(".h_nav-links ul");
     const content = document.querySelector(".content");
 
+    if (!navBar) {
+        console.error("❌ 네비게이션 바(.h_navbar)를 찾을 수 없습니다.");
+        return;
+    }
+
+    if (subMenus.length === 0) {
+        console.warn("⚠️ 서브메뉴(.h_nav-links ul)가 없습니다.");
+    }
+
+    if (!content) {
+        console.warn("⚠️ 콘텐츠 영역(.content)이 없습니다. margin-top 조정을 생략합니다.");
+    }
+
     const dropdownBackground = document.createElement("div");
     dropdownBackground.classList.add("h_dropdown-background");
-
     document.body.appendChild(dropdownBackground);
 
     navBar.addEventListener("mouseenter", function () {
@@ -22,9 +35,10 @@ document.addEventListener("DOMContentLoaded", function () {
             }, 50);
         });
 
-        // 메뉴가 열릴 때 content 아래로 밀기
-        content.style.transition = "margin-top 0.3s ease"; // 애니메이션 추가
-        content.style.marginTop = dropdownBackground.offsetHeight + 'px';
+        if (content) {
+            content.style.transition = "margin-top 0.3s ease"; // 애니메이션 추가
+            content.style.marginTop = dropdownBackground.offsetHeight + 'px';
+        }
     });
 
     navBar.addEventListener("mouseleave", function () {
@@ -40,8 +54,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     menu.style.display = "none";
                 });
 
-                // 메뉴가 닫힐 때 content 원래 위치로
-                content.style.marginTop = '0';
+                if (content) {
+                    content.style.marginTop = '0';
+                }
             }
         }, 300);
     });

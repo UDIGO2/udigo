@@ -17,6 +17,8 @@
 #
 # use udigo;
 
+# show databases;
+use udigo;
 -- --------------------------------------------------------
 -- ddl 부분
 -- --------------------------------------------------------
@@ -83,6 +85,8 @@ CREATE TABLE `tbl_acm` (
                            `acm_photo4` VARCHAR(255) NULL COMMENT '숙소사진4',
                            `acm_photo5` VARCHAR(255) NULL COMMENT '숙소 사진5'
 );
+
+
 
 
 DROP TRIGGER IF EXISTS before_insert_tbl_acm;
@@ -205,6 +209,11 @@ CREATE TABLE `tbl_reservations` (
                                     CONSTRAINT `FK_tbl_acm_TO_tbl_reservations_1` FOREIGN KEY (`acm_id`) REFERENCES `tbl_acm` (`acm_id`),
                                     CONSTRAINT `FK_tbl_member_TO_tbl_reservations_1` FOREIGN KEY (`member_code`) REFERENCES `tbl_member` (`member_code`)
 );
+ALTER TABLE `tbl_reservations`
+    ADD COLUMN `pay_id` INT NULL COMMENT '결제 고유 번호 (Foreign Key)',
+    ADD CONSTRAINT `FK_tbl_resv_to_tbl_pay`
+        FOREIGN KEY (`pay_id`) REFERENCES `tbl_pay` (`pay_id`)
+            ON DELETE SET NULL; -- 결제 내역이 삭제되면 예약의 pay_id는 NULL로 설정
 
 DELIMITER $$
 
@@ -256,6 +265,7 @@ CREATE TABLE `tbl_board_comments` (
                                       CONSTRAINT `FK_tbl_board_posts_TO_tbl_board_comments_1` FOREIGN KEY (`post_id`) REFERENCES `tbl_board_posts` (`post_id`)
 );
 
+ -- 테스트할 회원 ID 직접 입력
 
 
 CREATE TABLE `tbl_reviews` (
