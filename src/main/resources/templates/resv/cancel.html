@@ -7,6 +7,8 @@
     <link rel="stylesheet" th:href="@{/css/myResv.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <!-- FullCalendar CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css">
     <style>
         .resv-info {
             display: flex;
@@ -62,6 +64,21 @@
             background-color: #c82333;
         }
 
+        .calendar-button {
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .calendar-button:hover {
+            background-color: #138496;
+        }
+
         .button-container {
             display: flex;
             gap: 10px;
@@ -72,6 +89,80 @@
             margin-bottom: 20px;
             color: #dc3545;
             font-style: italic;
+        }
+
+        /* 달력 모달 스타일 */
+        .calendar-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .calendar-modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .calendar-container {
+            margin-top: 20px;
+            height: 500px;
+        }
+
+        .calendar-legend {
+            margin-top: 15px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
+
+        .legend-available {
+            background-color: #28a745;
+        }
+
+        .legend-unavailable {
+            background-color: #dc3545;
+        }
+
+        .legend-past {
+            background-color: #6c757d;
+        }
+
+        .legend-selected {
+            background-color: #007bff;
         }
     </style>
 </head>
@@ -142,21 +233,58 @@
 
             <div class="button-container">
                 <a th:href="@{'/acm/detail/' + ${reservation.acmId}}" class="details-button">상세 정보</a>
-                <!-- 기존 취소 기능 복원 -->
+                <!-- 숙소 예약 정보 버튼 수정 - data-* 속성 사용 -->
+                <button class="calendar-button"
+                        th:attr="data-acm-id=${reservation.acmId}, data-acm-name=${reservation.acmName}">
+                    숙소 예약 정보
+                </button>
+                <!-- 기존 취소 기능 수정 - data-* 속성 사용 -->
                 <button class="cancel-button"
-                        th:onclick="'cancelReservation(' + ${reservation.resvId} + ')'">
+                        th:attr="data-resv-id=${reservation.resvId}">
                     예약 취소
                 </button>
             </div>
         </div>
     </div>
 </div>
+
+<!-- 달력 모달 -->
+<div id="calendarModal" class="calendar-modal">
+    <div class="calendar-modal-content">
+        <span class="close-modal" onclick="closeCalendar()">&times;</span>
+        <h2 id="calendarTitle">숙소 예약 정보</h2>
+        <div id="calendar" class="calendar-container"></div>
+        <div class="calendar-legend">
+            <div class="legend-item">
+                <div class="legend-color legend-available"></div>
+                <span>예약 가능</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color legend-unavailable"></div>
+                <span>예약 불가능</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color legend-past"></div>
+                <span>지난 날짜</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color legend-selected"></div>
+                <span>현재 예약</span>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div th:replace="~{fragments/footer :: footer}"></div>
 <script src="/js/header.js"></script>
+<!-- FullCalendar JS -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.min.js"></script>
 
 <!-- 숙박 일수 및 금액 계산 스크립트 -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // 숙박 일수 및 금액 계산
         document.querySelectorAll('.resv-details').forEach(function(element) {
             const checkIn = new Date(element.dataset.checkin);
             const checkOut = new Date(element.dataset.checkout);
@@ -173,9 +301,26 @@
             element.querySelector('.stay-duration').textContent = days + '박';
             element.querySelector('.total-amount').textContent = totalAmount.toLocaleString() + '원';
         });
+
+        // 달력 버튼 이벤트 리스너 추가
+        document.querySelectorAll('.calendar-button').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const acmId = this.getAttribute('data-acm-id');
+                const acmName = this.getAttribute('data-acm-name');
+                showCalendar(acmId, acmName);
+            });
+        });
+
+        // 취소 버튼 이벤트 리스너 추가
+        document.querySelectorAll('.cancel-button').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const resvId = this.getAttribute('data-resv-id');
+                cancelReservation(resvId);
+            });
+        });
     });
 
-    // 기존 예약 취소 함수 복원
+    // 예약 취소 함수
     function cancelReservation(resvId) {
         if (confirm('정말로 예약을 취소하시겠습니까?')) {
             fetch(`/resv/cancel/${resvId}`, {
@@ -199,6 +344,188 @@
                 });
         }
     }
+
+    // 달력 관련 변수
+    let calendar;
+    let currentAcmId;
+
+    // 달력 표시 함수
+    function showCalendar(acmId, acmName) {
+        currentAcmId = acmId;
+        document.getElementById('calendarTitle').textContent = acmName + ' 예약 정보';
+        document.getElementById('calendarModal').style.display = 'flex';
+
+        // 달력이 이미 초기화되었는지 확인
+        if (calendar) {
+            calendar.removeAllEvents();
+        } else {
+            initializeCalendar();
+        }
+
+        // 해당 숙소의 예약 정보 가져오기
+        fetchReservationData(acmId);
+    }
+
+    // 달력 닫기 함수
+    function closeCalendar() {
+        document.getElementById('calendarModal').style.display = 'none';
+    }
+
+    // 달력 초기화 함수
+    function initializeCalendar() {
+        const calendarEl = document.getElementById('calendar');
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek'
+            },
+            locale: 'ko',
+            selectable: false,
+            selectMirror: true,
+            dayMaxEvents: true,
+            events: [],
+            dayCellDidMount: function(info) {
+                // 현재 날짜 이전의 날짜는 회색으로 표시
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                if (info.date < today) {
+                    info.el.style.backgroundColor = '#f8f9fa';
+                    info.el.style.color = '#adb5bd';
+                }
+            }
+        });
+
+        calendar.render();
+    }
+
+    // 예약 데이터 가져오기 함수
+    function fetchReservationData(acmId) {
+        // API 호출하여 예약 데이터 가져오기
+        fetch(`/api/reservations/acm/${acmId}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('API 응답 데이터:', data); // 디버깅용 로그
+                // 예약 데이터를 달력에 표시
+                displayReservationsOnCalendar(data);
+            })
+            .catch(error => {
+                console.error('예약 데이터를 가져오는 중 오류 발생:', error);
+                alert('예약 정보를 불러오는 데 실패했습니다.');
+            });
+    }
+
+    // 예약 데이터를 달력에 표시하는 함수
+    function displayReservationsOnCalendar(reservations) {
+        const myEvents = []; // 내 예약 이벤트
+        const otherEvents = []; // 다른 사용자의 예약 이벤트
+        const pastEvents = []; // 과거 날짜 이벤트
+        const availableEvents = []; // 예약 가능한 날짜 이벤트
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // 과거 날짜 이벤트 생성
+        let pastDate = new Date(today);
+        pastDate.setDate(pastDate.getDate() - 30); // 30일 전부터 시작
+
+        while (pastDate < today) {
+            pastEvents.push({
+                title: '지난 날짜',
+                start: new Date(pastDate),
+                allDay: true,
+                backgroundColor: '#6c757d',
+                borderColor: '#6c757d',
+                textColor: 'white',
+                display: 'background'
+            });
+
+            pastDate.setDate(pastDate.getDate() + 1);
+        }
+
+        // 예약된 날짜 추적을 위한 Set
+        const reservedDates = new Set();
+
+        // 각 예약에 대해 이벤트 생성
+        reservations.forEach(reservation => {
+            const checkIn = new Date(reservation.checkIn);
+            const checkOut = new Date(reservation.checkOut);
+
+            // 체크인부터 체크아웃 전날까지의 날짜를 예약됨으로 표시
+            let currentDate = new Date(checkIn);
+            while (currentDate < checkOut) {
+                const dateStr = currentDate.toISOString().split('T')[0];
+                reservedDates.add(dateStr);
+
+                // 현재 사용자의 예약이 아닌 경우에만 빨간색으로 표시
+                if (!reservation.currentUserReservation) {
+                    otherEvents.push({
+                        title: '예약됨',
+                        start: new Date(currentDate),
+                        allDay: true,
+                        backgroundColor: '#dc3545',
+                        borderColor: '#dc3545',
+                        textColor: 'white'
+                    });
+                }
+
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            // 현재 사용자의 예약인 경우 파란색으로 표시
+            if (reservation.currentUserReservation) {
+                myEvents.push({
+                    title: '내 예약',
+                    start: checkIn,
+                    end: checkOut,
+                    allDay: true,
+                    backgroundColor: '#007bff',
+                    borderColor: '#007bff',
+                    textColor: 'white'
+                });
+            }
+        });
+
+        // 예약 가능한 날짜 표시 (현재 날짜부터 3개월 후까지)
+        let futureDate = new Date(today);
+        const endDate = new Date(today);
+        endDate.setMonth(endDate.getMonth() + 3); // 3개월 후까지 표시
+
+        while (futureDate < endDate) {
+            const dateStr = futureDate.toISOString().split('T')[0];
+
+            // 예약되지 않은 날짜만 예약 가능으로 표시
+            if (!reservedDates.has(dateStr)) {
+                availableEvents.push({
+                    title: '예약 가능',
+                    start: new Date(futureDate),
+                    allDay: true,
+                    backgroundColor: '#28a745',
+                    borderColor: '#28a745',
+                    textColor: 'white'
+                });
+            }
+
+            futureDate.setDate(futureDate.getDate() + 1);
+        }
+
+        // 이벤트 추가 순서: 과거 날짜 -> 예약 가능 -> 다른 사용자 예약 -> 내 예약
+        // 이렇게 하면 내 예약이 다른 예약 위에 표시됨
+        calendar.addEventSource(pastEvents);
+        calendar.addEventSource(availableEvents);
+        calendar.addEventSource(otherEvents);
+        calendar.addEventSource(myEvents);
+    }
+
+    // 모달 외부 클릭 시 닫기
+    window.onclick = function(event) {
+        const modal = document.getElementById('calendarModal');
+        if (event.target === modal) {
+            closeCalendar();
+        }
+    };
 </script>
 </body>
 </html>

@@ -7,6 +7,66 @@
     <link rel="stylesheet" th:href="@{/css/myResv.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <style>
+        /* 상태 배지 스타일 수정 */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            min-width: 80px;
+            max-width: 120px;
+        }
+
+        .canceled-text {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .completed-text {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* 버튼 컨테이너 스타일 수정 */
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            align-items: center;
+        }
+
+        /* 예약 정보 레이아웃 개선 */
+        .resv-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .resv-info p {
+            margin: 5px 0;
+        }
+
+        /* 예약 정보 그리드 레이아웃 */
+        .resv-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .resv-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
 <div th:replace="~{fragments/header :: header}"></div>
@@ -29,14 +89,21 @@
         </div>
         <div class="resv-info">
             <h2 th:text="${resv.acmName}">숙소명</h2>
-            <p th:text="'투숙 인원: ' + ${resv.guestCount} + '명'">투숙 인원</p>
-            <p th:text="'체크인: ' + ${#temporals.format(resv.checkIn, 'yyyy/MM/dd')}">체크인 날짜</p>
-            <p th:text="'체크아웃: ' + ${#temporals.format(resv.checkOut, 'yyyy/MM/dd')}">체크아웃 날짜</p>
-            <div class="status-badge"
-                 th:classappend="${resv.isResv == 0 ? 'canceled-text' : 'completed-text'}"
-                 th:text="${resv.isResv == 0 ? '취소된 예약' : '이용 완료'}">
+
+            <!-- 예약 정보를 그리드 레이아웃으로 변경 -->
+            <div class="resv-details">
+                <p th:text="'투숙 인원: ' + ${resv.guestCount} + '명'">투숙 인원</p>
+                <p th:text="'체크인: ' + ${#temporals.format(resv.checkIn, 'yyyy/MM/dd')}">체크인 날짜</p>
+                <p th:text="'체크아웃: ' + ${#temporals.format(resv.checkOut, 'yyyy/MM/dd')}">체크아웃 날짜</p>
             </div>
+
             <div class="button-container">
+                <!-- 상태 배지를 버튼 컨테이너 안으로 이동 -->
+                <span class="status-badge"
+                      th:classappend="${resv.isResv == 0 ? 'canceled-text' : 'completed-text'}"
+                      th:text="${resv.isResv == 0 ? '취소됨' : '이용완료'}">
+                </span>
+
                 <a th:href="@{'/acm/detail/' + ${resv.acmId}}" class="details-button">상세 정보</a>
                 <a th:if="${resv.isResv == 1}"
                    th:href="@{'/review/write/' + ${resv.resvId}}"
@@ -44,8 +111,8 @@
             </div>
         </div>
     </div>
+</div>
 <div th:replace="~{fragments/footer :: footer}"></div>
 <script src="/js/header.js"></script>
-</div>
 </body>
 </html>

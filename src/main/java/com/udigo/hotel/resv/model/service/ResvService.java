@@ -37,6 +37,15 @@ public class ResvService {
         return resvMapper.selectResvByPayId(payId);
     }
 
+    /**
+     * 특정 숙소의 모든 예약 정보를 조회합니다.
+     * @param acmId 숙소 ID
+     * @return 예약 목록
+     */
+    public List<ResvDTO> getReservationsByAcmId(int acmId) {
+        return resvMapper.selectReservationsByAcmId(acmId);
+    }
+
     // 모든 예약 조회
     public List<ResvDTO> getAllReservations() {
         return resvMapper.findAll();

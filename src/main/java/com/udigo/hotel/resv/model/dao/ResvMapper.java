@@ -27,4 +27,11 @@ public interface ResvMapper {
     // 결제 ID로 예약 정보 조회
     ResvDTO selectResvByPayId(@Param("payId") int payId);
 
+    /**
+     * 특정 숙소의 모든 예약 정보를 조회합니다.
+     * @param acmId 숙소 ID
+     * @return 예약 목록
+     */
+    List<ResvDTO> selectReservationsByAcmId(int acmId);
+
 }
