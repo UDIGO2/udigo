@@ -77,7 +77,7 @@ public class ResvController {
             CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
             int memberCode = userDetails.getMemberCode();
 
-            model.addAttribute("resvList", resvService.getCancelableResv(memberCode));
+            model.addAttribute("reservations", resvService.getCancelableResv(memberCode));
             return "resv/cancel";
         } catch (Exception e) {
             e.printStackTrace();

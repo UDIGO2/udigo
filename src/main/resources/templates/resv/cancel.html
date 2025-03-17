@@ -37,10 +37,10 @@
             <p th:text="'체크인: ' + ${#temporals.format(reservation.checkIn, 'yyyy/MM/dd')}">체크인 날짜</p>
             <p th:text="'체크아웃: ' + ${#temporals.format(reservation.checkOut, 'yyyy/MM/dd')}">체크아웃 날짜</p>
             <div class="button-container">
-                <a th:href="@{'/acm/detail/' + ${reservation.acmId}}" class="details-button">상세 정보</a>
+                <a th:href="@{'/acm/detail/' + ${reservation.acmId}}" class="details-button">상세</a>
                 <button class="cancel-button"
                         th:onclick="'cancelReservation(' + ${reservation.resvId} + ')'">
-                    취소된 예약
+                    취소
                 </button>
             </div>
         </div>
