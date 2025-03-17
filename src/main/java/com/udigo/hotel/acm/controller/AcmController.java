@@ -3,6 +3,7 @@ package com.udigo.hotel.acm.controller;
 import com.udigo.hotel.acm.model.dto.AcmDTO;
 import com.udigo.hotel.acm.model.service.AcmService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,22 +34,24 @@ public class AcmController {
     // View More API - 추가 숙소 데이터 로드
     @GetMapping("/api/more")
     @ResponseBody
-    public Map<String, Object> getMoreAcms(@RequestParam(defaultValue = "6") int currentCount) {
+    public ResponseEntity<Map<String, Object>> getMoreAcms(@RequestParam int currentCount) {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            List<AcmDTO> acms = acmService.getNextAcms(currentCount);
-            boolean hasMore = acmService.hasMoreAcms(currentCount + acms.size());
+            int pageSize = 9;
+            List<AcmDTO> moreAcms = acmService.getMoreAcms(currentCount, pageSize);
+            int totalCount = acmService.getTotalAcmCount();
 
-            response.put("acms", acms);
-            response.put("hasMore", hasMore);
             response.put("success", true);
+            response.put("acms", moreAcms);
+            response.put("hasMore", (currentCount + moreAcms.size()) < totalCount);
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "데이터 로드 중 오류가 발생했습니다.");
+            response.put("message", "Failed to load more accommodations");
+            return ResponseEntity.badRequest().body(response);
         }
-
-        return response;
     }
 
     // 숙소 검색 기능

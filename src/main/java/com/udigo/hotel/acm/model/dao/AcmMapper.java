@@ -27,4 +27,12 @@ public interface AcmMapper {
     AcmDTO selectAcmDetail(int acmId);
 
     List<AcmDTO> selectAcmIds(List<Integer> acmIds);
+
+    List<AcmDTO> selectInitialAcms(@Param("limit") int limit);
+
+    List<AcmDTO> selectMoreAcms(@Param("offset") int offset, @Param("limit") int limit);
+
+    int getTotalCount();
+
+
 }
