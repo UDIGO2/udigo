@@ -37,10 +37,10 @@
                  th:text="${resv.isResv == 0 ? '취소된 예약' : '이용 완료'}">
             </div>
             <div class="button-container">
-                <a th:href="@{'/acm/detail/' + ${resv.acmId}}" class="details-button">상세</a>
+                <a th:href="@{'/acm/detail/' + ${resv.acmId}}" class="details-button">상세 정보</a>
                 <a th:if="${resv.isResv == 1}"
                    th:href="@{'/review/write/' + ${resv.resvId}}"
-                   class="review-button">후기</a>
+                   class="review-button">후기 등록</a>
             </div>
         </div>
     </div>
