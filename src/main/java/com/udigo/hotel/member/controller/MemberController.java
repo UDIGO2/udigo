@@ -76,7 +76,7 @@ public class MemberController {
     }
 
     @PostMapping("/myinfo/update")
-    public String updateMyInfo(@ModelAttribute MemberDTO memberDTO) {
+    public String updateMyInfo(@ModelAttribute MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getPrincipal() instanceof CustomUserDetails) {
             CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
@@ -85,11 +85,13 @@ public class MemberController {
             memberDTO.setMemberCode(userDetails.getMemberCode());
 
             memberService.updateMember(memberDTO);
+            redirectAttributes.addFlashAttribute("successMessage", "수정이 완료되었습니다!");
             return "redirect:/member/myinfo?success=true";
         }
 
         return "redirect:/auth/login";
     }
+
     /** ✅ 쿠폰 사용 API */
     @PostMapping("/useCoupon")
     public String useCoupon(@ModelAttribute MemberDTO memberDTO, RedirectAttributes redirectAttributes) {

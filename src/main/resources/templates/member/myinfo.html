@@ -24,33 +24,26 @@
         </div>
 
         <!-- 내 정보 폼 -->
-        <form th:action="@{/member/update}" method="post" class="info-form">
+        <form th:action="@{/member/myinfo/update}" method="post">
             <th:block th:if="${_csrf != null}">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
             </th:block>
 
-            <div class="form-group">
-                <label for="memberId">아이디</label>
-                <input type="text" id="memberId" name="memberId" th:value="${member.memberId}" readonly>
-            </div>
+            <label for="memberId">아이디</label>
+            <input type="text" id="memberId" name="memberId" th:value="${member.memberId}" readonly>
 
-            <div class="form-group">
-                <label for="memberName">이름</label>
-                <input type="text" id="memberName" name="memberName" th:value="${member.memberName}" readonly>
-            </div>
+            <label for="memberName">이름</label>
+            <input type="text" id="memberName" name="memberName" th:value="${member.memberName}">
 
-            <div class="form-group">
-                <label for="email">이메일</label>
-                <input type="email" id="email" name="email" th:value="${member.email}" readonly>
-            </div>
+            <label for="email">이메일</label>
+            <input type="text" id="email" name="email" th:value="${member.email}"> <!-- ✅ 이메일 수정 가능 -->
 
-            <div class="form-group">
-                <label for="phoneNo">휴대폰 번호</label>
-                <input type="text" id="phoneNo" name="phoneNo" th:value="${member.phoneNo}" readonly>
-            </div>
+            <label for="phoneNo">휴대폰 번호</label>
+            <input type="text" id="phoneNo" name="phoneNo" th:value="${member.phoneNo}">
 
-            <button type="submit" class="update-btn">수정하기</button>
+            <button type="submit">수정하기</button>
         </form>
+
 
         <!-- ✅ 쿠폰 사용 여부를 표시할 공간 -->
         <p id="couponStatusMessage" style="display: none; font-weight: bold;"></p>
@@ -109,6 +102,16 @@
             console.error("❌ 버튼을 찾을 수 없음!");
         }
     });
+
+    window.onload = function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const successMessage = urlParams.get("success");
+
+        if (successMessage) {
+            alert("수정이 완료되었습니다!");
+            history.replaceState({}, null, window.location.pathname); // ✅ URL 파라미터 제거
+        }
+    }
 </script>
 
 </body>

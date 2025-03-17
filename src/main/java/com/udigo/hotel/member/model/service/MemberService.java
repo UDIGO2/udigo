@@ -54,7 +54,14 @@ public class MemberService {
 
     /** ✅ 아이디로 회원 조회 */
     public MemberDTO findByMemberId(String memberId) {
-        return memberMapper.findByMemberId(memberId);
+        MemberDTO member = memberMapper.findByMemberId(memberId);
+        if (member == null) {
+            System.out.println("❌ 회원 정보를 찾을 수 없습니다.");
+        } else {
+            System.out.println("🔍 조회된 회원 정보: " + member);
+            System.out.println("📧 이메일 값 확인: " + member.getEmail());
+        }
+        return member;
     }
 
     /** ✅ 회원 정보 수정 */

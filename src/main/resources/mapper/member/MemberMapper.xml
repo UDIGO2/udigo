@@ -28,6 +28,7 @@
         member_id,
         password,
         member_name,
+        email,
         phone_no,
         coupon_used,  <!-- ✅ 쿠폰 사용 여부 추가 -->
         CASE
@@ -60,6 +61,7 @@
         UPDATE tbl_member
         SET
         member_name = #{memberName},
+        email = #{email},
         phone_no = #{phoneNo},
         coupon_used = #{couponUsed}  <!-- ✅ 쿠폰 사용 여부 수정 가능 -->
         WHERE member_code = #{memberCode}
