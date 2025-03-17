@@ -7,11 +7,74 @@
     <link rel="stylesheet" th:href="@{/css/myResv.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <style>
+        .resv-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .resv-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .resv-detail-item {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .price-info {
+            margin-top: 5px;
+            color: #333;
+        }
+
+        .total-price {
+            font-weight: bold;
+            color: #007bff;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+
+        .label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .value {
+            color: #555;
+        }
+
+        .payment-success-banner {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .payment-info {
+            background-color: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border-left: 3px solid #007bff;
+        }
+    </style>
 </head>
 <body>
 <div th:replace="~{fragments/header :: header}"></div>
 <div class="content container">
     <h1>내 예약</h1>
+
+    <!-- 결제 성공 메시지 (결제 ID로 접근한 경우에만 표시) -->
+    <div th:if="${fromPayment != null && fromPayment == true}" class="payment-success-banner">
+        결제가 성공적으로 완료되었습니다! 예약이 확정되었습니다.
+    </div>
 
     <div class="nav-tabs">
         <a href="/resv/current" class="active">현재 예약</a>
@@ -29,9 +92,52 @@
         </div>
         <div class="resv-info">
             <h2 th:text="${reservation.acmName}">숙소명</h2>
-            <p th:text="'투숙 인원: ' + ${reservation.guestCount} + '명'">투숙 인원</p>
-            <p th:text="'체크인: ' + ${#temporals.format(reservation.checkIn, 'yyyy/MM/dd')}">체크인 날짜</p>
-            <p th:text="'체크아웃: ' + ${#temporals.format(reservation.checkOut, 'yyyy/MM/dd')}">체크아웃 날짜</p>
+
+            <div class="resv-details"
+                 th:attr="data-checkin=${#temporals.format(reservation.checkIn, 'yyyy-MM-dd')},
+                          data-checkout=${#temporals.format(reservation.checkOut, 'yyyy-MM-dd')},
+                          data-price=${reservation.acmPrice},
+                          data-guests=${reservation.guestCount}">
+
+                <!-- 첫 번째 열: 체크인/체크아웃 -->
+                <div class="resv-detail-item">
+                    <div>
+                        <span class="label">체크인:</span>
+                        <span class="value" th:text="${#temporals.format(reservation.checkIn, 'yyyy/MM/dd')}">체크인 날짜</span>
+                    </div>
+                    <div>
+                        <span class="label">체크아웃:</span>
+                        <span class="value" th:text="${#temporals.format(reservation.checkOut, 'yyyy/MM/dd')}">체크아웃 날짜</span>
+                    </div>
+                    <div class="price-info">
+                        <span class="label">숙박 일수:</span>
+                        <span class="value stay-duration">계산 중...</span>
+                    </div>
+                </div>
+
+                <!-- 두 번째 열: 인원 및 가격 정보 -->
+                <div class="resv-detail-item">
+                    <div>
+                        <span class="label">투숙 인원:</span>
+                        <span class="value" th:text="${reservation.guestCount} + '명'">투숙 인원</span>
+                    </div>
+                    <div class="price-info">
+                        <span class="label">1박 가격:</span>
+                        <span class="value" th:text="${#numbers.formatInteger(reservation.acmPrice, 0, 'COMMA')} + '원'"></span>
+                    </div>
+                    <div class="total-price">
+                        <span class="label">총 금액:</span>
+                        <span class="total-amount">계산 중...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 결제 정보 (결제 ID로 접근한 경우에만 표시) -->
+            <div th:if="${payId != null}" class="payment-info">
+                <span class="label">결제 ID:</span>
+                <span class="value" th:text="${payId}">결제 ID</span>
+            </div>
+
             <div class="button-container">
                 <a th:href="@{'/acm/detail/' + ${reservation.acmId}}" class="details-button">상세 정보</a>
             </div>
@@ -40,5 +146,27 @@
 </div>
 <div th:replace="~{fragments/footer :: footer}"></div>
 <script src="/js/header.js"></script>
+
+<!-- 숙박 일수 및 금액 계산 스크립트 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.resv-details').forEach(function(element) {
+            const checkIn = new Date(element.dataset.checkin);
+            const checkOut = new Date(element.dataset.checkout);
+            const price = parseInt(element.dataset.price);
+            const guests = parseInt(element.dataset.guests);
+
+            // 숙박 일수 계산 (밀리초 -> 일)
+            const days = Math.round((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+
+            // 총 금액 계산 (1박 가격 × 숙박 일수 × 투숙 인원)
+            const totalAmount = price * days * guests;
+
+            // 결과 표시
+            element.querySelector('.stay-duration').textContent = days + '박';
+            element.querySelector('.total-amount').textContent = totalAmount.toLocaleString() + '원';
+        });
+    });
+</script>
 </body>
 </html>

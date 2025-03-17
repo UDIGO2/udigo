@@ -514,3 +514,31 @@ INSERT INTO `tbl_reviews` (member_code, acm_id, resv_id, content, written_at) VA
 (103,304,2,'후기 작성 내용 입니다.14',now()),
 (103,305,3,'후기 작성 내용 입니다.15',now());
 
+
+-- 테스트용 결제 데이터 생성
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+             102, 101, 101, '카드결제', '결제완료', '신용카드', NOW(),
+             150000, 0, 0, 'TEST-TRANSACTION-123', 'TEST-PG'
+         );
+
+-- 테스트용 예약 데이터 생성 (pay_id 연결)
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+             101, 101, '2025-04-10', '2025-04-14', 2, 1, NOW(), 102
+         );
+
+-- 테스트 데이터 확인 쿼리
+SELECT
+    p.pay_id, p.pay_method, p.pay_status, p.pay_price,
+    r.resv_id, r.check_in, r.check_out, r.guest_count,
+    a.acm_name, a.acm_price
+FROM
+    tbl_pay p
+        JOIN tbl_reservations r ON p.pay_id = r.pay_id
+        JOIN tbl_acm a ON r.acm_id = a.acm_id
+WHERE
+    p.pay_id = 102;

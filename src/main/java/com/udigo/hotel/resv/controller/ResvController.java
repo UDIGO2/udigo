@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,46 @@ public class ResvController {
         } catch (Exception e) {
             e.printStackTrace();
             return "redirect:/auth/login";
+        }
+    }
+
+    // 결제 ID로 현재 예약 페이지에 데이터 출력
+    @GetMapping("/current/payment/{payId}")
+    public String getCurrentResvByPayment(@PathVariable("payId") int payId, Model model) {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (!(auth.getPrincipal() instanceof CustomUserDetails)) {
+                return "redirect:/auth/login";
+            }
+
+            CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+            int memberCode = userDetails.getMemberCode();
+
+            // 결제 ID로 예약 정보 조회
+            ResvDTO reservation = resvService.getReservationByPayId(payId);
+
+            if (reservation == null) {
+                return "redirect:/error?message=해당 결제 정보를 찾을 수 없습니다.";
+            }
+
+            // 보안 검사: 현재 로그인한 사용자의 예약인지 확인
+            if (reservation.getMemberCode() != memberCode) {
+                return "redirect:/error?message=접근 권한이 없습니다.";
+            }
+
+            // 단일 예약을 리스트에 담아서 전달
+            List<ResvDTO> reservations = new ArrayList<>();
+            reservations.add(reservation);
+            model.addAttribute("reservations", reservations);
+
+            // 결제 ID로 조회했음을 표시
+            model.addAttribute("fromPayment", true);
+            model.addAttribute("payId", payId);
+
+            return "resv/current";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/error?message=" + e.getMessage();
         }
     }
 

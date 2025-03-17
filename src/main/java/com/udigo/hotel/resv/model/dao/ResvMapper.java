@@ -24,4 +24,7 @@ public interface ResvMapper {
     void updateResvCancel(@Param("resvId") int resvId, @Param("memberCode") int memberCode);
 
     void cancelReservation(@Param("resvId") int resvId);
+    // 결제 ID로 예약 정보 조회
+    ResvDTO selectResvByPayId(@Param("payId") int payId);
+
 }

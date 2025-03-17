@@ -57,7 +57,8 @@
             r.guest_count,
             r.is_resv,
             a.acm_name,
-            a.acm_photo1
+            a.acm_photo1,
+            a.acm_price
         FROM
             tbl_reservations r
                 JOIN tbl_acm a ON r.acm_id = a.acm_id
@@ -81,7 +82,8 @@
         r.is_resv,
         r.created_at,
         a.acm_name,
-        a.acm_photo1
+        a.acm_photo1,
+        a.acm_price
         FROM
         tbl_reservations r
         JOIN tbl_acm a ON r.acm_id = a.acm_id
@@ -104,7 +106,8 @@
             r.is_resv,
             r.created_at,
             a.acm_name,
-            a.acm_photo1
+            a.acm_photo1,
+            a.acm_price
         FROM
             tbl_reservations r
                 JOIN tbl_acm a ON r.acm_id = a.acm_id
@@ -123,4 +126,26 @@
         WHERE resv_id = #{resvId}
           AND member_code = #{memberCode}
     </update>
+
+    <!-- 결제 ID로 예약 정보 조회 -->
+    <select id="selectResvByPayId" resultType="com.udigo.hotel.resv.model.dto.ResvDTO">
+        SELECT
+            r.resv_id,
+            r.member_code,
+            r.acm_id,
+            r.check_in,
+            r.check_out,
+            r.guest_count,
+            r.is_resv,
+            r.created_at,
+            a.acm_name,
+            a.acm_photo1,
+            a.acm_price
+        FROM
+            tbl_reservations r
+                JOIN tbl_acm a ON r.acm_id = a.acm_id
+                JOIN tbl_pay p ON r.pay_id = p.pay_id
+        WHERE
+            p.pay_id = #{payId}
+    </select>
 </mapper>

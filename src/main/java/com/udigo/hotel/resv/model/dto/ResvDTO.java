@@ -13,11 +13,13 @@ public class ResvDTO {
     private LocalDateTime createdAt;
     private String acmName;
     private String acmPhoto1;
+    private int acmPrice;
+
 
     public ResvDTO() {
     }
 
-    public ResvDTO(int resvId, int acmId, int memberCode, LocalDateTime checkIn, LocalDateTime checkOut, int guestCount, int isResv, LocalDateTime createdAt, String acmName, String acmPhoto1) {
+    public ResvDTO(int resvId, int acmId, int memberCode, LocalDateTime checkIn, LocalDateTime checkOut, int guestCount, int isResv, LocalDateTime createdAt, String acmName, String acmPhoto1,int acmPrice) {
         this.resvId = resvId;
         this.acmId = acmId;
         this.memberCode = memberCode;
@@ -28,6 +30,7 @@ public class ResvDTO {
         this.createdAt = createdAt;
         this.acmName = acmName;
         this.acmPhoto1 = acmPhoto1;
+        this.acmPrice = acmPrice;
     }
 
 //    public ResvDTO(int resvId, int acmId, int memberCode, LocalDateTime checkIn, LocalDateTime checkOut, int guestCount, boolean isResv, LocalDateTime createdAt) {
@@ -122,6 +125,14 @@ public class ResvDTO {
         this.createdAt = createdAt;
     }
 
+    public int getAcmPrice() {
+        return acmPrice;
+    }
+
+    public void setAcmPrice(int acmPrice) {
+        this.acmPrice = acmPrice;
+    }
+
 
     @Override
     public String toString() {
@@ -136,6 +147,7 @@ public class ResvDTO {
                 ", createdAt=" + createdAt +
                 ", acmName='" + acmName + '\'' +
                 ", acmPhoto1='" + acmPhoto1 + '\'' +
+                ", acmPrice=" + acmPrice +
                 '}';
     }
 }

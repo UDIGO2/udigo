@@ -32,6 +32,11 @@ public class ResvService {
         resvMapper.updateResvCancel(resvId, memberCode);
     }
 
+    // 결제 ID로 예약 정보 조회
+    public ResvDTO getReservationByPayId(int payId) {
+        return resvMapper.selectResvByPayId(payId);
+    }
+
     // 모든 예약 조회
     public List<ResvDTO> getAllReservations() {
         return resvMapper.findAll();
