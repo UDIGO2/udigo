@@ -34,5 +34,6 @@ public interface AcmMapper {
 
     int getTotalCount();
 
-
+    // 관리자용 숙소 삭제
+    void deleteAcm(@Param("acmId") int acmId);
 }

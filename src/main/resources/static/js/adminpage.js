@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const action = link.textContent.trim();
             switch(action) {
                 case '숙소 정보 관리 >':
-                    window.location.href = "/acm/manage";
+                    window.location.href = "/admin/acm/list";
                     break;
                 case '숙소 정보 수정 >':
                     window.location.href = "/acm/edit";

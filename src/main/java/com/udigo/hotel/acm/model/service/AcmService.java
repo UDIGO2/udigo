@@ -58,4 +58,9 @@ public class AcmService {
     public int getTotalAcmCount() {
         return acmMapper.getTotalCount();
     }
+
+    // 관리자용 숙소 삭제
+    public void deleteAcm(int acmId) {
+        acmMapper.deleteAcm(acmId);
+    }
 }

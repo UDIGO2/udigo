@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 public class ReviewDTO {
 
-    //다시 셋팅해야함
 
     private int reviewId;
     private int memberCode;

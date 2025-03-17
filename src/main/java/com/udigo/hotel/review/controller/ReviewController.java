@@ -4,13 +4,19 @@ import com.udigo.hotel.member.security.CustomUserDetails;
 import com.udigo.hotel.review.dto.ReviewDTO;
 import com.udigo.hotel.review.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/review")
@@ -19,15 +25,13 @@ public class ReviewController {
     @Autowired
     private ReviewService reviewService;
 
-    // 초기 숙소 목록 페이지 로드
+    /* ====== myPage ====== */
+
     @GetMapping("/myReview")
     public String listReview(Model model) {
-        // 현재 로그인한 사용자 정보 가져오기
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getPrincipal() instanceof CustomUserDetails userDetails) {
             int memberCode = userDetails.getMemberCode();
-
-            // 해당 회원의 리뷰 목록 조회
             List<ReviewDTO> reviews = reviewService.getReviewsByMember(memberCode);
             model.addAttribute("reviews", reviews);
             return "review/myReview";
@@ -35,55 +39,69 @@ public class ReviewController {
         return "redirect:/auth/login";
     }
 
-    // 초기 숙소 목록 페이지 로드
     @GetMapping("/writeReview")
-    public String writeReview(Model model) {
+    public String writeReview(@RequestParam(required = false) Integer resvId,
+                              @RequestParam(required = false) Integer acmId,
+                              Model model) {
+        if (resvId == null) resvId = 1;  // 임시 데이터
+        if (acmId == null) acmId = 202;  // 임시 데이터
 
-        int resvId = 1; //데이터 임시
-        int acmId = 202; //데이터 임시
-        System.out.println("11111111111");
-        // 해당 회원의 리뷰 목록 조회
         ReviewDTO review = reviewService.findReviewsByWrite(resvId, acmId);
-        System.out.println("review--->"+review);
         model.addAttribute("review", review);
         return "review/writeReview";
-
     }
 
-
-
-/*    @GetMapping("/myinfo/update")
-    public String updateMyInfo(Model model) {
-        // 현재 로그인한 사용자 정보 가져오기
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.getPrincipal() instanceof CustomUserDetails) {
-            CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
-            int memberCode = userDetails.getMemberCode();
-
-            // 해당 회원의 리뷰 목록 조회
-            List<ReviewDTO> reviews = reviewService.getReviewsByMember(memberCode);
-            model.addAttribute("reviews", reviews);
-
-            return "review/myReview";
+    @PostMapping("/write")
+    public String submitReview(@ModelAttribute ReviewDTO reviewDTO,
+                               @RequestParam("photos") List<MultipartFile> photos) throws IOException {
+        // 리뷰 내용만 검증
+        if (reviewDTO.getContent() == null || reviewDTO.getContent().trim().isEmpty()) {
+            return "redirect:/review/writeReview?resvId=" + reviewDTO.getResvId()
+                    + "&acmId=" + reviewDTO.getAcmId()
+                    + "&error=content";
         }
 
-        return "redirect:/auth/login";
-    }*/
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() instanceof CustomUserDetails userDetails) {
+            reviewDTO.setMemberCode(userDetails.getMemberCode());
+            reviewService.saveReview(reviewDTO, photos);
+        }
+        return "redirect:/review/myReview";
+    }
 
     @PostMapping("/delete")
     public String deleteReview(@RequestParam int reviewId) {
-        // 현재 로그인한 사용자 정보 가져오기
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getPrincipal() instanceof CustomUserDetails userDetails) {
             int memberCode = userDetails.getMemberCode();
-
-            System.out.println("reviewParam-->" + reviewId);
-            System.out.println("reviewParam-->" + memberCode);
             reviewService.deleteReview(reviewId, memberCode);
         }
         return "redirect:/review/myReview";
     }
 
+    /* ====== adminPage ====== */
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/list")
+    public String adminReviewList(@RequestParam(defaultValue = "1") int page, Model model) {
+        Map<String, Object> reviewData = reviewService.getAllReviews(page);
+        model.addAttribute("reviews", reviewData.get("reviews"));
+        model.addAttribute("currentPage", reviewData.get("currentPage"));
+        model.addAttribute("totalPages", reviewData.get("totalPages"));
+        model.addAttribute("totalReviews", reviewData.get("totalReviews"));
+        return "review/adminReviewList";
+    }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/admin/delete")
+    public String adminDeleteReview(@RequestParam int reviewId) {
+        reviewService.deleteReviewByAdmin(reviewId);
+        return "redirect:/review/admin/list";
+    }
+
+    @ExceptionHandler({IOException.class, RuntimeException.class})
+    public String handleException(Exception e) {
+        // 로그 기록 추가
+        return "redirect:/error";
+    }
 }

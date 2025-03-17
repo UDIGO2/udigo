@@ -33,7 +33,6 @@
     </select>
 
     <!-- 검색 조건에 맞는 숙소 조회 -->
-    <!-- 검색 조건에 맞는 숙소 조회 -->
     <select id="searchAcms" resultMap="acmResultMap">
         SELECT DISTINCT a.*
         FROM tbl_acm a
@@ -87,8 +86,15 @@
         SELECT *
         FROM tbl_acm
         WHERE acm_id IN
-        <foreach item="id" collection="acmIds" open="(" separator="," close=")">
+        <foreach item="id" collection="list" open="(" separator="," close=")">
             #{id}
         </foreach>
     </select>
+
+    <!-- 숙소 삭제 -->
+    <delete id="deleteAcm">
+        DELETE FROM tbl_acm
+        WHERE acm_id = #{acmId}
+    </delete>
+
 </mapper>
