@@ -28,6 +28,12 @@ public interface MemberMapper {
     void updatePassword(@Param("memberId") String memberId, @Param("password") String password);
 
     List<MemberDTO> selectAllMembers();
+
+    /** ✅ 쿠폰 사용 (coupon_used 값을 1로 변경) */
+    void updateCouponUsed(@Param("memberId") String memberId, @Param("couponUsed") boolean couponUsed);
+
+    /** ✅ 쿠폰 사용 여부 조회 */
+    Integer getCouponStatus(String memberId);
 }
 
 

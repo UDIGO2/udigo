@@ -12,7 +12,7 @@
 <!-- ✅ 헤더 추가 -->
 <div th:replace="~{fragments/header :: header}"></div>
 
-<!-- ✅ 회원가입 폼을 감싸는 컨테이너 (여백 추가) -->
+<!-- ✅ 회원가입 폼을 감싸는 컨테이너 -->
 <div id="signup-page">
     <div class="signup-container">
         <h2>회원 가입</h2>
@@ -92,8 +92,15 @@
 
     document.addEventListener("DOMContentLoaded", function() {
         if (successMessage && successMessage.trim() !== "" && successMessage.trim() !== "null") {
-            alert(successMessage);
+            alert(successMessage); // 첫 번째 알림창 (회원가입 완료)
+
+            // 두 번째 알림창 (첫 가입 쿠폰 지급)
+            alert("🎉 첫 가입 환영! 5000원 쿠폰 지급");
+
+            // 마지막 알림 확인 후 로그인 페이지로 이동
+            window.location.href = "/login";
         }
+
         if (errorMessage && errorMessage.trim() !== "" && errorMessage.trim() !== "null") {
             alert("회원가입에 실패했습니다. 다시 시도해주세요.");
         }

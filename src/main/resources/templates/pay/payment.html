@@ -46,8 +46,9 @@
     <label class="block text-lg font-semibold">쿠폰 적용</label>
     <div class="bg-gray-200 p-3 mt-2 rounded flex justify-between">
       <span>첫 회원가입 쿠폰 5,000원</span>
-      <span>-5,000</span>
+      <span id="couponDiscount">-5,000</span>
     </div>
+    <button id="applyCouponButton" class="btn-primary">쿠폰 사용</button>
   </div>
 
   <!-- 결제 정보 -->
@@ -73,6 +74,8 @@
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
+<!-- ✅ 로그인한 사용자의 memberId를 저장하는 숨겨진 태그 -->
+<div id="userInfo" data-member-id="[[${memberId}]]"></div>
   <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
   <script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>

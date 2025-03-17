@@ -3,14 +3,12 @@ package com.udigo.hotel.member.controller;
 import com.udigo.hotel.member.model.dto.MemberDTO;
 import com.udigo.hotel.member.model.service.MemberService;
 import com.udigo.hotel.member.security.CustomUserDetails;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -87,5 +85,33 @@ public class MemberController {
         }
 
         return "redirect:/auth/login";
+    }
+    /** ✅ 쿠폰 사용 API */
+    @PostMapping("/useCoupon")
+    public String useCoupon(@ModelAttribute MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
+        try {
+            memberService.useCoupon(memberDTO.getMemberId());
+            redirectAttributes.addFlashAttribute("successMessage", "쿠폰이 성공적으로 사용되었습니다.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "쿠폰 사용 실패: " + e.getMessage());
+        }
+        return "redirect:/member/mypage"; // ✅ 마이페이지로 리디렉트
+    }
+
+    /** ✅ GET 요청 지원: 브라우저에서 실행 가능하도록 변경 */
+    @GetMapping("/useCoupon")
+    public String useCouponGet(@ModelAttribute MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
+        return useCoupon(memberDTO, redirectAttributes);
+    }
+    /** ✅ 쿠폰 사용 여부 조회 API */
+    @GetMapping("/coupons")
+    public ResponseEntity<String> getCouponStatus(@RequestParam("memberId") String memberId) {
+        boolean couponUsed = memberService.checkCouponStatus(memberId);
+
+        if (couponUsed) {
+            return ResponseEntity.ok("이미 사용한 쿠폰입니다.");
+        } else {
+            return ResponseEntity.ok("사용 가능한 쿠폰이 있습니다!");
+        }
     }
 }

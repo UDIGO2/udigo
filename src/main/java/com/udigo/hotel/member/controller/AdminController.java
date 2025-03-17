@@ -52,7 +52,7 @@ public class AdminController {
     @GetMapping("/memberlist")
     public String memberList(Model model) {
         List<MemberDTO> members = memberService.getAllMembers();
-        model.addAttribute("members", members);
+        model.addAttribute("membersList", members);
         return "member/admin/memberlist";
     }
 

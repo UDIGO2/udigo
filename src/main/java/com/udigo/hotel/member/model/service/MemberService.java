@@ -127,5 +127,26 @@ public class MemberService {
     }
 
 
+    @Transactional
+    public void useCoupon(String memberId) {
+        MemberDTO member = memberMapper.findByMemberId(memberId);
 
+
+        if (member == null) {
+            throw new RuntimeException("존재하지 않는 회원입니다.");
+        }
+
+        if (member.getCouponUsed()) {
+            throw new RuntimeException("이미 사용된 쿠폰입니다.");
+        }
+
+        memberMapper.updateCouponUsed(memberId, true); // ✅ 쿠폰 사용 완료로 변경
+        System.out.println("🎉 쿠폰 사용 완료: " + memberId);
+    }
+
+    /** ✅ 쿠폰 사용 여부 확인 */
+    public boolean checkCouponStatus(String memberId) {
+        Integer couponUsed = memberMapper.getCouponStatus(memberId);
+        return couponUsed != null && couponUsed == 1; // 1이면 사용됨, 0이면 미사용
+    }
 }

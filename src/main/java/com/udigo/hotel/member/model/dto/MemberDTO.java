@@ -14,22 +14,32 @@ public class MemberDTO implements UserDetails {
     private String email;
     private String password;
     private String phoneNo;
-    private List<GrantedAuthority> authorities; // 🔥 Spring Security 권한 정보 저장
+    private boolean couponUsed; // ✅ 쿠폰 사용 여부 추가
+    private List<GrantedAuthority> authorities;
     private String role;
 
     public MemberDTO() {}
 
-    public MemberDTO(int memberCode, String memberId, String memberName, String email, String password, String phoneNo, List<GrantedAuthority> authorities) {
+    public MemberDTO(int memberCode, String memberId, String memberName, String email, String password, String phoneNo, boolean couponUsed, List<GrantedAuthority> authorities) {
         this.memberCode = memberCode;
         this.memberId = memberId;
         this.memberName = memberName;
         this.email = email;
         this.password = password;
         this.phoneNo = phoneNo;
+        this.couponUsed = couponUsed; // ✅ 생성자에 추가
         this.authorities = authorities;
     }
 
-    // ✅ Getter & Setter
+    // ✅ Getter & Setter 추가
+    public boolean getCouponUsed() {
+        return couponUsed;
+    }
+
+    public void setCouponUsed(boolean couponUsed) {
+        this.couponUsed = couponUsed;
+    }
+
     public int getMemberCode() {
         return memberCode;
     }
@@ -115,6 +125,7 @@ public class MemberDTO implements UserDetails {
     public String getRole() {
         return role;
     }
+
     public void setRole(String role) {
         this.role = role;
     }
@@ -124,10 +135,11 @@ public class MemberDTO implements UserDetails {
         return "MemberDTO{" +
                 "memberCode=" + memberCode +
                 ", memberId='" + memberId + '\'' +
-                ", memberName='" + memberName + '\'' + // 수정된 필드 반영
+                ", memberName='" + memberName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", phoneNo='" + phoneNo + '\'' +
+                ", couponUsed=" + couponUsed + // ✅ 추가된 필드
                 '}';
     }
 }
