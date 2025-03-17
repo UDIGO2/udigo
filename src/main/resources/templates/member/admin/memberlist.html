@@ -1,42 +1,91 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>회원 목록</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 전체 조회 - UDIGO</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
 </head>
 <body>
-<h2>회원 목록</h2>
-<table>
-    <thead>
-    <tr>
-        <th>회원 코드</th>
-        <th>아이디</th>
-        <th>이름</th>
-        <th>이메일</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="member : ${members}">
-        <td th:text="${member.memberCode}"></td>
-        <td th:text="${member.memberId}"></td>
-        <td th:text="${member.memberName}"></td>
-        <td th:text="${member.email}"></td>
-    </tr>
-    </tbody>
-</table>
+<!-- ✅ 헤더 추가 -->
+<div th:replace="~{fragments/header :: header}"></div>
+
+<!-- ✅ 전체 페이지 컨테이너 -->
+
+    <div class="memberlist-container">
+        <h1>회원 전체 조회</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>NO.</th>
+                <th>회원 ID</th>
+                <th>이름</th>
+                <th>가입일</th>
+                <th>상세조회</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="member, stat : ${memberList}" th:if="${member.memberId != 'admin'}" >
+                <td th:text="${stat.index}"></td>
+                <td th:text="${member.memberId}"></td>
+                <td th:text="${member.memberName}"></td>
+                <td th:text="${#dates.format(member.joinDate, 'yyyy-MM-dd')}"></td>
+                <td>
+                    <a th:href="@{/admin/member/detail/{memberId}(memberId=${member.memberId})}" class="btn-detail">상세조회</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+<!-- ✅ 푸터 추가 -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="/js/header.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch('/admin/api/members') // ✅ 백엔드에서 회원 목록을 가져오는 API 엔드포인트
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("서버 응답이 실패했습니다.");
+                }
+                return response.json();
+            })
+            .then(data => {
+                populateMemberTable(data);
+            })
+            .catch(error => {
+                console.error("회원 목록을 불러오는 중 오류 발생:", error);
+            });
+    });
+
+    /**
+     * 회원 목록을 테이블에 추가하는 함수
+     * @param {Array} members - 회원 목록 데이터
+     */
+    function populateMemberTable(members) {
+        const tableBody = document.querySelector("#memberTable tbody");
+        tableBody.innerHTML = ""; // 기존 데이터 삭제
+
+        members.forEach((member, index) => {
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${member.memberId}</td>
+            <td>${member.memberName}</td>
+            <td>${member.joinDate}</td>
+            <td>
+                <a href="/member/admin/detail/${member.memberId}" class="btn-detail">상세조회</a>
+            </td>
+        `;
+
+            tableBody.appendChild(row);
+        });
+    }
+</script>
 </body>
 </html>

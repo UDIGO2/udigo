@@ -81,7 +81,13 @@
     </update>
 
     <select id="selectAllMembers" resultType="com.udigo.hotel.member.model.dto.MemberDTO">
-        SELECT member_code, member_id, member_name FROM tbl_member;
+        SELECT member_code, member_id, member_name, join_date FROM tbl_member;
+    </select>
+
+    <select id="selectMemberById" parameterType="String" resultType="com.udigo.hotel.member.model.dto.MemberDTO">
+        SELECT member_code, member_id, member_name, email, phone_no, join_date, role, coupon_used
+        FROM tbl_member
+        WHERE member_id = #{memberId};
     </select>
 
     <!-- ✅ 쿠폰 사용 여부 업데이트 -->

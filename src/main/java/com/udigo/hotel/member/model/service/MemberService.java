@@ -122,11 +122,13 @@ public class MemberService {
         }
     }
 
+    // ✅ 전체 회원 목록 가져오기
     public List<MemberDTO> getAllMembers() {
-        return memberMapper.selectAllMembers();
+        return memberMapper.selectAllMembers(); // 🚀 MyBatis에서 전체 회원 조회
     }
-
-
+    public MemberDTO getMemberById(String memberId) {
+        return memberMapper.selectMemberById(memberId);
+    }
     @Transactional
     public void useCoupon(String memberId) {
         MemberDTO member = memberMapper.findByMemberId(memberId);

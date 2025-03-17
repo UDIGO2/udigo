@@ -29,6 +29,9 @@ public interface MemberMapper {
 
     List<MemberDTO> selectAllMembers();
 
+    MemberDTO selectMemberById(@Param("memberId") String memberId);
+
+
     /** ✅ 쿠폰 사용 (coupon_used 값을 1로 변경) */
     void updateCouponUsed(@Param("memberId") String memberId, @Param("couponUsed") boolean couponUsed);
 

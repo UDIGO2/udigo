@@ -29,10 +29,10 @@
         <a href="/cart" class="cart-icon">
           🛒 <span class="cart-count" th:text="${session.cartCount != null ? session.cartCount : 0}"></span>
         </a>
-        <button class="h_my-page-btn">
+
           <button class="login-btn" onclick="location.href='/member/mypage'">마이페이지</button>
           <a href="/admin/adminpage" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">관리자 페이지</a>
-        </button>
+
         <form th:action="@{/auth/logout}" method="post" style="display:inline;">
           <th:block th:if="${_csrf != null}">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />

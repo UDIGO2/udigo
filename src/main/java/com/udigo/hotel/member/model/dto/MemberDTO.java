@@ -3,6 +3,7 @@ package com.udigo.hotel.member.model.dto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,29 +18,25 @@ public class MemberDTO implements UserDetails {
     private boolean couponUsed; // ✅ 쿠폰 사용 여부 추가
     private List<GrantedAuthority> authorities;
     private String role;
+    private Timestamp joinDate;
 
     public MemberDTO() {}
 
-    public MemberDTO(int memberCode, String memberId, String memberName, String email, String password, String phoneNo, boolean couponUsed, List<GrantedAuthority> authorities) {
+    public MemberDTO(int memberCode, String memberId, String memberName, String email,
+                     String password, String phoneNo, List<GrantedAuthority> authorities,
+                     Timestamp joinDate, boolean couponUsed) {
         this.memberCode = memberCode;
         this.memberId = memberId;
         this.memberName = memberName;
         this.email = email;
         this.password = password;
         this.phoneNo = phoneNo;
-        this.couponUsed = couponUsed; // ✅ 생성자에 추가
         this.authorities = authorities;
-    }
-
-    // ✅ Getter & Setter 추가
-    public boolean getCouponUsed() {
-        return couponUsed;
-    }
-
-    public void setCouponUsed(boolean couponUsed) {
+        this.joinDate = joinDate;
         this.couponUsed = couponUsed;
     }
 
+    // ✅ Getter & Setter
     public int getMemberCode() {
         return memberCode;
     }
@@ -88,6 +85,14 @@ public class MemberDTO implements UserDetails {
         this.phoneNo = phoneNo;
     }
 
+    public Timestamp getJoinDate() {
+        return joinDate;
+    }
+
+    public void setJoinDate(Timestamp joinDate) {
+        this.joinDate = joinDate;
+    }
+
     public void setAuthorities(List<GrantedAuthority> authorities) {
         this.authorities = authorities;
     }
@@ -125,9 +130,16 @@ public class MemberDTO implements UserDetails {
     public String getRole() {
         return role;
     }
-
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public boolean getCouponUsed() {
+        return couponUsed;
+    }
+
+    public void setCouponUsed(boolean couponUsed) {
+        this.couponUsed = couponUsed;
     }
 
     @Override
@@ -139,7 +151,9 @@ public class MemberDTO implements UserDetails {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", phoneNo='" + phoneNo + '\'' +
-                ", couponUsed=" + couponUsed + // ✅ 추가된 필드
+                ", joinDate=" + joinDate +
+                ", couponUsed=" + couponUsed +
                 '}';
     }
+
 }
