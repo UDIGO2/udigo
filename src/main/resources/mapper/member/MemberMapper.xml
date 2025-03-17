@@ -85,7 +85,7 @@
     </select>
 
     <select id="selectMemberById" parameterType="String" resultType="com.udigo.hotel.member.model.dto.MemberDTO">
-        SELECT member_code, member_id, member_name, email, phone_no, join_date, role, coupon_used
+        SELECT member_code, member_id, member_name, email, password, phone_no, join_date, role, coupon_used
         FROM tbl_member
         WHERE member_id = #{memberId};
     </select>

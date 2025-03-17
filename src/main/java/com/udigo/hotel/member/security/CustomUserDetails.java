@@ -13,30 +13,22 @@ public class CustomUserDetails implements UserDetails {
     private String password;
     private String role;
     private String memberName;
-    private String memberId;
+    private String memberId;  // ✅ 로그인 ID 필드
 
-    public String getMemberId() {
-        return memberId;
-    }
-
-    public void setMemberId(String memberId) {
+    // ✅ 생성자 추가 (필요한 정보 초기화)
+    public CustomUserDetails(int memberCode, String email, String password, String role, String memberName, String memberId) {
+        this.memberCode = memberCode;
+        this.email = email;
+        this.password = password;
+        this.role = role != null ? role : "USER";  // ✅ 기본값 설정
+        this.memberName = memberName;
         this.memberId = memberId;
     }
 
-    public int getMemberCode() {
-        return memberCode;
-    }
-
-    public void setMemberCode(int memberCode) {
-        this.memberCode = memberCode;
-    }
-
-    public String getMemberName() {
-        return memberName;
-    }
-
-    public void setMemberName(String memberName) {
-        this.memberName = memberName;
+    // ✅ `getUsername()`을 `memberId`로 변경 (Spring Security가 로그인 ID로 사용)
+    @Override
+    public String getUsername() {
+        return memberId;  // ✅ `authentication.getName()`이 `memberId`를 반환하도록 설정
     }
 
     @Override
@@ -47,11 +39,6 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public String getPassword() {
         return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
     }
 
     @Override
@@ -74,6 +61,23 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
+    // ✅ Getter & Setter 추가
+    public int getMemberCode() {
+        return memberCode;
+    }
+
+    public void setMemberCode(int memberCode) {
+        this.memberCode = memberCode;
+    }
+
+    public String getMemberName() {
+        return memberName;
+    }
+
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -90,5 +94,15 @@ public class CustomUserDetails implements UserDetails {
         this.role = role;
     }
 
-    public String getEmail() {return email;}
+    public String getEmail() {
+        return email;
+    }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
+    }
 }

@@ -37,6 +37,7 @@ public interface MemberMapper {
 
     /** ✅ 쿠폰 사용 여부 조회 */
     Integer getCouponStatus(String memberId);
+
 }
 
 

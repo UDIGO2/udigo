@@ -57,7 +57,6 @@ public class MemberService {
         return memberMapper.findByMemberId(memberId);
     }
 
-
     /** ✅ 회원 정보 수정 */
     @Transactional
     public void updateMember(MemberDTO memberDTO) {
@@ -105,24 +104,8 @@ public class MemberService {
         return "임시 비밀번호가 이메일로 전송되었습니다.";
     }
 
-    /** ✅ 비밀번호 변경 */
-    @Transactional
-    public void changePassword(String memberId, String newPassword) {
-        if (newPassword == null || newPassword.trim().isEmpty()) {
-            throw new IllegalArgumentException("새로운 비밀번호를 입력해야 합니다.");
-        }
-
-        String encodedPassword = passwordEncoder.encode(newPassword);
-        try {
-            memberMapper.updatePassword(memberId, encodedPassword);
-            System.out.println("🔐 비밀번호 변경 완료: " + memberId);
-        } catch (Exception e) {
-            System.err.println("❌ 비밀번호 변경 실패: " + e.getMessage());
-            throw new RuntimeException("비밀번호 변경 실패: " + e.getMessage());
-        }
-    }
-
     // ✅ 전체 회원 목록 가져오기
+
     public List<MemberDTO> getAllMembers() {
         return memberMapper.selectAllMembers(); // 🚀 MyBatis에서 전체 회원 조회
     }
@@ -145,10 +128,18 @@ public class MemberService {
         memberMapper.updateCouponUsed(memberId, true); // ✅ 쿠폰 사용 완료로 변경
         System.out.println("🎉 쿠폰 사용 완료: " + memberId);
     }
-
     /** ✅ 쿠폰 사용 여부 확인 */
     public boolean checkCouponStatus(String memberId) {
         Integer couponUsed = memberMapper.getCouponStatus(memberId);
         return couponUsed != null && couponUsed == 1; // 1이면 사용됨, 0이면 미사용
     }
+
+    // ✅ 비밀번호 변경
+    public void updatePassword(String memberId, String newPassword) {
+        if (memberId == null || newPassword == null) {
+            throw new IllegalArgumentException("memberId 또는 newPassword가 null입니다.");
+        }
+        memberMapper.updatePassword(memberId, newPassword);
+    }
+
 }
