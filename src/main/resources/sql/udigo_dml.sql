@@ -473,13 +473,6 @@ INSERT INTO `tbl_board_comments` (`post_id`, `content`, `created_at`) VALUES
 
 
 
-
-
-
-
-
-
-
 INSERT INTO `tbl_reservations` (acm_id, member_code, check_in, check_out, guest_count, is_resv,created_at) VALUES
 (101,101,'2025-03-11','2025-03-14',3,1,NOW()),
 (101,101,'2025-03-15','2025-03-19',3,1,NOW()),

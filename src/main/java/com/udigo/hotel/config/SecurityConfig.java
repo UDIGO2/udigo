@@ -51,10 +51,10 @@ public class SecurityConfig {
 
                     // ✅ 관리자 페이지 설정
                     auth.requestMatchers("/admin/**").hasRole("ADMIN");  // 관리자는 /admin/** 경로 접근 가능
-                    auth.requestMatchers("/member/admin/**").hasRole("ADMIN");  // ✅ 관리자 전용 회원 관리 페이지 설정
+                    auth.requestMatchers("/member/admin/**", "/adminList").hasRole("ADMIN");  // ✅ 관리자 전용 회원 관리 페이지 설정
 
                     // 기타 인증 필요 페이지
-                    auth.requestMatchers("/cart", "/payment", "/payList").authenticated();
+                    auth.requestMatchers("/cart", "/payList", "/payment").authenticated();
                     auth.requestMatchers("/member/mypage", "/member/myinfo").authenticated();
 
                     auth.anyRequest().authenticated();

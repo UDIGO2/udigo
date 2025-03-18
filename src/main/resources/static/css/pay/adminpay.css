@@ -1,0 +1,44 @@
+/* ↓↓↓ 모든 페이지에 css 맨 앞에 필수로 넣어주세요 ↓↓↓ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    font-weight: 500;
+}
+/* ↑↑↑ 모든 페이지에 css 맨 앞에 필수로 넣어주세요 ↑↑↑ */
+
+
+/* 거래 내역 조회 제목 */
+.adminpay_header {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.paylist_table {
+    text-align: center;
+    margin: 20px auto; /* 위아래 여백 추가 + 좌우 중앙 정렬 */
+    border-collapse: collapse; /* 테두리 깔끔하게 정리 */
+    width: 80%; /* 테이블 너비 설정 */
+}
+
+.adminpay_table th, .adminpay_table td {
+    border: 1px solid #2a90d9;
+    padding: 12px;
+    text-align: center;
+}
+
+.adminpay_table th {
+    background-color: #2a90d9;
+    color: white;
+    font-weight: 400;
+}
+
+.adminpay_table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}

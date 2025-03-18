@@ -9,6 +9,7 @@ spring:
     username: udigo  # MySQL 사용자명
     password: udigo  # MySQL 비밀번호 (설정한 값으로 변경)
     driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL 드라이버 설정
+    context-path: /api  # API 기본 경로 설정 (없으면 `/`가 기본값)
   thymeleaf:
     prefix: classpath:/templates/  # 템플릿 파일 경로
     suffix: .html                  # 확장자

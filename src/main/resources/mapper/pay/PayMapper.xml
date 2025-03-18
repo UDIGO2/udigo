@@ -68,9 +68,9 @@
             pay_date, pay_price, discount, pay_ref, transaction_id, pay_provider
         )
         VALUES (
-            #{memberCode}, #{acmId}, #{payMethod}, #{payStatus}, #{payType},
-            NOW(), #{payPrice}, #{discount}, #{payRef}, #{transactionId}, #{payProvider}
-        )
+                   #{memberCode}, #{acmId}, #{payMethod}, #{payStatus}, #{payType},
+                   NOW(), #{payPrice}, #{discount}, #{payRef}, #{transactionId}, #{payProvider}
+               )
     </insert>
 
     <!-- 가장 최근 INSERT 된 PayId 조회 -->
@@ -84,8 +84,8 @@
             acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
         )
         VALUES (
-            #{acmId}, #{memberCode}, #{checkIn}, #{checkOut}, #{guestCount}, #{isResv}, NOW(), #{payId}
-        )
+                   #{acmId}, #{memberCode}, #{checkIn}, #{checkOut}, #{guestCount}, #{isResv}, NOW(), #{payId}
+               )
     </insert>
 
     <!-- ============================ -->
