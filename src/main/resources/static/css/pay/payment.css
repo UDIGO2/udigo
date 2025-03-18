@@ -1,0 +1,112 @@
+/* ↓↓↓ 모든 페이지에 css 맨 앞에 필수로 넣어주세요 ↓↓↓ */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    font-weight: 500;
+}
+/* ↑↑↑ 모든 페이지에 css 맨 앞에 필수로 넣어주세요 ↑↑↑ */
+
+
+/* 결제 메인 컨테이너 */
+.pay_main {
+    width: 60%;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+/* 숙소 정보 */
+.mt-6 {
+    margin-top: 24px;
+}
+
+.border-b {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 16px;
+}
+
+.text-gray-700 {
+    font-size: 14px;
+    color: #333;
+    margin: 6px 0;
+}
+
+.payment_head {
+    margin-top: 30px;
+    text-align: center;
+}
+
+/* 총 결제 금액 */
+.text-lg {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.text-xl {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+    margin-top: 10px;
+}
+
+/* 회원 정보 입력 */
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+/* 쿠폰 적용 */
+.bg-gray-200 {
+    background-color: #5da9df;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* 환불 정책 */
+.text-sm {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* 결제 버튼 */
+.payButton {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 30px auto;
+    padding: 12px;
+    background-color: #333;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.payButton:hover {
+    background-color: #555;
+}
