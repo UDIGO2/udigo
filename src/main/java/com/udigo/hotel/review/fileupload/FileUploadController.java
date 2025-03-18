@@ -21,12 +21,15 @@ public class FileUploadController {
 
     public static String saveFile(String fileDir, String fileName, MultipartFile file)
             throws IOException {
-
+        System.out.println("--- 이미지 저장 시작 ---");
+        System.out.println("fileDir = " + fileDir);
+        System.out.println("fileName = " + fileName);
+        System.out.println("file = " + file);
         // 프로젝트 루트 디렉토리 경로 가져오기
         String projectPath = System.getProperty("user.dir");
 
         // 저장될 경로 설정 (build/resources/static/image/review)
-        String buildPath = projectPath + "/build/resources/static/image/review";
+        String buildPath = projectPath + "/build/resources/main/static/image/review";
         File dir = new File(buildPath);
 
         // 디렉토리가 존재하지 않으면 생성

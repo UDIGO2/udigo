@@ -7,6 +7,7 @@
     <link rel="stylesheet" th:href="@{/css/detail.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=66ee0366c34ede131d6dce128078a011&libraries=services"></script>
 </head>
 <body>
 <div th:replace="~{fragments/header :: header}"></div>
@@ -99,7 +100,7 @@
     <div class="right-section">
         <!-- 지도를 표시할 div -->
         <div class="map-section">
-            <div id="staticMap" style="width:100%;height:400px;"></div>
+            <div id="staticMap" style="width:100%;height:100%;"></div>
         </div>
     </div>
 
@@ -109,36 +110,43 @@
 
 <div th:replace="~{fragments/footer :: footer}"></div>
 <script th:src="@{/js/header.js}"></script>
-<!-- 카카오맵 API 스크립트를 body 끝부분으로 이동 -->
+<!-- 카카오맵 API 스크립트 -->
 <script type="text/javascript">
-    // 카카오맵 API 로드 함수
-    function loadKakaoMap() {
+    window.addEventListener('load', function() {
+        debugger;
         // 주소-좌표 변환 객체를 생성
         var geocoder = new kakao.maps.services.Geocoder();
-
+        var address = '[[${acm.acmAddress}]]';
+        var acmName = '[[${acm.acmName}]]';
+        debugger;
         // 주소로 좌표를 검색
-        geocoder.addressSearch('[[${acm.acmAddress}]]', function(result, status) {
+        geocoder.addressSearch(address, function(result, status) {
+            debugger;
             // 정상적으로 검색이 완료됐으면
             if (status === kakao.maps.services.Status.OK) {
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
+                debugger;
                 // 지도 옵션 설정
-                var staticMapContainer = document.getElementById('staticMap'),
-                    staticMapOption = {
-                        center: coords, // 변환된 좌표를 지도의 중심으로 설정
-                        level: 3, // 확대 레벨
-                        marker: {
-                            position: coords, // 마커 위치를 변환된 좌표로 설정
-                            text: '[[${acm.acmName}]]' // 숙소 이름을 마커 텍스트로 표시
-                        }
-                    };
+                var staticMapContainer = document.getElementById('staticMap');
+                var staticMapOption = {
+                    center: coords,
+                    level: 3,
+                    marker: {
+                        position: coords,
+                        text: acmName
+                    }
+                };
 
                 // 지도 생성
                 var staticMap = new kakao.maps.StaticMap(staticMapContainer, staticMapOption);
+                debugger;
+            } else {
+                // 주소-좌표 변환 실패 시 에러 처리
+                console.error('주소를 찾을 수 없습니다:', address);
+                document.getElementById('staticMap').innerHTML = '지도를 불러올 수 없습니다.';
             }
         });
-    }
+    });
 </script>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=66ee0366c34ede131d6dce128078a011&libraries=services&onload=loadKakaoMap"></script>
 </body>
 </html>

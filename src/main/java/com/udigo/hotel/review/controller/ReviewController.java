@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.List;
@@ -53,18 +54,22 @@ public class ReviewController {
 
     @PostMapping("/write")
     public String submitReview(@ModelAttribute ReviewDTO reviewDTO,
-                               @RequestParam("photos") List<MultipartFile> photos) throws IOException {
+                               @RequestParam("photos") List<MultipartFile> photos,
+                               RedirectAttributes rttr) throws IOException {
+        System.out.println("up11111");
         // 리뷰 내용만 검증
         if (reviewDTO.getContent() == null || reviewDTO.getContent().trim().isEmpty()) {
             return "redirect:/review/writeReview?resvId=" + reviewDTO.getResvId()
                     + "&acmId=" + reviewDTO.getAcmId()
                     + "&error=content";
         }
-
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getPrincipal() instanceof CustomUserDetails userDetails) {
             reviewDTO.setMemberCode(userDetails.getMemberCode());
+            System.out.println("photos--->"+photos);
+            System.out.println("reviewDTO--->"+reviewDTO);
             reviewService.saveReview(reviewDTO, photos);
+            System.out.println("----saveReview----");
         }
         return "redirect:/review/myReview";
     }

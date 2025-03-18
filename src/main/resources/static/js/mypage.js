@@ -1,5 +1,6 @@
 // DOM Elements
 document.addEventListener('DOMContentLoaded', function() {
+    debugger;
     // Navigation handling
     const navLinks = document.querySelectorAll('.nav-links a');
     navLinks.forEach(link => {
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const reservationLinks = document.querySelectorAll('.reservation-links a');
     reservationLinks.forEach(link => {
         link.addEventListener('click', (e) => {
+            debugger;
             e.preventDefault();
             // Add reservation handling logic here
         });
@@ -31,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const basketLinks = document.querySelectorAll('.basket-links a');
     basketLinks.forEach(link => {
         link.addEventListener('click', (e) => {
+            debugger;
             e.preventDefault();
             // Add basket handling logic here
         });

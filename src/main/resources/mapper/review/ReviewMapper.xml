@@ -54,15 +54,30 @@
     </delete>
 
     <!--  파일 업로드 DML 구문  -->
-    <update id="insertReviewFile" parameterType="com.udigo.hotel.review.dto.ReviewDTO">
-        UPDATE tbl_reviews
-        SET
-            re_photo1 = #{rePhoto1},
-            re_photo2 = #{rePhoto2},
-            re_photo3 = #{rePhoto3}
-        WHERE
-            review_id = #{reviewId}
-    </update>
+    <insert id="insertReview" parameterType="com.udigo.hotel.review.dto.ReviewDTO">
+        INSERT INTO tbl_reviews (
+            review_id,
+            member_code,
+            acm_id,
+            resv_id,
+            content,
+            written_at,
+            re_photo1,
+            re_photo2,
+            re_photo3
+        )
+        VALUES (
+                   0,
+                   #{memberCode},
+                   #{acmId},
+                   #{resvId},
+                   #{content},
+                   NOW(),
+                   #{rePhoto1},
+                   #{rePhoto2},
+                   #{rePhoto3}
+               )
+    </insert>
 
     <!-- 관리자용 전체 리뷰 조회 (페이징) -->
     <select id="findAllReviews" resultType="com.udigo.hotel.review.dto.ReviewDTO">
