@@ -19,8 +19,8 @@
 
         <!-- 상단 탭 (쿠폰 관리 / 회원 탈퇴) -->
         <div class="info-tabs">
-            <button id="couponManageButton" class="info-tab active">쿠폰 관리</button>
-            <button class="info-tab">회원 탈퇴</button>
+            <a href="#" id="couponManageButton" class="info-tab btn-primary" style="text-align: center; display: inline-block; text-decoration: none;">쿠폰 관리</a>
+            <a href="/withdraw.html" class="info-tab btn-danger" style="text-align: center; display: inline-block; text-decoration: none;">회원 탈퇴</a>
         </div>
 
         <!-- 내 정보 폼 -->
@@ -61,46 +61,29 @@
 <!-- ✅ JavaScript 포함 -->
 <script th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function () {
-        console.log("✅ 페이지 로드 완료");
+        document.getElementById("couponManageButton").addEventListener("click", function (event) {
+            event.preventDefault(); // 기본 이동 동작 막기
 
-        // ✅ 버튼 요소 가져오기
-        var couponButton = document.getElementById("couponManageButton");
-        console.log("✅ 버튼 확인:", couponButton);
+            let memberId = document.getElementById("memberId").value;
+            console.log("✅ API 요청: /api/member/coupons?memberId=" + memberId); // 로그 추가
 
-        // ✅ 버튼이 존재할 경우 클릭 이벤트 추가
-        if (couponButton) {
-            couponButton.addEventListener("click", function () {
-                console.log("✅ 쿠폰 관리 버튼 클릭됨!");
-
-                let userInfoElement = document.getElementById("memberId");
-                let memberId = userInfoElement ? userInfoElement.value : null;
-
-                if (!memberId || memberId.trim() === "") {
-                    alert("로그인이 필요합니다.");
-                    return;
-                }
-
-                // ✅ Fetch API를 이용해 쿠폰 사용 여부 확인
-                fetch(`/member/coupons?memberId=${memberId}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error("서버 응답 오류");
-                        }
-                        return response.text();
-                    })
-                    .then(data => {
-                        let messageElement = document.getElementById("couponStatusMessage");
-                        messageElement.innerText = data;
-                        messageElement.style.display = "block";
-                    })
-                    .catch(error => {
-                        console.error("쿠폰 상태 조회 실패:", error);
-                        alert("쿠폰 정보를 불러올 수 없습니다.");
-                    });
-            });
-        } else {
-            console.error("❌ 버튼을 찾을 수 없음!");
-        }
+            fetch(`/api/member/coupons?memberId=${memberId}`)
+                .then(response => {
+                    console.log("✅ 응답 상태:", response.status); // 응답 상태 코드 확인
+                    if (!response.ok) {
+                        throw new Error("서버 응답 오류");
+                    }
+                    return response.text();
+                })
+                .then(message => {
+                    console.log("✅ 서버 응답 메시지:", message);
+                    alert(message);
+                })
+                .catch(error => {
+                    console.error("❌ 쿠폰 조회 실패:", error);
+                    alert("쿠폰 정보를 불러올 수 없습니다.");
+                });
+        });
     });
 
     window.onload = function () {

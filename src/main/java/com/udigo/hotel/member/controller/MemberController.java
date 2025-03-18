@@ -3,6 +3,7 @@ package com.udigo.hotel.member.controller;
 import com.udigo.hotel.member.model.dto.MemberDTO;
 import com.udigo.hotel.member.model.service.MemberService;
 import com.udigo.hotel.member.security.CustomUserDetails;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/member")
 public class MemberController {
 
+    @Autowired
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
 
@@ -109,17 +111,8 @@ public class MemberController {
     public String useCouponGet(@ModelAttribute MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
         return useCoupon(memberDTO, redirectAttributes);
     }
-    /** ✅ 쿠폰 사용 여부 조회 API */
-    @GetMapping("/coupons")
-    public ResponseEntity<String> getCouponStatus(@RequestParam("memberId") String memberId) {
-        boolean couponUsed = memberService.checkCouponStatus(memberId);
 
-        if (couponUsed) {
-            return ResponseEntity.ok("이미 사용한 쿠폰입니다.");
-        } else {
-            return ResponseEntity.ok("사용 가능한 쿠폰이 있습니다!");
-        }
-    }
+
 
     // ✅ 비밀번호 변경 페이지 이동
     @GetMapping("/changepassword")
