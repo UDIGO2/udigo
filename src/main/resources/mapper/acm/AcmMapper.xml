@@ -14,6 +14,10 @@
         <result property="acmPhoto5" column="acm_photo5"/>
         <result property="likedCount" column="liked_count"/>
         <result property="maxGuest" column="max_guest"/>
+        <result property="acmAddress" column="acm_address"/>
+        <result property="acmPrice" column="acm_price"/>
+        <result property="acmPhone" column="acm_phone"/>
+        <result property="acmDate" column="regist_date"/>
     </resultMap>
 
     <!-- 초기 숙소 목록 조회 -->
@@ -96,5 +100,40 @@
         DELETE FROM tbl_acm
         WHERE acm_id = #{acmId}
     </delete>
+    
+    <!-- 숙소 추가 -->
+    <insert id="insertAcm" parameterType="com.udigo.hotel.acm.model.dto.AcmDTO">
+        INSERT INTO tbl_acm (
+            acm_name, 
+            acm_address, 
+            acm_location, 
+            acm_price, 
+            acm_info, 
+            acm_phone, 
+            regist_date, 
+            max_guest, 
+            liked_count, 
+            acm_photo1, 
+            acm_photo2, 
+            acm_photo3, 
+            acm_photo4, 
+            acm_photo5
+        ) VALUES (
+            #{acmName}, 
+            #{acmAddress}, 
+            #{acmLocation}, 
+            #{acmPrice}, 
+            #{acmInfo}, 
+            #{acmPhone}, 
+            NOW(), 
+            #{maxGuest}, 
+            0, 
+            #{acmPhoto1}, 
+            #{acmPhoto2}, 
+            #{acmPhoto3}, 
+            #{acmPhoto4}, 
+            #{acmPhoto5}
+        )
+    </insert>
 
 </mapper>

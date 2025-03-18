@@ -36,4 +36,7 @@ public interface AcmMapper {
 
     // 관리자용 숙소 삭제
     void deleteAcm(@Param("acmId") int acmId);
+
+    // 관리자용 숙소 추가
+    void insertAcm(AcmDTO acmDTO);
 }

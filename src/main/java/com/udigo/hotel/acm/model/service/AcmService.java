@@ -2,12 +2,17 @@ package com.udigo.hotel.acm.model.service;
 
 import com.udigo.hotel.acm.model.dao.AcmMapper;
 import com.udigo.hotel.acm.model.dto.AcmDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Service
 public class AcmService {
 
+    private static final Logger logger = LoggerFactory.getLogger(AcmService.class);
     private final AcmMapper acmMapper;
 
     public AcmService(AcmMapper acmMapper) {
@@ -60,7 +65,21 @@ public class AcmService {
     }
 
     // 관리자용 숙소 삭제
+    @Transactional
     public void deleteAcm(int acmId) {
         acmMapper.deleteAcm(acmId);
+    }
+
+    // 관리자용 숙소 추가
+    @Transactional
+    public void addAcm(AcmDTO acmDTO) {
+        logger.info("숙소 추가 시작: {}", acmDTO);
+        try {
+            acmMapper.insertAcm(acmDTO);
+            logger.info("숙소 추가 성공: {}", acmDTO);
+        } catch (Exception e) {
+            logger.error("숙소 추가 실패: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 }

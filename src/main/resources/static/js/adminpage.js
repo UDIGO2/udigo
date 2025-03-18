@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     window.location.href = "/acm/edit";
                     break;
                 case '숙소 등록 >':
-                    window.location.href = "/acm/register";
+                    window.location.href = "/admin/acm/add";
                     break;
                 case '숙소 정보 삭제 >':
                     if (confirm("숙소 정보를 삭제하시겠습니까?")) {

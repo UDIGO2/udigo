@@ -11,7 +11,7 @@ public class AcmDTO {
     private long acmPrice;
     private String acmInfo;
     private String acmPhone;
-    private LocalDateTime acmDate;
+    private LocalDateTime acmDate;     // 이 필드가 DB의 regist_date 컬럼과 매핑됩니다
     private int maxGuest;
     private int likedCount;
     private String acmPhoto1;
