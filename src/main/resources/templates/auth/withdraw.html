@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원 탈퇴</title>
+  <link rel="stylesheet" th:href="@{/css/header.css}">
+  <link rel="stylesheet" th:href="@{/css/footer.css}">
+  <link rel="stylesheet" th:href="@{/css/withdraw.css}">
+</head>
+<body>
+
+<!-- ✅ 헤더 추가 -->
+<div th:replace="~{fragments/header :: header}"></div>
+
+<!-- ✅ 회원 탈퇴 컨테이너 -->
+<div id="withdraw-page">
+  <div class="withdraw-container">
+    <h2>회원 탈퇴</h2>
+
+    <!-- 성공/실패 메시지 -->
+    <p th:if="${errorMessage != null}" class="message error" th:text="${errorMessage}"></p>
+
+    <form id="withdrawForm" th:action="@{/auth/withdraw}" method="post" onsubmit="return validateWithdrawal();">
+      <!-- 현재 비밀번호 -->
+      <div class="form-group">
+        <label for="password">비밀번호 확인</label>
+        <input type="password" id="password" name="password" placeholder="비밀번호 입력" required>
+      </div>
+
+      <!-- 탈퇴 안내 메시지 -->
+      <p class="warning-text">
+        ❗ 회원 탈퇴 시 계정이 즉시 삭제되며, 복구가 불가능합니다.<br>
+        정말로 탈퇴하시겠습니까?
+      </p>
+
+      <!-- 회원 탈퇴 버튼 -->
+      <button type="submit" class="btn-danger">회원 탈퇴</button>
+
+      <!-- 취소 버튼 -->
+      <a href="/member/mypage" class="btn-secondary">취소</a>
+    </form>
+  </div>
+</div>
+
+<!-- ✅ 푸터 추가 -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- ✅ JavaScript 추가 -->
+<script src="/js/header.js"></script>
+
+<script th:inline="javascript">
+  var errorMessage = /*[[${errorMessage}]]*/ null;
+
+  document.addEventListener("DOMContentLoaded", function() {
+    if (errorMessage && errorMessage.trim() !== "" && errorMessage.trim() !== "null") {
+      alert(errorMessage);
+    }
+  });
+
+  function validateWithdrawal() {
+    let passwordInput = document.getElementById("password").value.trim();
+
+    // ✅ 비밀번호 입력 체크
+    if (passwordInput === "") {
+      alert("비밀번호를 입력해주세요.");
+      return false; // 폼 제출 방지
+    }
+
+    // ✅ 탈퇴 확인 알림창
+    let confirmation = confirm("정말로 탈퇴하시겠습니까?");
+    if (!confirmation) {
+      return false; // 사용자가 취소하면 폼 제출 방지
+    }
+
+    return true; // 폼 제출 진행
+  }
+</script>
+
+</body>
+</html>
