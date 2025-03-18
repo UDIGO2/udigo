@@ -1,6 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
     console.log("📌 DOM 로드 완료! (header.js)");
 
+    var memberCodeElement = document.getElementById("memberCodeElement");
+    if (memberCodeElement) {
+        var memberCode = memberCodeElement.textContent.trim();
+        localStorage.setItem("memberCode", memberCode);
+        console.log("✅ localStorage에 memberCode 저장됨:", memberCode);
+    } else {
+        console.warn("⚠️ memberCode가 존재하지 않음. localStorage에 저장되지 않음.");
+    }
+
     const navBar = document.querySelector(".h_navbar");
     const subMenus = document.querySelectorAll(".h_nav-links ul");
     const content = document.querySelector(".content");

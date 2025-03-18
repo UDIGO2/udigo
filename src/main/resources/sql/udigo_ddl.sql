@@ -295,6 +295,4 @@ CREATE TABLE `tbl_member_roles` (
 );
 ALTER TABLE tbl_member ADD COLUMN role VARCHAR(20) DEFAULT 'USER';
 
-ALTER TABLE tbl_reservations
-    ADD COLUMN pay_id INT NULL COMMENT '결제 ID',
-    ADD CONSTRAINT FK_tbl_pay_TO_tbl_reservations FOREIGN KEY (pay_id) REFERENCES tbl_pay(pay_id);
+

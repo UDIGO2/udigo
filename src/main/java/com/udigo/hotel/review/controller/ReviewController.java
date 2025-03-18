@@ -87,7 +87,7 @@ public class ReviewController {
     /* ====== adminPage ====== */
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/admin/list")
+    @GetMapping("/adminReviewList")
     public String adminReviewList(@RequestParam(defaultValue = "1") int page, Model model) {
         Map<String, Object> reviewData = reviewService.getAllReviews(page);
         model.addAttribute("reviews", reviewData.get("reviews"));
