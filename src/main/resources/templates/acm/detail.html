@@ -304,20 +304,12 @@
 
             // 필터 클릭 이벤트
             document.getElementById('date-filter').addEventListener('click', function() {
-                const acmId = document.querySelector('.calendar-button').getAttribute('data-acm-id');
-                const acmName = document.querySelector('.calendar-button').getAttribute('data-acm-name');
+                // 예약 현황 버튼이 제거되었으므로 acmId와 acmName을 직접 가져옵니다
+                const acmId = /*[[${acm.acmId}]]*/ '';
+                const acmName = /*[[${acm.acmName}]]*/ '';
                 showCalendar(acmId, acmName);
             });
             document.getElementById('guest-filter').addEventListener('click', () => openModal(guestModal));
-            
-            // 달력 버튼 클릭 이벤트 리스너 추가
-            document.querySelectorAll('.calendar-button').forEach(function(button) {
-                button.addEventListener('click', function() {
-                    const acmId = this.getAttribute('data-acm-id');
-                    const acmName = this.getAttribute('data-acm-name');
-                    showCalendar(acmId, acmName);
-                });
-            });
         });
     </script>
 
@@ -349,7 +341,8 @@
             document.getElementById('calendarModal').style.display = 'none';
             // 타이틀 원래대로 복원
             if (currentAcmId) {
-                const acmName = document.querySelector('.calendar-button').getAttribute('data-acm-name');
+                // 예약 현황 버튼이 제거되었으므로 직접 acmName을 가져옵니다
+                const acmName = /*[[${acm.acmName}]]*/ '';
                 document.getElementById('calendarTitle').textContent = acmName + ' 예약 정보';
             }
         }
