@@ -108,5 +108,31 @@
         WHERE
             r.member_code = #{memberCode}                 -- 회원 코드로 필터링 (파라미터로 전달된 값)
     </select>
+    
+    <!-- 관리자용 - 모든 결제 내역 조회 -->
+    <select id="getAllPayments" resultType="map">
+        SELECT
+            p.pay_id as payId,
+            p.pay_date as payDate,
+            m.member_name as memberName,
+            m.member_id as memberId,
+            a.acm_name as acmName,
+            r.guest_count as guestCount,
+            r.check_in as checkIn,
+            r.check_out as checkOut,
+            p.pay_price as payPrice,
+            p.discount as discount,
+            p.pay_method as payMethod,
+            p.pay_status as payStatus,
+            p.pay_type as payType,
+            p.transaction_id as transactionId
+        FROM
+            tbl_pay p
+            JOIN tbl_reservations r ON p.pay_id = r.pay_id  -- tbl_pay와 tbl_reservations를 pay_id로 JOIN
+            JOIN tbl_acm a ON p.acm_id = a.acm_id           -- tbl_pay와 tbl_acm을 acm_id로 JOIN
+            JOIN tbl_member m ON p.member_code = m.member_code  -- tbl_pay와 tbl_member를 member_code로 JOIN
+        ORDER BY 
+            p.pay_date DESC
+    </select>
 
 </mapper>

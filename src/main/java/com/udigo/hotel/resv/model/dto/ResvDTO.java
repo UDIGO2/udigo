@@ -14,12 +14,13 @@ public class ResvDTO {
     private String acmName;
     private String acmPhoto1;
     private int acmPrice;
-
+    private int payId;
+    private int discount;  // 쿠폰 할인 금액
 
     public ResvDTO() {
     }
 
-    public ResvDTO(int resvId, int acmId, int memberCode, LocalDateTime checkIn, LocalDateTime checkOut, int guestCount, int isResv, LocalDateTime createdAt, String acmName, String acmPhoto1,int acmPrice) {
+    public ResvDTO(int resvId, int acmId, int memberCode, LocalDateTime checkIn, LocalDateTime checkOut, int guestCount, int isResv, LocalDateTime createdAt, String acmName, String acmPhoto1, int acmPrice) {
         this.resvId = resvId;
         this.acmId = acmId;
         this.memberCode = memberCode;
@@ -133,6 +134,21 @@ public class ResvDTO {
         this.acmPrice = acmPrice;
     }
 
+    public int getPayId() {
+        return payId;
+    }
+
+    public void setPayId(int payId) {
+        this.payId = payId;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
+    }
 
     @Override
     public String toString() {
@@ -148,6 +164,8 @@ public class ResvDTO {
                 ", acmName='" + acmName + '\'' +
                 ", acmPhoto1='" + acmPhoto1 + '\'' +
                 ", acmPrice=" + acmPrice +
+                ", payId=" + payId +
+                ", discount=" + discount +
                 '}';
     }
 }

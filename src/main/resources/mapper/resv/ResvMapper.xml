@@ -56,12 +56,15 @@
             r.check_out,
             r.guest_count,
             r.is_resv,
+            r.pay_id,
             a.acm_name,
             a.acm_photo1,
-            a.acm_price
+            a.acm_price as acm_price,
+            p.discount
         FROM
             tbl_reservations r
                 JOIN tbl_acm a ON r.acm_id = a.acm_id
+                LEFT JOIN tbl_pay p ON r.pay_id = p.pay_id
         WHERE
             r.member_code = #{memberCode}
           AND r.check_out >= CURDATE()
@@ -73,25 +76,27 @@
     <!-- 이전 예약 조회 -->
     <select id="selectPastResv" resultType="com.udigo.hotel.resv.model.dto.ResvDTO">
         SELECT
-        r.resv_id,
-        r.member_code,
-        r.acm_id,
-        r.check_in,
-        r.check_out,
-        r.guest_count,
-        r.is_resv,
-        r.created_at,
-        a.acm_name,
-        a.acm_photo1,
-        a.acm_price
+            r.resv_id,
+            r.member_code,
+            r.acm_id,
+            r.check_in,
+            r.check_out,
+            r.guest_count,
+            r.is_resv,
+            r.created_at,
+            r.pay_id,
+            a.acm_name,
+            a.acm_photo1,
+            a.acm_price as acm_price
         FROM
-        tbl_reservations r
-        JOIN tbl_acm a ON r.acm_id = a.acm_id
+            tbl_reservations r
+            JOIN tbl_acm a ON r.acm_id = a.acm_id
+            LEFT JOIN tbl_pay p ON r.pay_id = p.pay_id
         WHERE
-        r.member_code = #{memberCode}
-        AND (r.check_out &lt; CURDATE() OR r.is_resv = 0)
+            r.member_code = #{memberCode}
+            AND (r.check_out &lt; CURDATE() OR r.is_resv = 0)
         ORDER BY
-        r.check_in DESC
+            r.check_in DESC
     </select>
 
     <!-- 취소 가능한 예약 조회 -->
@@ -105,12 +110,15 @@
             r.guest_count,
             r.is_resv,
             r.created_at,
+            r.pay_id,
             a.acm_name,
             a.acm_photo1,
-            a.acm_price
+            a.acm_price as acm_price,
+            p.discount
         FROM
             tbl_reservations r
                 JOIN tbl_acm a ON r.acm_id = a.acm_id
+                LEFT JOIN tbl_pay p ON r.pay_id = p.pay_id
         WHERE
             r.member_code = #{memberCode}
           AND r.check_in &gt; DATE_ADD(CURDATE(), INTERVAL 3 DAY)
@@ -138,9 +146,11 @@
             r.guest_count,
             r.is_resv,
             r.created_at,
+            r.pay_id,
             a.acm_name,
             a.acm_photo1,
-            a.acm_price
+            a.acm_price as acm_price,
+            p.discount
         FROM
             tbl_reservations r
                 JOIN tbl_acm a ON r.acm_id = a.acm_id
@@ -151,17 +161,19 @@
 
     <select id="selectReservationsByAcmId" parameterType="int" resultType="com.udigo.hotel.resv.model.dto.ResvDTO">
         SELECT
-        r.resv_id, r.acm_id, r.member_code, r.check_in, r.check_out,
-        r.guest_count, r.is_resv, r.created_at, r.pay_id,
-        a.acm_name, a.acm_price, a.acm_photo1
+            r.resv_id, r.acm_id, r.member_code, r.check_in, r.check_out,
+            r.guest_count, r.is_resv, r.created_at, r.pay_id,
+            a.acm_name, a.acm_price as acm_price, a.acm_photo1
         FROM
-        tbl_reservations r
+            tbl_reservations r
         JOIN
-        tbl_acm a ON r.acm_id = a.acm_id
+            tbl_acm a ON r.acm_id = a.acm_id
+        LEFT JOIN
+            tbl_pay p ON r.pay_id = p.pay_id
         WHERE
-        r.acm_id = #{acmId}
-        AND r.is_resv = 1  <!-- 취소되지 않은 예약만 조회 -->
+            r.acm_id = #{acmId}
+            AND r.is_resv = 1  <!-- 취소되지 않은 예약만 조회 -->
         ORDER BY
-        r.check_in ASC
+            r.check_in ASC
     </select>
 </mapper>

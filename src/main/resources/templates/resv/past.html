@@ -92,8 +92,8 @@
 
             <!-- 예약 정보를 그리드 레이아웃으로 변경 -->
             <div class="resv-details">
-                <p th:text="'투숙 인원: ' + ${resv.guestCount} + '명'">투숙 인원</p>
                 <p th:text="'체크인: ' + ${#temporals.format(resv.checkIn, 'yyyy/MM/dd')}">체크인 날짜</p>
+                <p th:text="'투숙 인원: ' + ${resv.guestCount} + '명'">투숙 인원</p>
                 <p th:text="'체크아웃: ' + ${#temporals.format(resv.checkOut, 'yyyy/MM/dd')}">체크아웃 날짜</p>
             </div>
 

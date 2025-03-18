@@ -18,7 +18,7 @@ public interface PayMapper {
     AcmDTO getCartItems(int acmId);
 
     // 접속한 사용자 정보 조회
-    MemberDTO getMemberInfo(int memberCode);
+    MemberDTO getMemberInfo(@Param("member_code") int memberCode);
 
     // 결제 정보 저장
     void savePaymentRecord(Map<String, Object> paymentData);
@@ -34,5 +34,8 @@ public interface PayMapper {
     //  ============================
 
     // 접속한 사용자가 예약했던 숙소 내역 조회
-    List<Map<String, Object>> getPayListItems(int memberCode);
+    List<Map<String, Object>> getPayListItems(@Param("memberCode") int memberCode);
+    
+    // 관리자용 - 모든 결제 내역 조회
+    List<Map<String, Object>> getAllPayments();
 }

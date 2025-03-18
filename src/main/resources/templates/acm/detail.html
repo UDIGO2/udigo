@@ -204,7 +204,7 @@
                                     <span class="price" th:text="${#numbers.formatDecimal(acm.acmPrice, 0, 'COMMA', 0, 'POINT')} + '원'">가격</span>
                                     <span class="per-night">/박</span>
                                 </div>
-                                <button class="payment-btn">결제하기</button>
+                                <button class="payment-btn" id="paymentBtn">결제하기</button>
                             </div>
                         </div>
                         <div class="location">
@@ -835,6 +835,83 @@
             
             reviewsContainer.innerHTML = reviewsHTML;
         }
+    </script>
+
+    <!-- 결제 관련 스크립트 추가 -->
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const paymentBtn = document.getElementById('paymentBtn');
+            
+            paymentBtn.addEventListener('click', function() {
+                // 로그인 상태 확인
+                const isLoggedIn = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
+                
+                if (!isLoggedIn) {
+                    alert('로그인이 필요한 서비스입니다.');
+                    window.location.href = '/auth/login';
+                    return;
+                }
+                
+                // 날짜 확인
+                const dateInput = document.querySelector('#date-filter input');
+                if (!dateInput.value || dateInput.value === '') {
+                    alert('체크인/체크아웃 날짜를 선택해주세요.');
+                    document.getElementById('date-filter').click();
+                    return;
+                }
+                
+                // 인원 수 확인
+                const guestInput = document.querySelector('#guest-filter input');
+                if (!guestInput.value || guestInput.value === '') {
+                    alert('인원 수를 선택해주세요.');
+                    document.getElementById('guest-filter').click();
+                    return;
+                }
+                
+                // 선택한 날짜 파싱
+                const dateRangeStr = dateInput.value;
+                const dateParts = dateRangeStr.split(' ~ ');
+                const checkInDate = dateParts[0];
+                const checkOutDate = dateParts[1];
+                
+                // 인원 수 파싱
+                const guestCount = parseInt(guestInput.value.replace('명', ''));
+                
+                // 숙소 정보
+                const acmId = /*[[${acm.acmId}]]*/ '';
+                const acmName = /*[[${acm.acmName}]]*/ '';
+                const acmPrice = /*[[${acm.acmPrice}]]*/ 0;
+                const acmPhoto = /*[[${acm.acmPhoto1}]]*/ '';
+                
+                // 결제 페이지로 데이터 전송
+                const paymentData = {
+                    acmId: acmId,
+                    acmName: acmName,
+                    acmPrice: acmPrice,
+                    acmPhoto: acmPhoto,
+                    checkInDate: checkInDate,
+                    checkOutDate: checkOutDate,
+                    guestCount: guestCount
+                };
+                
+                // 폼 생성 및 데이터 전송
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/pay/payment';
+                
+                // JSON 데이터를 hidden input으로 변환
+                for (const key in paymentData) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = paymentData[key];
+                    form.appendChild(input);
+                }
+                
+                document.body.appendChild(form);
+                form.submit();
+            });
+        });
     </script>
 </body>
 </html>

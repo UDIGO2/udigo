@@ -50,4 +50,9 @@ public class PayService {
     public List<Map<String, Object>> getPayListItems(int memberCode) {
         return  payMapper.getPayListItems(memberCode);
     }
+    
+    // 관리자용 - 모든 결제 내역 조회
+    public List<Map<String, Object>> getAllPayments() {
+        return payMapper.getAllPayments();
+    }
 }
