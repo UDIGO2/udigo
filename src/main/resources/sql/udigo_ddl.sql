@@ -18,7 +18,7 @@
 # use udigo;
 
 # show databases;
-use udigo;
+# use udigo;
 -- --------------------------------------------------------
 -- ddl 부분
 -- --------------------------------------------------------
@@ -39,22 +39,23 @@ DROP TABLE IF EXISTS `tbl_member`;
 
 -- 테이블 생성
 CREATE TABLE `tbl_member` (
-                              `member_code`	INT	NOT NULL AUTO_INCREMENT PRIMARY KEY	COMMENT '회원 고유 코드',
-                              `member_id`	VARCHAR(50)	NOT NULL UNIQUE	COMMENT '사용자  아이디(UNIQUE)',
-                              `member_name`	VARCHAR(30)	NOT NULL	COMMENT '사용자 이름',
-                              `email`	VARCHAR(100)	NOT NULL UNIQUE COMMENT '회원 이메일(UNIQUE)',
-                              `password`	VARCHAR(255)	NOT NULL	COMMENT '암호화된 비밀번호',
-                              `phone_no`	VARCHAR(30)	NULL	COMMENT '휴대폰번호',
-                              `join_date`	DATETIME	NULL	DEFAULT CURRENT_TIMESTAMP	COMMENT '가입일',
-                              `oauth_provider`	VARCHAR(30)	NULL	COMMENT '카카오,네이버,구글 로그인',
-                              `coupon_used`	BOOLEAN	NOT NULL	DEFAULT FALSE	COMMENT '쿠폰 사용 여부(기본값:미사용)',
-                              `temp_pwd`	VARCHAR(30)	NULL	COMMENT '임시비밀번호',
-                              `is_locked`	BOOLEAN	NOT NULL	DEFAULT FALSE	COMMENT '계정잠금여부',
-                              `deactivated_at`	DATETIME	NULL	COMMENT '비활성화 시작일(탈퇴 요청일, 7일 후 삭제됨))',
-                              `deleted_at`	DATETIME	NULL	COMMENT '완전삭제일(비활성화 후 7일 경과)',
-                              `rejoin_at`	DATETIME	NULL	COMMENT '재가입 가능 날짜 (탈퇴 후 30일 후부터 가능)',
-                              `email_verified`	BOOLEAN	NOT NULL	DEFAULT 0	COMMENT '이메일 인증 여부',
-                              `is_verified`	BOOLEAN	NOT NULL	DEFAULT 0	COMMENT '계정검증여부'
+                              `member_code`     INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '회원 고유 코드',
+                              `member_id`       VARCHAR(50) NOT NULL UNIQUE COMMENT '사용자 아이디 (탈퇴 시 deleted_member_회원코드 형식)',
+                              `member_name`     VARCHAR(30) NOT NULL COMMENT '사용자 이름',
+                              `email`           VARCHAR(100) NOT NULL UNIQUE COMMENT '회원 이메일 (UNIQUE)',
+                              `password`        VARCHAR(255) NOT NULL COMMENT '암호화된 비밀번호',
+                              `phone_no`        VARCHAR(30) NULL COMMENT '휴대폰번호',
+                              `join_date`       DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT '가입일',
+                              `oauth_provider`  VARCHAR(30) NULL COMMENT '카카오, 네이버, 구글 로그인',
+                              `coupon_used`     BOOLEAN NOT NULL DEFAULT FALSE COMMENT '쿠폰 사용 여부 (기본값: 미사용)',
+                              `temp_pwd`        VARCHAR(30) NULL COMMENT '임시 비밀번호',
+                              `is_locked`       BOOLEAN NOT NULL DEFAULT FALSE COMMENT '계정 잠금 여부',
+                              `deactivated_at`  DATETIME NULL COMMENT '비활성화 시작일 (탈퇴 요청일, 7일 후 삭제됨)',
+                              `deleted_at`      DATETIME NULL COMMENT '완전 삭제일 (비활성화 후 7일 경과)',
+                              `rejoin_at`       DATETIME NULL COMMENT '재가입 가능 날짜 (탈퇴 후 30일 후부터 가능)',
+                              `email_verified`  BOOLEAN NOT NULL DEFAULT 0 COMMENT '이메일 인증 여부',
+                              `is_verified`     BOOLEAN NOT NULL DEFAULT 0 COMMENT '계정 검증 여부',
+                              `status`          ENUM('ACTIVE', 'WITHDRAWN') NOT NULL DEFAULT 'ACTIVE' COMMENT '회원 상태 (ACTIVE: 정상, WITHDRAWN: 탈퇴)'
 );
 
 

@@ -1,10 +1,12 @@
 package com.udigo.hotel.member.model.dto;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class MemberDTO implements UserDetails {
@@ -15,16 +17,18 @@ public class MemberDTO implements UserDetails {
     private String email;
     private String password;
     private String phoneNo;
-    private boolean couponUsed; // ✅ 쿠폰 사용 여부 추가
+    private boolean couponUsed;
     private List<GrantedAuthority> authorities;
     private String role;
-    private Timestamp joinDate;
+    private LocalDateTime joinDate;
+    private LocalDateTime deletedAt;
+    private String status; // ✅ 추가 (ACTIVE, WITHDRAWN)
 
     public MemberDTO() {}
 
     public MemberDTO(int memberCode, String memberId, String memberName, String email,
                      String password, String phoneNo, List<GrantedAuthority> authorities,
-                     Timestamp joinDate, boolean couponUsed) {
+                     LocalDateTime joinDate, boolean couponUsed, LocalDateTime deletedAt, String status) {
         this.memberCode = memberCode;
         this.memberId = memberId;
         this.memberName = memberName;
@@ -34,6 +38,8 @@ public class MemberDTO implements UserDetails {
         this.authorities = authorities;
         this.joinDate = joinDate;
         this.couponUsed = couponUsed;
+        this.deletedAt = deletedAt;
+        this.status = status;
     }
 
     // ✅ Getter & Setter
@@ -85,12 +91,28 @@ public class MemberDTO implements UserDetails {
         this.phoneNo = phoneNo;
     }
 
-    public Timestamp getJoinDate() {
+    public LocalDateTime getJoinDate() {
         return joinDate;
     }
 
-    public void setJoinDate(Timestamp joinDate) {
+    public void setJoinDate(LocalDateTime joinDate) {
         this.joinDate = joinDate;
+    }
+
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public void setAuthorities(List<GrantedAuthority> authorities) {
@@ -99,6 +121,9 @@ public class MemberDTO implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (authorities == null || authorities.isEmpty()) {
+            return role != null ? Collections.singletonList(new SimpleGrantedAuthority(role)) : Collections.emptyList();
+        }
         return authorities;
     }
 
@@ -130,6 +155,7 @@ public class MemberDTO implements UserDetails {
     public String getRole() {
         return role;
     }
+
     public void setRole(String role) {
         this.role = role;
     }
@@ -149,11 +175,12 @@ public class MemberDTO implements UserDetails {
                 ", memberId='" + memberId + '\'' +
                 ", memberName='" + memberName + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 ", phoneNo='" + phoneNo + '\'' +
                 ", joinDate=" + joinDate +
+                ", deletedAt=" + deletedAt +
+                ", status='" + status + '\'' +  // ✅ 추가
                 ", couponUsed=" + couponUsed +
+                ", role='" + role + '\'' +
                 '}';
     }
-
 }

@@ -20,8 +20,7 @@
         <!-- 상단 탭 (쿠폰 관리 / 회원 탈퇴) -->
         <div class="info-tabs">
             <a href="#" id="couponManageButton" class="info-tab btn-primary" style="text-align: center; display: inline-block; text-decoration: none;">쿠폰 관리</a>
-            <a href="/withdraw.html" class="info-tab btn-danger" style="text-align: center; display: inline-block; text-decoration: none;">회원 탈퇴</a>
-        </div>
+            <a th:href="@{/auth/withdraw}" class="info-tab btn-danger">회원 탈퇴</a>        </div>
 
         <!-- 내 정보 폼 -->
         <form th:action="@{/member/myinfo/update}" method="post">

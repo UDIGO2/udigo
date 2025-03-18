@@ -12,46 +12,30 @@
         <result property="email" column="email"/>
         <result property="password" column="password"/>
         <result property="phoneNo" column="phone_no"/>
-        <result property="couponUsed" column="coupon_used"/>  <!-- ✅ 쿠폰 사용 여부 추가 -->
+        <result property="couponUsed" column="coupon_used"/>
+        <result property="status" column="status"/>
+        <result property="deletedAt" column="deleted_at" javaType="java.time.LocalDateTime"/>
     </resultMap>
 
-    <!-- ✅ 회원가입 쿼리 -->
+    <!-- ✅ 회원 정보 저장 -->
     <insert id="insertMember" parameterType="com.udigo.hotel.member.model.dto.MemberDTO">
-        INSERT INTO tbl_member (member_id, member_name, email, password, phone_no, coupon_used)
-        VALUES (#{memberId}, #{memberName}, #{email}, #{password}, #{phoneNo}, #{couponUsed})
+        INSERT INTO tbl_member (member_id, member_name, email, password, phone_no, coupon_used, status)
+        VALUES (#{memberId}, #{memberName}, #{email}, #{password}, #{phoneNo}, #{couponUsed}, 'ACTIVE')
     </insert>
 
-    <!-- ✅ 회원 조회 (id 기반) -->
-    <select id="findByMemberId" resultType="com.udigo.hotel.member.model.dto.MemberDTO">
-        SELECT
-        member_code,
-        member_id,
-        password,
-        member_name,
-        email,
-        phone_no,
-        coupon_used,  <!-- ✅ 쿠폰 사용 여부 추가 -->
-        CASE
-        WHEN member_code = 1 THEN 'ADMIN'
-        ELSE 'USER'
-        END as role
-        FROM tbl_member
-        WHERE member_id = #{memberId}
+    <!-- ✅ 회원 정보 조회 (ID 기준) -->
+    <select id="findByMemberId" resultMap="memberResultMap">
+        SELECT * FROM tbl_member WHERE member_id = #{memberId}
+    </select>
+
+    <!-- ✅ 비밀번호 조회 (회원 ID 기반) -->
+    <select id="getPasswordByMemberId" resultType="string">
+        SELECT password FROM tbl_member WHERE member_id = #{memberId}
     </select>
 
     <!-- ✅ 이메일 기반 회원 조회 -->
     <select id="findByEmail" resultType="com.udigo.hotel.member.model.dto.MemberDTO">
-        SELECT
-        member_code,
-        email,
-        password,
-        member_name,
-        coupon_used,  <!-- ✅ 쿠폰 사용 여부 추가 -->
-        CASE
-        WHEN member_code = 1 THEN 'ADMIN'
-        ELSE 'USER'
-        END as role,
-        phone_no
+        SELECT member_code, email, password, member_name, phone_no, coupon_used, status
         FROM tbl_member
         WHERE email = #{email}
     </select>
@@ -59,11 +43,7 @@
     <!-- ✅ 회원 정보 수정 -->
     <update id="updateMember" parameterType="com.udigo.hotel.member.model.dto.MemberDTO">
         UPDATE tbl_member
-        SET
-        member_name = #{memberName},
-        email = #{email},
-        phone_no = #{phoneNo},
-        coupon_used = #{couponUsed}  <!-- ✅ 쿠폰 사용 여부 수정 가능 -->
+        SET member_name = #{memberName}, email = #{email}, phone_no = #{phoneNo}, coupon_used = #{couponUsed}
         WHERE member_code = #{memberCode}
     </update>
 
@@ -72,25 +52,40 @@
         SELECT member_id FROM tbl_member WHERE email = #{email}
     </select>
 
-    <!-- ✅ 아이디와 이메일이 일치하는 회원 조회 -->
+    <!-- ✅ 아이디 & 이메일 일치 회원 조회 -->
     <select id="findByMemberIdAndEmail" parameterType="map" resultType="com.udigo.hotel.member.model.dto.MemberDTO">
         SELECT * FROM tbl_member WHERE member_id = #{memberId} AND email = #{email}
     </select>
 
-    <!-- ✅ 비밀번호 업데이트 (임시 비밀번호 저장) -->
+    <!-- ✅ 비밀번호 변경 (임시 비밀번호 저장) -->
     <update id="updatePassword" parameterType="map">
         UPDATE tbl_member SET password = #{password} WHERE member_id = #{memberId}
     </update>
 
+    <!-- ✅ 전체 회원 목록 조회 -->
     <select id="selectAllMembers" resultType="com.udigo.hotel.member.model.dto.MemberDTO">
-        SELECT member_code, member_id, member_name, join_date FROM tbl_member;
+        SELECT member_code, member_id, member_name, join_date FROM tbl_member
     </select>
 
-    <select id="selectMemberById" parameterType="String" resultType="com.udigo.hotel.member.model.dto.MemberDTO">
-        SELECT member_code, member_id, member_name, email, password, phone_no, join_date, role, coupon_used
+    <!-- ✅ 특정 회원 정보 조회 -->
+    <select id="selectMemberById" parameterType="string" resultType="com.udigo.hotel.member.model.dto.MemberDTO">
+        SELECT member_code, member_id, member_name, email, password, phone_no, join_date, coupon_used, status
         FROM tbl_member
-        WHERE member_id = #{memberId};
+        WHERE member_id = #{memberId}
     </select>
+
+    <!-- ✅ 회원 탈퇴 (ID 무효화 + 상태 변경) -->
+    <update id="updateWithdrawMember">
+        UPDATE tbl_member
+        SET
+            member_id = CONCAT('deleted_member_', member_code),
+            email = CONCAT('deleted_', member_id, '@deleted.com'),
+            password = 'DELETED_USER',
+            phone_no = NULL,
+            status = 'WITHDRAWN',
+            deleted_at = NOW()
+        WHERE member_id = #{memberId}
+    </update>
 
     <!-- ✅ 쿠폰 사용 여부 업데이트 -->
     <update id="updateCouponUsed">
@@ -99,6 +94,7 @@
         WHERE member_id = #{memberId}
     </update>
 
+    <!-- ✅ 쿠폰 사용 여부 조회 -->
     <select id="getCouponStatus" parameterType="string" resultType="int">
         SELECT coupon_used FROM tbl_member WHERE member_id = #{memberId}
     </select>

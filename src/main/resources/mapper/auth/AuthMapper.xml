@@ -25,4 +25,6 @@
         WHERE mr.member_code = #{memberCode}
     </select>
 
+
+
 </mapper>

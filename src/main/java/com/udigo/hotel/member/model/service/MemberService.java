@@ -51,7 +51,6 @@ public class MemberService {
         return memberMapper.findByEmail(email);
     }
 
-
     /** ✅ 아이디로 회원 조회 */
     public MemberDTO findByMemberId(String memberId) {
         MemberDTO member = memberMapper.findByMemberId(memberId);
@@ -82,12 +81,12 @@ public class MemberService {
 
         if (member == null) {
             System.out.println("❌ 존재하지 않는 회원 정보: memberId = " + memberId + ", email = " + email);
-            return null; // ✅ 컨트롤러에서 처리
+            return null;
         }
 
-        // ✅ 13자리 임시 비밀번호 생성 (UUID 활용)
+        // ✅ 13자리 임시 비밀번호 생성
         String tempPassword = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 13);
-        String encodedPassword = passwordEncoder.encode(tempPassword); // 암호화
+        String encodedPassword = passwordEncoder.encode(tempPassword);
 
         // ✅ DB에 임시 비밀번호 저장
         memberMapper.updatePassword(memberId, encodedPassword);
@@ -112,17 +111,17 @@ public class MemberService {
     }
 
     // ✅ 전체 회원 목록 가져오기
-
     public List<MemberDTO> getAllMembers() {
-        return memberMapper.selectAllMembers(); // 🚀 MyBatis에서 전체 회원 조회
+        return memberMapper.selectAllMembers();
     }
+
     public MemberDTO getMemberById(String memberId) {
         return memberMapper.selectMemberById(memberId);
     }
+
     @Transactional
     public void useCoupon(String memberId) {
         MemberDTO member = memberMapper.findByMemberId(memberId);
-
 
         if (member == null) {
             throw new RuntimeException("존재하지 않는 회원입니다.");
@@ -132,13 +131,14 @@ public class MemberService {
             throw new RuntimeException("이미 사용된 쿠폰입니다.");
         }
 
-        memberMapper.updateCouponUsed(memberId, true); // ✅ 쿠폰 사용 완료로 변경
+        memberMapper.updateCouponUsed(memberId, true);
         System.out.println("🎉 쿠폰 사용 완료: " + memberId);
     }
+
     /** ✅ 쿠폰 사용 여부 확인 */
     public boolean checkCouponStatus(String memberId) {
         Integer couponUsed = memberMapper.getCouponStatus(memberId);
-        return couponUsed != null && couponUsed == 1; // 1이면 사용됨, 0이면 미사용
+        return couponUsed != null && couponUsed == 1;
     }
 
     // ✅ 비밀번호 변경
@@ -147,6 +147,18 @@ public class MemberService {
             throw new IllegalArgumentException("memberId 또는 newPassword가 null입니다.");
         }
         memberMapper.updatePassword(memberId, newPassword);
+    }
+
+    /** ✅ 회원 ID로 비밀번호 가져오기 */
+    public String getPasswordByMemberId(String memberId) {
+        return memberMapper.getPasswordByMemberId(memberId);
+    }
+
+    /** ✅ 회원 탈퇴 기능 */
+    @Transactional
+    public boolean withdrawMember(String memberId) {
+        int result = memberMapper.updateWithdrawMember(memberId);
+        return result > 0; // ✅ 업데이트 성공 여부 반환
     }
 
 }
