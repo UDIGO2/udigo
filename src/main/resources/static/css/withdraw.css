@@ -1,84 +1,142 @@
+/* 전체 페이지 스타일 */
 #withdraw-page {
     font-family: 'Noto Sans KR', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 160px); /* 헤더, 푸터 공간 확보 */
-    padding: 80px 0; /* 위아래 여백 추가 */
-    background-color: #f8f9fa;
+    min-height: calc(100vh - 160px);
+    padding: 80px 0;
+    background-color: #ffffff;
 }
 
+/* 회원 탈퇴 컨테이너 */
 .withdraw-container {
-    width: 400px;
-    padding: 20px;
+    max-width: 600px;
+    width: 100%;
+    padding: 40px;
     background: white;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
+/* 제목 스타일 */
 h2 {
-    font-size: 24px;
+    font-size: 26px;
     font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* 부가 설명 */
+.description {
+    font-size: 14px;
+    color: #666;
     margin-bottom: 20px;
 }
 
+/* 비밀번호 입력 안내 문구 */
+p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+/* 비밀번호 입력 필드 */
 .form-group {
-    margin-bottom: 15px;
     text-align: left;
+    margin-bottom: 20px;
 }
 
 .form-group label {
     font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 5px;
-    display: block;
+    font-weight: bold;
+    color: #0056b3;
 }
 
 .form-group input {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 16px;
+    margin-top: 5px;
 }
 
+/* 경고 메시지 스타일 */
 .warning-text {
     font-size: 14px;
-    color: red;
-    margin: 10px 0;
+    color: #333;
     text-align: left;
+    margin-bottom: 20px;
+    line-height: 1.6;
 }
 
-.btn-danger {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 12px;
-    font-size: 16px;
-    width: 100%;
-    cursor: pointer;
+.warning-text strong {
+    font-weight: bold;
+    color: #d9534f; /* 강조 색상 */
 }
 
-.btn-secondary {
-    display: block;
-    margin-top: 10px;
-    background-color: #6c757d;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 12px;
-    font-size: 16px;
-    text-align: center;
-    text-decoration: none;
-}
-
-.message {
-    font-size: 14px;
-    margin-top: 10px;
-}
-
-.error {
+/* 경고 아이콘 스타일 */
+.warning-text .icon {
     color: red;
+    font-weight: bold;
+    margin-right: 5px;
+    font-size: 16px;
+}
+
+/* 버튼 컨테이너 (회원 탈퇴 & 취소 버튼 정렬) */
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* 버튼 사이 간격 */
+    width: 100%;
+}
+
+/* 회원 탈퇴 버튼 & 취소 버튼 동일 크기 */
+.btn-danger, .btn-secondary {
+    width: 180px;
+    height: 50px;
+    font-size: 18px;
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center; /* 버튼 내부 텍스트 수직 중앙 정렬 */
+    justify-content: center; /* 버튼 내부 텍스트 가로 중앙 정렬 */
+    line-height: 50px; /* 폰트 높이 맞추기 */
+}
+
+/* 회원 탈퇴 버튼 */
+.btn-danger {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #0056b3;
+}
+
+/* 취소 버튼 (회원 탈퇴 버튼과 동일한 높이 & 선 정렬) */
+.btn-secondary {
+    border: 2px solid #007bff;
+    background: none;
+    color: #007bff;
+    box-sizing: border-box; /* border로 인해 크기가 달라지는 문제 해결 */
+}
+
+.btn-secondary:hover {
+    background: #007bff;
+    color: white;
+}
+
+/* 푸터 스타일 */
+.footer {
+    background: white;
+    padding: 20px 0;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
 }

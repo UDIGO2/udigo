@@ -36,20 +36,20 @@ public class SecurityConfig {
                     auth.requestMatchers("/", "/auth/**", "/member/signup", "/member/api/**", "/auth/login").permitAll();
                     auth.requestMatchers("/css/**", "/js/**", "/image/**", "/reservations/**", "/acm/**", "/board/**").permitAll();
 
-                    // ✅ 권한 설정
+                    //  권한 설정
                     auth.requestMatchers("/member/useCoupon", "/changepassword").permitAll();
                     auth.requestMatchers("/search", "/hotel/**", "/regional-recommendations").permitAll();
 
-                    // ✅ 게시판 관련 권한 설정
+                    //  게시판 관련 권한 설정
                     auth.requestMatchers("/board/notice", "/board/FAQ").permitAll();  // 공지사항 & FAQ는 모두 접근 가능
                     auth.requestMatchers("/board/ask/**").authenticated();  // 1:1 문의는 로그인 필요
                     auth.requestMatchers("/board/admin/**").hasRole("ADMIN");  // 관리자 전용
 
-                    // ✅ 예약 관련 권한 설정
+                    //  예약 관련 권한 설정
                     auth.requestMatchers("/reservations/list").permitAll();  // 예약 목록 조회는 가능
                     auth.requestMatchers("/reservations/**").authenticated();  // 예약 관련 기능은 로그인 필요
 
-                    // ✅ 관리자 페이지 설정
+                    //  관리자 페이지 설정
                     auth.requestMatchers("/admin/**").hasRole("ADMIN");  // 관리자는 /admin/** 경로 접근 가능
                     auth.requestMatchers("/member/admin/**", "/adminList").hasRole("ADMIN");  // ✅ 관리자 전용 회원 관리 페이지 설정
 

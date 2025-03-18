@@ -22,7 +22,7 @@ public class MemberDTO implements UserDetails {
     private String role;
     private LocalDateTime joinDate;
     private LocalDateTime deletedAt;
-    private String status; // ✅ 추가 (ACTIVE, WITHDRAWN)
+    private String status;
 
     public MemberDTO() {}
 
@@ -42,7 +42,7 @@ public class MemberDTO implements UserDetails {
         this.status = status;
     }
 
-    // ✅ Getter & Setter
+    //  Getter & Setter
     public int getMemberCode() {
         return memberCode;
     }
@@ -178,7 +178,7 @@ public class MemberDTO implements UserDetails {
                 ", phoneNo='" + phoneNo + '\'' +
                 ", joinDate=" + joinDate +
                 ", deletedAt=" + deletedAt +
-                ", status='" + status + '\'' +  // ✅ 추가
+                ", status='" + status + '\'' +
                 ", couponUsed=" + couponUsed +
                 ", role='" + role + '\'' +
                 '}';

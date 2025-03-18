@@ -7,15 +7,16 @@
     <link rel="stylesheet" th:href="@{/css/mypage.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
-
 </head>
 <body>
+
 <!-- ✅ 헤더 추가 -->
 <div th:replace="~{fragments/header :: header}"></div>
 
 <main class="mypage-container">
     <h1>MyPage</h1>
 
+    <!-- ✅ 사용자 프로필 -->
     <div class="user-profile">
         <img th:src="@{/image/mypage/member.png}" alt="User" class="user-icon">
         <div class="user-info">
@@ -24,39 +25,39 @@
         <a href="/member/changepassword" class="password-link">비밀번호 변경 ></a>
     </div>
 
+    <!-- ✅ 내 정보 -->
     <div class="my-info">
         <a href="/member/myinfo" class="info-link">내 정보 ></a>
     </div>
 
+    <!-- ✅ 예약 & 결제 -->
     <section class="reservation-section">
         <h3>예약/결제</h3>
-        <div class="reservation-links">
-            <a href="/payList" class="full-width-link">거래내역 전체 조회 ></a>
-            <div class="split-links">
-                <a href="#">예약 조회 ></a>
-                <a href="#">예약 취소 ></a>
-            </div>
+        <a href="/payList" class="full-width-link">거래내역 전체 조회 ></a>
+        <div class="split-links">
+            <a href="#">예약 조회 ></a>
+            <a href="#">예약 취소 ></a>
         </div>
     </section>
 
+    <!-- ✅ 장바구니 & 후기 -->
     <section class="basket-section">
         <h3>장바구니/후기</h3>
-        <div class="basket-links">
-            <a href="#" class="full-width-link">장바구니 목록 ></a>
-            <a href="#" class="full-width-link">찜 목록 ></a>
-            <div class="split-links">
-                <a href="#">좋아요 목록 ></a>
-                <a href="/review/myReview">내 후기 ></a>
-            </div>
+        <a href="#" class="full-width-link">장바구니 목록 ></a>
+        <a href="#" class="full-width-link">찜 목록 ></a>
+        <div class="split-links">
+            <a href="#">좋아요 목록 ></a>
+            <a href="/review/myReview">내 후기 ></a>
         </div>
     </section>
 
-    <a href="#" class="logout">로그아웃 ></a>
+    <!-- ✅ 로그아웃 -->
+    <a href="/auth/logout" class="logout">로그아웃 ></a>
 </main>
 
+<!-- ✅ 푸터 추가 -->
 <div th:replace="~{fragments/footer :: footer}"></div>
 
-<!--<script src="/js/mypage.js"></script>  ----   a태그 버튼 안눌리니까 일단 풀지 말아주세용  -->
 <script src="/js/header.js"></script>
 </body>
 </html>

@@ -9,10 +9,10 @@
     <link rel="stylesheet" th:href="@{/css/footer.css}">
 </head>
 <body>
-<!-- ✅ 헤더 추가 -->
+<!--  헤더 추가 -->
 <div th:replace="~{fragments/header :: header}"></div>
 
-<!-- ✅ 전체 페이지 컨테이너 -->
+<!--  전체 페이지 컨테이너 -->
 
     <div class="memberlist-container">
         <h1>회원 전체 조회</h1>
@@ -41,13 +41,13 @@
     </div>
 
 
-<!-- ✅ 푸터 추가 -->
+<!--  푸터 추가 -->
 <div th:replace="~{fragments/footer :: footer}"></div>
 
 <script src="/js/header.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        fetch('/admin/api/members') // ✅ 백엔드에서 회원 목록을 가져오는 API 엔드포인트
+        fetch('/admin/api/members') //  백엔드에서 회원 목록을 가져오는 API 엔드포인트
             .then(response => {
                 if (!response.ok) {
                     throw new Error("서버 응답이 실패했습니다.");

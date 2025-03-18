@@ -17,28 +17,30 @@
 <div id="withdraw-page">
   <div class="withdraw-container">
     <h2>회원 탈퇴</h2>
+    <p>현재 비밀번호가 일치하는 경우 탈퇴할 수 있습니다.</p>
 
-    <!-- 성공/실패 메시지 -->
+    <!-- ✅ 성공/실패 메시지 -->
     <p th:if="${errorMessage != null}" class="message error" th:text="${errorMessage}"></p>
 
     <form id="withdrawForm" th:action="@{/auth/withdraw}" method="post" onsubmit="return validateWithdrawal();">
-      <!-- 현재 비밀번호 -->
+      <!-- ✅ 현재 비밀번호 입력 -->
       <div class="form-group">
         <label for="password">비밀번호 확인</label>
         <input type="password" id="password" name="password" placeholder="비밀번호 입력" required>
       </div>
 
-      <!-- 탈퇴 안내 메시지 -->
+      <!-- ✅ 탈퇴 안내 메시지 -->
       <p class="warning-text">
-        ❗ 회원 탈퇴 시 계정이 즉시 삭제되며, 복구가 불가능합니다.<br>
-        정말로 탈퇴하시겠습니까?
+        <span class="icon">❗</span> <strong>회원 탈퇴를 진행하시겠습니까?</strong><br>
+        탈퇴 시 계정 정보는 삭제되지만, <strong>관련 법령에 따라 일부 거래 내역은 일정 기간 보관될 수 있습니다.</strong><br>
+        탈퇴 후에는 <strong>동일한 아이디로 재가입이 제한될 수 있습니다.</strong> 계속 진행하시겠습니까?
       </p>
 
-      <!-- 회원 탈퇴 버튼 -->
-      <button type="submit" class="btn-danger">회원 탈퇴</button>
-
-      <!-- 취소 버튼 -->
-      <a href="/member/mypage" class="btn-secondary">취소</a>
+      <!-- ✅ 버튼 컨테이너 -->
+      <div class="button-container">
+        <button type="submit" class="btn-danger">회원 탈퇴</button>
+        <a href="/member/mypage" class="btn-secondary">취소</a>
+      </div>
     </form>
   </div>
 </div>
@@ -50,9 +52,8 @@
 <script src="/js/header.js"></script>
 
 <script th:inline="javascript">
-  var errorMessage = /*[[${errorMessage}]]*/ null;
-
   document.addEventListener("DOMContentLoaded", function() {
+    var errorMessage = /*[[${errorMessage}]]*/ null;
     if (errorMessage && errorMessage.trim() !== "" && errorMessage.trim() !== "null") {
       alert(errorMessage);
     }
@@ -69,11 +70,7 @@
 
     // ✅ 탈퇴 확인 알림창
     let confirmation = confirm("정말로 탈퇴하시겠습니까?");
-    if (!confirmation) {
-      return false; // 사용자가 취소하면 폼 제출 방지
-    }
-
-    return true; // 폼 제출 진행
+    return confirmation; // 사용자가 확인하면 폼 제출 진행, 취소하면 방지
   }
 </script>
 

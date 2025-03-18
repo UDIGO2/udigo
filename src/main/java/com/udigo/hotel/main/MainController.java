@@ -12,7 +12,7 @@ public class MainController {
     @GetMapping("/")
     public String mainPage(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
         if (userDetails != null) {
-            int memberCode = userDetails.getMemberCode(); // ✅ memberCode 가져오기
+            int memberCode = userDetails.getMemberCode(); //  memberCode 가져오기
             model.addAttribute("memberCode", String.valueOf(memberCode));
         }
         return "main/main";  // templates/main/main.html을 반환
@@ -38,7 +38,7 @@ public class MainController {
 
     @GetMapping("/cart-main")
     public String cart() {
-        return "cart/cart";  // 다른 뷰로 변경
+        return "cart/cart";
     }
 
 }

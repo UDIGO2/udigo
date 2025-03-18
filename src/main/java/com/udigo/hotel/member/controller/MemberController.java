@@ -94,7 +94,7 @@ public class MemberController {
         return "redirect:/auth/login";
     }
 
-    /** ✅ 쿠폰 사용 API */
+    /* 쿠폰 사용 API */
     @PostMapping("/useCoupon")
     public String useCoupon(@ModelAttribute MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
         try {
@@ -103,10 +103,10 @@ public class MemberController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "쿠폰 사용 실패: " + e.getMessage());
         }
-        return "redirect:/member/mypage"; // ✅ 마이페이지로 리디렉트
+        return "redirect:/member/mypage"; //  마이페이지로 리디렉트
     }
 
-    /** ✅ GET 요청 지원: 브라우저에서 실행 가능하도록 변경 */
+    /* GET 요청 지원: 브라우저에서 실행 가능하도록 변경 */
     @GetMapping("/useCoupon")
     public String useCouponGet(@ModelAttribute MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
         return useCoupon(memberDTO, redirectAttributes);

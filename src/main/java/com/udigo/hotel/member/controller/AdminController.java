@@ -52,8 +52,8 @@ public class AdminController {
 
     @GetMapping("/memberlist")
     public String getMemberList(Model model) {
-        List<MemberDTO> members  = memberService.getAllMembers();  // ✅ 회원 목록 가져오기
-        model.addAttribute("memberList", members);  // ✅ Thymeleaf에서 사용할 데이터 전달
+        List<MemberDTO> members  = memberService.getAllMembers();  //  회원 목록 가져오기
+        model.addAttribute("memberList", members);  //  Thymeleaf에서 사용할 데이터 전달
         return "member/admin/memberlist";
     }
 
