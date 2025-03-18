@@ -21,6 +21,7 @@ public class ReviewDTO {
     private String acmPhoto1;
     private String acmPhoto2;
     private String acmPhoto3;
+    private String memberName;
 
     public ReviewDTO() {
     }
@@ -172,6 +173,14 @@ public class ReviewDTO {
         this.acmPhoto3 = acmPhoto3;
     }
 
+    public String getMemberName() {
+        return memberName;
+    }
+
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
+    }
+
     @Override
     public String toString() {
         return "ReviewDTO{" +
@@ -191,6 +200,7 @@ public class ReviewDTO {
                 ", acmPhoto1='" + acmPhoto1 + '\'' +
                 ", acmPhoto2='" + acmPhoto2 + '\'' +
                 ", acmPhoto3='" + acmPhoto3 + '\'' +
+                ", memberName='" + memberName + '\'' +
                 '}';
     }
 }

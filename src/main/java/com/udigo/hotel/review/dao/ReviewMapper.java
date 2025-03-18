@@ -18,5 +18,7 @@ public interface ReviewMapper {
      int getTotalReviewCount();
      void deleteReviewByAdmin(@Param("reviewId") int reviewId);
 
-    }
+    // 숙소별 후기 조회
+    List<ReviewDTO> findReviewsByAcmId(@Param("acmId") int acmId);
+}
 

@@ -493,6 +493,9 @@ INSERT INTO `tbl_reservations` (acm_id, member_code, check_in, check_out, guest_
 # 리뷰 데이터 / 리뷰 이미지 추가 예정
 INSERT INTO `tbl_reviews` (member_code, acm_id, resv_id, content, written_at) VALUES
 (101,101,1,'후기 작성 내용 입니다.1',now()),
+(102,101,1,'후기 작성 내용 입니다.2',now()),
+(103,101,1,'후기 작성 내용 입니다.333',now()),
+(104,101,1,'후기 작성 내용 입니다.444',now()),
 (101,102,2,'후기 작성 내용 입니다.2',now()),
 (101,103,3,'후기 작성 내용 입니다.3',now()),
 (101,104,4,'후기 작성 내용 입니다.4',now()),

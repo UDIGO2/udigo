@@ -90,5 +90,10 @@ public class ReviewService {
     public void deleteReviewByAdmin(int reviewId) {
         reviewMapper.deleteReviewByAdmin(reviewId);
     }
+
+    // 숙소별 후기 조회
+    public List<ReviewDTO> getReviewsByAcmId(int acmId) {
+        return reviewMapper.findReviewsByAcmId(acmId);
+    }
 }
 
