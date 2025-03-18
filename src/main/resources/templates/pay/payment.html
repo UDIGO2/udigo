@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>결제하기 | UDIGO</title>
+  <link rel="stylesheet" th:href="@{/css/paypage.css}">
+  <link rel="stylesheet" th:href="@{/css/header.css}">
+  <link rel="stylesheet" th:href="@{/css/footer.css}">
+  <style>
+    /* 둥근 체크버튼 스타일 */
+    .round-button {
+      width: 30px;
+      height: 30px;
+      border-radius: 50px;
+      background-color: #ffffff;
+      color: #000000;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .round-button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+
+
+<div class="pay_main">
+  <!-- 예약 정보 -->
+  <div class="mt-6 border-b pb-4">
+
+    <ul id="paymentPreviewList">
+
+      <!-- 결제할 숙소 목록이 여기에 표시됨 -->
+    </ul>
+    <p class="text-gray-700"><strong>체크인:</strong> <span id="checkIn"></span></p>
+    <p class="text-gray-700"><strong>체크아웃:</strong> <span id="checkOut"></span></p>
+    <p class="text-gray-700"><strong>최대 인원:</strong> <span id="guestCount"></span>명</p>
+    <p><strong>총 결제 금액: <span id="defaultPrice"></span>원</strong></p>
+
+  </div>
+
+  <!-- 예약자 정보 -->
+  <div class="mt-6">
+    <h2 class="text-lg font-semibold">회원 정보</h2>
+    <input type="text" id="userName" placeholder="회원 이름을 입력해주세요." class="w-full p-2 border rounded mt-2">
+
+    <h2 class="text-lg font-semibold mt-4">휴대폰 번호</h2>
+    <input type="text" id="phoneNo" placeholder="전화번호를 입력해주세요." class="w-full p-2 border rounded mt-2">
+  </div>
+
+  <!-- 쿠폰 적용 -->
+  <div class="mt-6">
+    <label class="block text-lg font-semibold">쿠폰 적용</label>
+    <div class="bg-gray-200 p-3 mt-2 rounded flex justify-between">
+      <span>첫 회원가입 쿠폰 5,000원</span>
+      <span id="couponDiscount">-5,000</span>
+    </div>
+    <button id="applyCouponButton" class="btn-primary">쿠폰 사용</button>
+  </div>
+
+  <!-- 결제 정보 -->
+  <div class="mt-6">
+    <h2 class="text-lg font-semibold">총 결제 금액</h2>
+    <p class="text-xl font-bold text-blue-600"><span id="totalPrice"></span>원</p>
+  </div>
+
+
+
+
+  <!-- 환불 정책 -->
+  <div class="mt-6 text-sm text-gray-600">
+    <p><strong>현장 결제</strong>추가 인원 발생, 추가 금액 발생 등은 현장에서 추가 금액을 납부하셔야 합니다.</p>
+    <p><strong>취소 수수료</strong> 결제취소의 기준은 7일 이전이어야 하며 7일 이후 결제취소 및 환불은 불가합니다.</p>
+    <p><strong>필수 이용 수칙</strong> 각 숙박시설의 규정(규칙 및 약관 등)을 준수해야 합니다. <br>
+      숙박시설 규정을 위반 시 입실 불가, 퇴실 조치, 추가요금 등이 발생할 수 있으며, <br>
+      이에 대한 모든 책임은 예약 및 이용 고객님에게 있으므로 숙박시설의 이용규칙과 시설 현황을 반드시 확인하시기 바랍니다.</p>
+  </div>
+
+  <!-- 결제 버튼 -->
+  <button id="confirmPayment" class="payButton">결제하기</button>
+
+</div>
+<script>
+  const couponToggle = document.getElementById("couponToggle");
+  const checkButton = document.getElementById("checkButton");
+
+  // 체크박스의 상태에 따라 버튼 활성화/비활성화
+  couponToggle.addEventListener("change", function() {
+    const couponUsed = couponToggle.checked; // true이면 쿠폰 사용
+    checkButton.disabled = !couponUsed; // 사용 true면 버튼 활성화, false면 비활성화
+  });
+
+  // 버튼 클릭 시 동작 예제
+  checkButton.addEventListener("click", function() {
+    if (!checkButton.disabled) {
+      alert("쿠폰이 적용되었습니다!");
+    }
+  });
+
+</script>
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+<script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="/js/header.js"></script>
+<script src="/js/pay/payment.js"></script>
+<script src="/js/pay/paymentHandler.js"></script>
+</body>
+</html>
