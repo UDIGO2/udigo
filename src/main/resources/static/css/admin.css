@@ -1,5 +1,19 @@
-/* 전체 컨테이너 스타일 */
-.memberlist-container {
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    font-weight: 500;
+}
+
+.main-content {
     width: 80%;
     margin: 50px auto;
     text-align: center;
@@ -57,23 +71,6 @@ tbody tr:nth-child(odd) {
 
 .btn-detail:hover {
     background-color: #0056b3;
-}
-
-/* 반응형 디자인 */
-@media (max-width: 768px) {
-    .container {
-        width: 95%;
-    }
-
-    th, td {
-        padding: 8px;
-        font-size: 0.9rem;
-    }
-
-    .btn-detail {
-        padding: 6px 10px;
-        font-size: 0.8rem;
-    }
 }
 
 .memberdetail-container {

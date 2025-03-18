@@ -68,23 +68,29 @@
 <!-- ✅ JavaScript 추가 -->
 <script src="/js/header.js"></script>
 
+<!-- ✅ JavaScript 포함 -->
 <script th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("couponManageButton").addEventListener("click", function (event) {
             event.preventDefault(); // 기본 이동 동작 막기
 
             let memberId = document.getElementById("memberId").value;
+            console.log("✅ API 요청: /api/member/coupons?memberId=" + memberId); // 로그 추가
+
             fetch(`/api/member/coupons?memberId=${memberId}`)
                 .then(response => {
+                    console.log("✅ 응답 상태:", response.status); // 응답 상태 코드 확인
                     if (!response.ok) {
                         throw new Error("서버 응답 오류");
                     }
                     return response.text();
                 })
                 .then(message => {
+                    console.log("✅ 서버 응답 메시지:", message);
                     alert(message);
                 })
                 .catch(error => {
+                    console.error("❌ 쿠폰 조회 실패:", error);
                     alert("쿠폰 정보를 불러올 수 없습니다.");
                 });
         });

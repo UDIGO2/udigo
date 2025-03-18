@@ -25,16 +25,19 @@
     <div class="h_nav-buttons">
       <!-- ✅ 로그인한 경우 -->
       <div th:if="${#authorization.expression('isAuthenticated()')}">
-        <span class="welcome-message" th:text="|${#authentication.principal.memberId}님 환영합니다!|">사용자명</span>
+        <span class="welcome-message" th:text="|${#authentication.principal.memberId}님 환영합니다!|"></span>
 
-        <span id="memberCodeElement" th:text="${#authentication.principal.memberCode}" style="display: none;"></span>
-
-        <a href="/cart" class="cart-icon">
-          🛒 <span class="cart-count" th:text="${session.cartCount != null ? session.cartCount : 0}"></span>
-        </a>
-
+        <!-- ✅ 일반 사용자만 마이페이지 버튼 보이기 -->
+        <th:block th:unless="${#authorization.expression('hasRole(''ADMIN'')')}">
+          <a href="/cart" class="cart-icon">
+            🛒 <span class="cart-count"></span>
+          </a>
           <button class="login-btn" onclick="location.href='/member/mypage'">마이페이지</button>
-          <a href="/admin/adminpage" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">관리자 페이지</a>
+        </th:block>
+
+        <th:block th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+          <button class="admin-page-btn" onclick="location.href='/admin/adminpage'">관리자 페이지</button>
+        </th:block>
 
         <form th:action="@{/auth/logout}" method="post" style="display:inline;">
           <th:block th:if="${_csrf != null}">

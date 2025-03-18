@@ -12,14 +12,13 @@ body {
     font-weight: 500;
 }
 
-#login-page {
+.main-content {
     font-family: 'Noto Sans KR', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 160px); /* 헤더, 푸터 공간 확보 */
-    padding: 80px 0; /* 위아래 여백 추가 */
     background-color: #f9fafb;
+    height: 60vh
 }
 
 .login-container {
@@ -29,15 +28,6 @@ body {
     padding: 40px;
     width: 400px;
     text-align: center;
-}
-
-/* 헤더와 푸터 간격 조정 */
-header {
-    margin-bottom: 40px;
-}
-
-footer {
-    margin-top: 40px;
 }
 
 .login-container h2 {
@@ -50,10 +40,20 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    margin-bottom: 20px; /* 그룹 간의 여백 */
+    text-align: left; /
+}
+
+.login-container label {
+    width: 80px; /* 고정된 너비 설정 (조절 가능) */
+    text-align: left; /* 왼쪽 정렬 */
+    margin-right: 10px;
+    display: block; /* 입력 필드와 간격 조정 */
 }
 
 .login-container input[type="text"],
 .login-container input[type="password"] {
+    width: 100%; 
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -81,7 +81,7 @@ footer {
 }
 
 .signup-link a {
-    color: #4361ee;
+    color: #666;
     text-decoration: none;
 }
 

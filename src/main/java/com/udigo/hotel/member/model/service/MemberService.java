@@ -161,4 +161,8 @@ public class MemberService {
         return result > 0; //  업데이트 성공 여부 반환
     }
 
+    public boolean isMemberIdDuplicate(String memberId) {
+        MemberDTO member = memberMapper.findByMemberId(memberId);
+        return member != null; // 데이터가 존재하면 중복 아이디
+    }
 }

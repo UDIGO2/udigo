@@ -23,6 +23,7 @@ public class MemberDTO implements UserDetails {
     private LocalDateTime joinDate;
     private LocalDateTime deletedAt;
     private String status;
+    private String formattedJoinDate;
 
     public MemberDTO() {}
 
@@ -99,6 +100,10 @@ public class MemberDTO implements UserDetails {
         this.joinDate = joinDate;
     }
 
+    public String getFormattedJoinDate() { return formattedJoinDate; }
+
+    public void setFormattedJoinDate(String formattedJoinDate) { this.formattedJoinDate = formattedJoinDate;}
+
     public LocalDateTime getDeletedAt() {
         return deletedAt;
     }
@@ -152,9 +157,7 @@ public class MemberDTO implements UserDetails {
         return true;
     }
 
-    public String getRole() {
-        return role;
-    }
+    public String getRole() { return role; }
 
     public void setRole(String role) {
         this.role = role;
@@ -183,4 +186,9 @@ public class MemberDTO implements UserDetails {
                 ", role='" + role + '\'' +
                 '}';
     }
+
+
+
+
+
 }

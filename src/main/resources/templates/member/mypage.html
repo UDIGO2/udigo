@@ -10,54 +10,53 @@
 </head>
 <body>
 
-<!-- ✅ 헤더 추가 -->
+<!-- 헤더 추가 -->
 <div th:replace="~{fragments/header :: header}"></div>
+<div class="content container">
+    <main class="mypage-container">
+        <h1>MyPage</h1>
 
-<main class="mypage-container">
-    <h1>MyPage</h1>
-
-    <!-- ✅ 사용자 프로필 -->
-    <div class="user-profile">
-        <img th:src="@{/image/mypage/member.png}" alt="User" class="user-icon">
-        <div class="user-info">
-            <h2 th:text="${memberId + '님'}">사용자</h2>
+        <!--  사용자 프로필 -->
+        <div class="user-profile">
+            <img th:src="@{/image/mypage/member.png}" alt="User" class="user-icon">
+            <div class="user-info">
+                <h2 th:text="${memberId + '님'}">사용자</h2>
+            </div>
+            <a href="/member/changepassword" class="password-link">비밀번호 변경 ></a>
         </div>
-        <a href="/member/changepassword" class="password-link">비밀번호 변경 ></a>
-    </div>
 
-    <!-- ✅ 내 정보 -->
-    <div class="my-info">
-        <a href="/member/myinfo" class="info-link">내 정보 ></a>
-    </div>
-
-    <!-- ✅ 예약 & 결제 -->
-    <section class="reservation-section">
-        <h3>예약/결제</h3>
-        <a href="/payList" class="full-width-link">거래내역 전체 조회 ></a>
-        <div class="split-links">
-            <a href="#">예약 조회 ></a>
-            <a href="#">예약 취소 ></a>
+        <!--  내 정보 -->
+        <div class="my-info">
+            <a href="/member/myinfo" class="info-link">내 정보 ></a>
         </div>
-    </section>
 
-    <!-- ✅ 장바구니 & 후기 -->
-    <section class="basket-section">
-        <h3>장바구니/후기</h3>
-        <a href="#" class="full-width-link">장바구니 목록 ></a>
-        <a href="#" class="full-width-link">찜 목록 ></a>
-        <div class="split-links">
-            <a href="#">좋아요 목록 ></a>
-            <a href="/review/myReview">내 후기 ></a>
-        </div>
-    </section>
+        <!--  예약 & 결제 -->
+        <section class="reservation-section">
+            <h3>예약/결제</h3>
+            <a href="/payList" class="full-width-link">거래내역 전체 조회 ></a>
+            <div class="split-links">
+                <a href="#">예약 조회 ></a>
+                <a href="#">예약 취소 ></a>
+            </div>
+        </section>
 
-    <!-- ✅ 로그아웃 -->
-    <a href="/auth/logout" class="logout">로그아웃 ></a>
-</main>
+        <!--  장바구니 & 후기 -->
+        <section class="basket-section">
+            <h3>장바구니/후기</h3>
+            <a href="#" class="full-width-link">장바구니 목록 ></a>
+            <a href="#" class="full-width-link">찜 목록 ></a>
+            <div class="split-links">
+                <a href="#">좋아요 목록 ></a>
+                <a href="/review/myReview">내 후기 ></a>
+            </div>
+        </section>
 
-<!-- ✅ 푸터 추가 -->
-<div th:replace="~{fragments/footer :: footer}"></div>
-
+        <!--  로그아웃 -->
+        <a href="/auth/logout" class="logout">로그아웃 ></a>
+    </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+<!--<script src="/js/mypage.js"></script>-->
 <script src="/js/header.js"></script>
 </body>
 </html>

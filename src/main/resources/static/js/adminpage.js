@@ -98,4 +98,6 @@ document.addEventListener('DOMContentLoaded', function() {
             window.open(link.href, "_blank"); // 🚀 새 창에서 열기
         });
     });
+
+
 });

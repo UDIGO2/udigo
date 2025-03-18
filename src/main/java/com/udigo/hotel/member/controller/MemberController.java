@@ -49,6 +49,20 @@ public class MemberController {
         return "redirect:/member/signup";
     }
 
+    @PostMapping("/checkDuplicate")
+    public String checkDuplicate(@RequestParam("memberId") String memberId, RedirectAttributes redirectAttributes) {
+        boolean isDuplicate = memberService.isMemberIdDuplicate(memberId);
+
+        if (isDuplicate) {
+            redirectAttributes.addFlashAttribute("duplicateMessage", "이미 존재하는 아이디입니다.");
+        } else {
+            redirectAttributes.addFlashAttribute("duplicateMessage", "사용 가능한 아이디입니다.");
+            redirectAttributes.addFlashAttribute("checkedMemberId", memberId); // 입력 유지
+        }
+
+        return "redirect:/member/signup"; // 회원가입 페이지로 이동
+    }
+
     @GetMapping("/mypage")
     public String myPage(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();       // security 관련부분

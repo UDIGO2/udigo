@@ -26,8 +26,8 @@
             <div class="form-group">
                 <label for="memberId">아이디</label>
                 <div class="btn-container">
-                    <input type="text" id="memberId" name="memberId" placeholder="아이디" required>
-                    <button type="button" class="btn-check">중복 확인</button>
+                    <input type="text" id="memberId" name="memberId" th:value="${checkedMemberId}" required oninput="checkIdInput()">
+                    <button type="button" id="checkDuplicateBtn" onclick="checkDuplicateId()" disabled>중복 확인</button>
                 </div>
             </div>
 
@@ -90,10 +90,12 @@
 <script src="/js/header.js"></script>
 
 <script th:inline="javascript">
-    var successMessage = /*[[${successMessage}]]*/ null;
-    var errorMessage = /*[[${errorMessage}]]*/ null;
-
     document.addEventListener("DOMContentLoaded", function() {
+        var successMessage = /*[[${successMessage}]]*/ null;
+        var errorMessage = /*[[${errorMessage}]]*/ null;
+        var duplicateMessage = /*[[${duplicateMessage}]]*/ null;
+        var checkedMemberId = /*[[${checkedMemberId}]]*/ null;
+
         if (successMessage && successMessage.trim() !== "" && successMessage.trim() !== "null") {
             alert(successMessage); // 첫 번째 알림창 (회원가입 완료)
 
@@ -106,6 +108,16 @@
 
         if (errorMessage && errorMessage.trim() !== "" && errorMessage.trim() !== "null") {
             alert("회원가입에 실패했습니다. 다시 시도해주세요.");
+        }
+
+        // ✅ 아이디 중복 확인 메시지
+        if (duplicateMessage && duplicateMessage.trim() !== "" && duplicateMessage.trim() !== "null") {
+            alert(duplicateMessage);
+        }
+
+        // ✅ 아이디가 중복 확인 후 유지되도록 설정
+        if (checkedMemberId && checkedMemberId.trim() !== "" && checkedMemberId.trim() !== "null") {
+            document.getElementById("memberId").value = checkedMemberId;
         }
     });
 
@@ -129,6 +141,35 @@
             message.style.color = "red";
             message.innerHTML = "❌ 비밀번호가 일치하지 않습니다.";
         }
+    }
+
+    // ✅ 아이디 입력 시 버튼 활성화/비활성화
+    function checkIdInput() {
+        let memberId = document.getElementById("memberId").value.trim();
+        let checkBtn = document.getElementById("checkDuplicateBtn");
+
+        if (memberId.length > 0) {
+            checkBtn.disabled = false; // 입력값이 있을 경우 활성화
+            checkBtn.style.backgroundColor = "#007bff"; // ✅ 활성화 시 색상 변경
+            checkBtn.style.cursor = "pointer";
+        } else {
+            checkBtn.disabled = true; // 입력값이 없으면 비활성화
+            checkBtn.style.backgroundColor = "#ccc"; // ✅ 비활성화 색상 적용
+            checkBtn.style.cursor = "default";
+        }
+    }
+
+    // ✅ 아이디 중복 확인
+    function checkDuplicateId() {
+        let memberId = document.getElementById("memberId").value.trim();
+
+        if (memberId.length === 0) {
+            alert("아이디를 입력해주세요.");
+            return;
+        }
+
+        // 서버에 GET 요청을 보내어 아이디 중복 확인
+        location.href = "/member/checkDuplicate?memberId=" + encodeURIComponent(memberId);
     }
 </script>
 </body>

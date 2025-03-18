@@ -69,7 +69,7 @@
 
     <!-- ✅ 특정 회원 정보 조회 -->
     <select id="selectMemberById" parameterType="string" resultType="com.udigo.hotel.member.model.dto.MemberDTO">
-        SELECT member_code, member_id, member_name, email, password, phone_no, join_date, coupon_used, status
+        SELECT member_code, member_id, member_name, email, password, phone_no, join_date, coupon_used, status, role
         FROM tbl_member
         WHERE member_id = #{memberId}
     </select>
