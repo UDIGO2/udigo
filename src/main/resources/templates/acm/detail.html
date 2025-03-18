@@ -8,6 +8,99 @@
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=66ee0366c34ede131d6dce128078a011&libraries=services"></script>
+    <!-- FullCalendar CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css">
+    <style>
+        /* 달력 모달 스타일 */
+        .calendar-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .calendar-modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .calendar-container {
+            margin-top: 20px;
+            height: 500px;
+        }
+
+        .calendar-legend {
+            margin-top: 15px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
+
+        .legend-available {
+            background-color: #28a745;
+        }
+
+        .legend-unavailable {
+            background-color: #dc3545;
+        }
+
+        .legend-past {
+            background-color: #6c757d;
+        }
+
+        .legend-selected {
+            background-color: #007bff;
+        }
+        
+        .calendar-button {
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            margin-right: 10px;
+        }
+
+        .calendar-button:hover {
+            background-color: #138496;
+        }
+    </style>
 </head>
 <body>
     <div th:replace="~{fragments/header :: header}"></div>
@@ -82,8 +175,6 @@
                         </div>
                     </div>
 
-                    </div>
-
                     <!-- 후기 섹션 -->
                     <div class="reviews-section">
                         <h2>후기</h2>
@@ -107,8 +198,38 @@
         </div>
     </div>
 
+    <!-- 달력 모달 -->
+    <div id="calendarModal" class="calendar-modal">
+        <div class="calendar-modal-content">
+            <span class="close-modal" onclick="closeCalendar()">&times;</span>
+            <h2 id="calendarTitle">숙소 예약 정보</h2>
+            <div id="calendar" class="calendar-container"></div>
+            <div class="calendar-legend">
+                <div class="legend-item">
+                    <div class="legend-color legend-available"></div>
+                    <span>예약 가능</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color legend-unavailable"></div>
+                    <span>예약 불가능</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color legend-past"></div>
+                    <span>지난 날짜</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color legend-selected"></div>
+                    <span>선택한 날짜</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div th:replace="~{fragments/footer :: footer}"></div>
     <script th:src="@{/js/header.js}"></script>
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.min.js"></script>
 
     <!-- 필터바 스크립트 -->
     <script th:inline="javascript">
@@ -141,104 +262,408 @@
 
                 return modal;
             }
-
             
-            // 날짜 선택 모달
-            const dateModal = createModal('날짜 선택', `
-                <div style="padding: 15px;">
-                    <div style="margin-bottom: 15px;">
-                        <label style="display: block; margin-bottom: 5px;">체크인:</label>
-                        <input type="date" id="check-in-date" style="width: 100%; padding: 8px;" min="${new Date().toISOString().split('T')[0]}">
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <label style="display: block; margin-bottom: 5px;">체크아웃:</label>
-                        <input type="date" id="check-out-date" style="width: 100%; padding: 8px;">
-                    </div>
-                    <div class="modal-info" style="font-size: 0.9em; color: #666;">
-                        * 체크인 날짜는 오늘 이후만 선택 가능합니다.<br>
-                        * 체크아웃은 체크인 다음 날부터 선택 가능합니다.
-                    </div>
-                </div>
-            `, function() {
-                const checkInDate = document.getElementById('check-in-date').value;
-                const checkOutDate = document.getElementById('check-out-date').value;
-
-                if (!checkInDate || !checkOutDate) {
-                    alert('체크인과 체크아웃 날짜를 모두 선택해주세요.');
-                    return false;
-                }
-
-                if (new Date(checkInDate) >= new Date(checkOutDate)) {
-                    alert('체크아웃 날짜는 체크인 날짜 이후여야 합니다.');
-                    return false;
-                }
-
-                document.querySelector('#date-filter input').value = `${checkInDate} ~ ${checkOutDate}`;
-                return true;
-            });
-
             // 인원 선택 모달
             const guestModal = createModal('인원 선택', `
                 <div id="guest-modal-content" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                    <label><input type="radio" name="guest" value="1"> 1명</label>
-                    <label><input type="radio" name="guest" value="2"> 2명</label>
-                    <label><input type="radio" name="guest" value="3"> 3명</label>
-                    <label><input type="radio" name="guest" value="4"> 4명</label>
-                    <label><input type="radio" name="guest" value="5"> 5명</label>
-                    <label><input type="radio" name="guest" value="6"> 6명</label>
-                    <label><input type="radio" name="guest" value="7"> 7명</label>
-                    <label><input type="radio" name="guest" value="8"> 8명</label>
-                    <label><input type="radio" name="guest" value="9"> 9명</label>
+                </div>
+                <div class="modal-info" style="font-size: 0.9em; color: #666; margin-top: 10px;">
+                    * 최대 <span id="max-guest-count"></span>명까지 선택 가능합니다.
                 </div>
             `, function() {
-                const selectedGuest = document.querySelector('input[name="guest"]:checked').value;
-                document.querySelector('#guest-filter input').value = selectedGuest + '명';
+                const selectedGuest = document.querySelector('input[name="guest"]:checked');
+                if (!selectedGuest) {
+                    alert('인원 수를 선택해주세요.');
+                    return false;
+                }
+                document.querySelector('#guest-filter input').value = selectedGuest.value + '명';
                 return true;
             });
 
             // 모달 열기 함수
             function openModal(modal) {
                 if (!document.querySelector('.modal.active')) {
+                    // 인원 선택 모달인 경우 최대 인원까지만 선택 옵션 생성
+                    if (modal === guestModal) {
+                        const maxGuest = parseInt(document.querySelector('.info-item span').textContent.match(/\d+/)[0]);
+                        const guestContent = document.getElementById('guest-modal-content');
+                        guestContent.innerHTML = '';
+                        
+                        for (let i = 1; i <= maxGuest; i++) {
+                            const label = document.createElement('label');
+                            label.innerHTML = `<input type="radio" name="guest" value="${i}"> ${i}명`;
+                            guestContent.appendChild(label);
+                        }
+                        
+                        document.getElementById('max-guest-count').textContent = maxGuest;
+                    }
+                    
                     modal.classList.add('active');
                 }
             }
 
             // 필터 클릭 이벤트
-            document.getElementById('date-filter').addEventListener('click', () => openModal(dateModal));
+            document.getElementById('date-filter').addEventListener('click', function() {
+                const acmId = document.querySelector('.calendar-button').getAttribute('data-acm-id');
+                const acmName = document.querySelector('.calendar-button').getAttribute('data-acm-name');
+                showCalendar(acmId, acmName);
+            });
             document.getElementById('guest-filter').addEventListener('click', () => openModal(guestModal));
-
-            // 체크인 날짜 선택 시 체크아웃 최소 날짜 설정
-            document.getElementById('check-in-date')?.addEventListener('change', function() {
-                const checkOutInput = document.getElementById('check-out-date');
-                if (this.value) {
-                    const nextDay = new Date(this.value);
-                    nextDay.setDate(nextDay.getDate() + 1);
-                    checkOutInput.min = nextDay.toISOString().split('T')[0];
-
-                    if (checkOutInput.value && new Date(checkOutInput.value) <= new Date(this.value)) {
-                        checkOutInput.value = '';
-                    }
-                }
+            
+            // 달력 버튼 클릭 이벤트 리스너 추가
+            document.querySelectorAll('.calendar-button').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const acmId = this.getAttribute('data-acm-id');
+                    const acmName = this.getAttribute('data-acm-name');
+                    showCalendar(acmId, acmName);
+                });
             });
         });
     </script>
 
+    <!-- 달력 관련 스크립트 -->
+    <script>
+        // 달력 관련 변수
+        let calendar;
+        let currentAcmId;
+
+        // 달력 표시 함수
+        function showCalendar(acmId, acmName) {
+            currentAcmId = acmId;
+            document.getElementById('calendarTitle').textContent = acmName + ' 예약 정보';
+            document.getElementById('calendarModal').style.display = 'flex';
+
+            // 달력이 이미 초기화되었는지 확인
+            if (calendar) {
+                calendar.removeAllEvents();
+            } else {
+                initializeCalendar();
+            }
+
+            // 해당 숙소의 예약 정보 가져오기
+            fetchReservationData(acmId);
+        }
+
+        // 달력 닫기 함수
+        function closeCalendar() {
+            document.getElementById('calendarModal').style.display = 'none';
+            // 타이틀 원래대로 복원
+            if (currentAcmId) {
+                const acmName = document.querySelector('.calendar-button').getAttribute('data-acm-name');
+                document.getElementById('calendarTitle').textContent = acmName + ' 예약 정보';
+            }
+        }
+
+        // 달력 초기화 함수
+        function initializeCalendar() {
+            const calendarEl = document.getElementById('calendar');
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek'
+                },
+                locale: 'ko',
+                selectable: true,
+                selectMirror: true,
+                dayMaxEvents: false, // 모든 이벤트를 표시하도록 변경
+                events: [],
+                dateClick: function(info) {
+                    handleDateSelection(info.date);
+                },
+                dayCellDidMount: function(info) {
+                    // 현재 날짜 이전의 날짜는 회색으로 표시
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+
+                    if (info.date < today) {
+                        info.el.style.backgroundColor = '#f8f9fa';
+                        info.el.style.color = '#adb5bd';
+                    }
+                }
+            });
+
+            calendar.render();
+        }
+
+        // 예약 데이터 가져오기 함수
+        function fetchReservationData(acmId) {
+            // API 호출하여 예약 데이터 가져오기
+            fetch(`/api/reservations/acm/${acmId}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('API 응답 데이터:', data); // 디버깅용 로그
+                    // 예약 데이터를 달력에 표시
+                    displayReservationsOnCalendar(data);
+                })
+                .catch(error => {
+                    console.error('예약 데이터를 가져오는 중 오류 발생:', error);
+                    alert('예약 정보를 불러오는 데 실패했습니다.');
+                });
+        }
+
+        // 예약 데이터를 달력에 표시하는 함수
+        function displayReservationsOnCalendar(reservations) {
+            // 달력의 모든 이벤트 제거
+            calendar.removeAllEvents();
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // 예약된 날짜 추적을 위한 Set
+            const reservedDates = new Set();
+            // 날짜별 상태를 저장할 맵
+            const dateStatusMap = new Map();
+
+            // 각 예약에 대해 날짜 추적
+            reservations.forEach(reservation => {
+                const checkIn = new Date(reservation.checkIn);
+                const checkOut = new Date(reservation.checkOut);
+
+                // 체크인부터 체크아웃 전날까지의 날짜를 예약됨으로 표시
+                let currentDate = new Date(checkIn);
+                while (currentDate < checkOut) {
+                    const dateStr = currentDate.toISOString().split('T')[0];
+                    reservedDates.add(dateStr);
+                    
+                    // 현재 사용자의 예약인 경우 최우선
+                    if (reservation.currentUserReservation) {
+                        dateStatusMap.set(dateStr, 'my-reservation');
+                    } 
+                    // 아직 값이 없거나 내 예약이 아닌 경우에만 'reserved' 설정
+                    else if (!dateStatusMap.has(dateStr) || dateStatusMap.get(dateStr) !== 'my-reservation') {
+                        dateStatusMap.set(dateStr, 'reserved');
+                    }
+
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+            });
+
+            // 날짜 상태에 따라 이벤트 추가
+            const start = new Date(today);
+            start.setDate(start.getDate() - 30); // 30일 전
+            
+            const end = new Date(today);
+            end.setMonth(end.getMonth() + 3); // 3개월 후
+            
+            let currentDate = new Date(start);
+            while (currentDate <= end) {
+                const dateStr = currentDate.toISOString().split('T')[0];
+                let eventConfig;
+                
+                // 과거 날짜
+                if (currentDate < today) {
+                    eventConfig = {
+                        title: '지난 날짜',
+                        start: new Date(currentDate),
+                        allDay: true,
+                        backgroundColor: '#6c757d',
+                        borderColor: '#6c757d',
+                        textColor: 'white',
+                        classNames: ['past-date-event']
+                    };
+                } 
+                // 내 예약
+                else if (dateStatusMap.get(dateStr) === 'my-reservation') {
+                    eventConfig = {
+                        title: '내 예약',
+                        start: new Date(currentDate),
+                        allDay: true,
+                        backgroundColor: '#007bff',
+                        borderColor: '#007bff',
+                        textColor: 'white',
+                        classNames: ['my-reservation-event']
+                    };
+                } 
+                // 예약됨 (다른 사용자)
+                else if (dateStatusMap.get(dateStr) === 'reserved') {
+                    eventConfig = {
+                        title: '예약됨',
+                        start: new Date(currentDate),
+                        allDay: true,
+                        backgroundColor: '#dc3545',
+                        borderColor: '#dc3545',
+                        textColor: 'white',
+                        classNames: ['reserved-event']
+                    };
+                } 
+                // 예약 가능 (미래 날짜)
+                else if (currentDate >= today) {
+                    eventConfig = {
+                        title: '예약 가능',
+                        start: new Date(currentDate),
+                        allDay: true,
+                        backgroundColor: '#28a745',
+                        borderColor: '#28a745',
+                        textColor: 'white',
+                        classNames: ['available-event']
+                    };
+                }
+                
+                if (eventConfig) {
+                    calendar.addEvent(eventConfig);
+                }
+                
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            
+            // 예약된 날짜 저장 (날짜 선택에 사용)
+            window.reservedDates = reservedDates;
+        }
+
+        // 날짜 선택 처리 변수
+        let selectedCheckIn = null;
+        let selectedCheckOut = null;
+        let selectedDateEvents = []; // 선택된 날짜 이벤트 배열
+
+        // 날짜 선택 처리 함수
+        function handleDateSelection(date) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            // 과거 날짜는 선택 불가
+            if (date < today) {
+                alert('지난 날짜는 선택할 수 없습니다.');
+                return;
+            }
+            
+            // 예약된 날짜는 선택 불가
+            const dateStr = date.toISOString().split('T')[0];
+            if (window.reservedDates && window.reservedDates.has(dateStr)) {
+                alert('이미 예약된 날짜입니다.');
+                return;
+            }
+            
+            // 체크인 날짜 선택
+            if (selectedCheckIn === null) {
+                // 이전 선택 초기화
+                clearSelectedDates();
+                
+                selectedCheckIn = date;
+                
+                // 선택된 날짜에 진한 배경색 적용
+                const event = calendar.addEvent({
+                    title: '',
+                    start: date,
+                    end: new Date(date.getTime() + 24 * 60 * 60 * 1000), // 하루 추가
+                    allDay: true,
+                    backgroundColor: 'rgba(0, 123, 255, 0.7)',
+                    borderColor: '#007bff',
+                    display: 'background'
+                });
+                
+                selectedDateEvents.push(event);
+                
+                // alert 제거, 대신 상태 표시로 변경
+                document.getElementById('calendarTitle').textContent = 
+                    '체크인: ' + formatDate(date) + ' - 체크아웃을 선택해주세요';
+                
+                return;
+            }
+            
+            // 체크아웃 날짜 선택
+            if (selectedCheckOut === null) {
+                // 체크인 이전 날짜는 체크아웃으로 선택 불가
+                if (date <= selectedCheckIn) {
+                    alert('체크아웃 날짜는 체크인 날짜 이후여야 합니다.');
+                    return;
+                }
+                
+                // 체크인과 체크아웃 사이에 예약된 날짜가 있는지 확인
+                let currentDate = new Date(selectedCheckIn);
+                currentDate.setDate(currentDate.getDate() + 1); // 체크인 다음날부터
+                
+                while (currentDate < date) {
+                    const dateStr = currentDate.toISOString().split('T')[0];
+                    if (window.reservedDates && window.reservedDates.has(dateStr)) {
+                        alert('선택한 기간 내에 이미 예약된 날짜가 있습니다.');
+                        return;
+                    }
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                
+                selectedCheckOut = date;
+                
+                // 선택된 날짜 구간에 진한 배경색 적용
+                currentDate = new Date(selectedCheckIn);
+                while (currentDate <= selectedCheckOut) {
+                    const event = calendar.addEvent({
+                        title: '',
+                        start: new Date(currentDate),
+                        end: new Date(currentDate.getTime() + 24 * 60 * 60 * 1000), // 하루 추가
+                        allDay: true,
+                        backgroundColor: 'rgba(0, 123, 255, 0.7)',
+                        borderColor: '#007bff',
+                        display: 'background'
+                    });
+                    selectedDateEvents.push(event);
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                
+                // 선택 완료 후 필터바에 반영
+                const checkInStr = formatDate(selectedCheckIn);
+                const checkOutStr = formatDate(selectedCheckOut);
+                document.querySelector('#date-filter input').value = `${checkInStr} ~ ${checkOutStr}`;
+                
+                // 모달 닫기
+                setTimeout(() => {
+                    closeCalendar();
+                    
+                    // 선택 초기화
+                    clearSelectedDates();
+                }, 1000);
+            }
+        }
+        
+        // 선택된 날짜 초기화 함수
+        function clearSelectedDates() {
+            // 선택된 모든 이벤트 제거
+            selectedDateEvents.forEach(event => event.remove());
+            selectedDateEvents = [];
+            selectedCheckIn = null;
+            selectedCheckOut = null;
+        }
+        
+        // 날짜 포맷 함수 (YYYY-MM-DD 형식으로 변환)
+        function formatDate(date) {
+            const d = new Date(date);
+            const year = d.getFullYear();
+            // getMonth()는 0부터 시작하므로 +1 해줌
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // 모달 외부 클릭 시 닫기
+        window.onclick = function(event) {
+            const modal = document.getElementById('calendarModal');
+            if (event.target === modal) {
+                closeCalendar();
+                // 달력을 닫을 때 선택 초기화
+                clearSelectedDates();
+            }
+        };
+    </script>
+
     <!-- 카카오맵 API 스크립트 -->
-    <sFcript type="text/javascript">
+    <script th:inline="javascript">
+        // debugger;
         window.addEventListener('load', function() {
-            debugger;
             // 주소-좌표 변환 객체를 생성
             var geocoder = new kakao.maps.services.Geocoder();
-            var address = '[[${acm.acmAddress}]]';
-            var acmName = '[[${acm.acmName}]]';
-            debugger;
+            var address = /*[[${acm.acmAddress}]]*/ '';
+            var acmName = /*[[${acm.acmName}]]*/ '';
+
             // 주소로 좌표를 검색
             geocoder.addressSearch(address, function(result, status) {
-                debugger;
+                // debugger;
+
                 // 정상적으로 검색이 완료됐으면
                 if (status === kakao.maps.services.Status.OK) {
                     var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-                    debugger;
+                    // debugger;
+
                     // 지도 옵션 설정
                     var staticMapContainer = document.getElementById('staticMap');
                     var staticMapOption = {
@@ -252,7 +677,6 @@
 
                     // 지도 생성
                     var staticMap = new kakao.maps.StaticMap(staticMapContainer, staticMapOption);
-                    debugger;
                 } else {
                     // 주소-좌표 변환 실패 시 에러 처리
                     console.error('주소를 찾을 수 없습니다:', address);
@@ -260,6 +684,6 @@
                 }
             });
         });
-    </sFcript>
+    </script>
 </body>
 </html>
