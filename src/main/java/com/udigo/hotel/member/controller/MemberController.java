@@ -3,6 +3,7 @@ package com.udigo.hotel.member.controller;
 import com.udigo.hotel.member.model.dto.MemberDTO;
 import com.udigo.hotel.member.model.service.MemberService;
 import com.udigo.hotel.member.security.CustomUserDetails;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -147,6 +148,7 @@ public class MemberController {
             @RequestParam("newPassword") String newPassword,
             @RequestParam("confirmPassword") String confirmPassword,
             Authentication authentication,
+            HttpServletRequest request,
             Model model,
             RedirectAttributes redirectAttributes) {
 
@@ -175,6 +177,11 @@ public class MemberController {
         memberService.updatePassword(memberId, passwordEncoder.encode(newPassword));
         redirectAttributes.addFlashAttribute("successMessage", "비밀번호가 성공적으로 변경되었습니다.");
 
-        return "redirect:/member/changepassword";
+        // 세션 무효화 (로그아웃 처리)
+        request.getSession().invalidate();
+        SecurityContextHolder.clearContext();
+
+        redirectAttributes.addFlashAttribute("successMessage", "비밀번호가 성공적으로 변경되었습니다. 다시 로그인해 주세요.");
+        return "redirect:/auth/login";
     }
 }
