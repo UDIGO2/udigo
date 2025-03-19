@@ -69,10 +69,6 @@ h2 {
     transition: background-color 0.3s;
 }
 
-.btn-check:hover {
-    background-color: #0056b3;
-}
-
 .btn-check:disabled {
     background-color: #ccc;
     cursor: default;
@@ -95,10 +91,17 @@ h2 {
     font-size: 16px;
     width: 100%;
     cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;  /* hover 효과를 부드럽게 */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
 }
 
 .login-link {
     text-align: center;
     margin-top: 15px;
     font-size: 14px;
+    color: #666;
 }

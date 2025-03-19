@@ -196,7 +196,7 @@ input:focus {
 /* 확인 버튼 스타일 */
 .findpass-modal .confirm-btn {
     width: 90%;
-    background: #337af1;
+    background: #007bff;
     color: white;
     padding: 12px;
     border: none;
@@ -207,7 +207,7 @@ input:focus {
 }
 
 .findpass-modal .confirm-btn:hover {
-    background: #2a6be0;
+    background: #0056b3;
 }
 
 /* 반응형 (모바일 최적화) */

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/auth")
@@ -99,34 +100,35 @@ public class AuthController {
         return "auth/findid";
     }
 
-    /** ✅ 비밀번호 찾기 페이지 이동 */
+    /** 비밀번호 찾기 페이지 이동 */
     @GetMapping("/findpass")
     public String showFindPasswordPage() {
         return "auth/findpass";
     }
 
-    /** ✅ 비밀번호 찾기 요청 처리 */
+    /** 비밀번호 찾기 요청 처리 */
     @PostMapping("/findpass")
     public String processFindPassword(@RequestParam("memberId") String memberId,
-                                      @RequestParam("email") String email, Model model) {
+                                      @RequestParam("email") String email,
+                                      Model model) {
         String tempPassword = memberService.findPassword(memberId, email);
 
         if (tempPassword == null || tempPassword.isEmpty()) {
             model.addAttribute("error", "존재하지 않는 회원 정보입니다.");
-        } else {
-            model.addAttribute("success", "임시 비밀번호가 이메일로 발송되었습니다.");
+            return "auth/findpass";  // 비밀번호 찾기 페이지로 유지
         }
 
-        return "auth/findpass";
+        model.addAttribute("success", "임시 비밀번호가 이메일로 발송되었습니다.");
+        return "auth/findpass";  // 성공 모달을 비밀번호 찾기 페이지에서 먼저 띄우기
     }
 
-    /** ✅ 회원 탈퇴 페이지 이동 */
+    /** 회원 탈퇴 페이지 이동 */
     @GetMapping("/withdraw")
     public String showWithdrawPage() {
         return "auth/withdraw";
     }
 
-    /** ✅ 회원 탈퇴 처리 */
+    /** 회원 탈퇴 처리 */
     @PostMapping("/withdraw")
     public String withdrawMember(@RequestParam("password") String password,
                                  HttpServletRequest request, Model model) {

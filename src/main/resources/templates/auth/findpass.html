@@ -13,7 +13,7 @@
 
   <div id="change-password-page">
       <main class="main-content">
-        <form id="findPassForm" action="/auth/findpass" method="post" onsubmit="return false;">
+        <form id="findPassForm" th:action="@{/auth/findpass}" method="post">
           <h2>비밀번호 찾기</h2>
           <label for="memberId">아이디:</label>
           <input type="text" id="memberId" name="memberId" required>
@@ -24,11 +24,19 @@
           <button type="submit">비밀번호 찾기</button>
         </form>
 
+        <!-- 에러 메시지 모달 -->
+        <div id="errorModal" class="modal" th:if="${error}">
+          <div class="modal-content">
+            <p th:text="${error}"></p>
+            <button onclick="closeErrorModal()">확인</button>
+          </div>
+        </div>
 
-        <div id="modal" class="modal" th:if="${success}">
+        <!-- 성공 메시지 (모달) -->
+        <div id="successModal" class="modal" th:if="${success}">
           <div class="modal-content">
             <p th:text="${success}"></p>
-            <button onclick="closeModal()">확인</button>
+            <button onclick="redirectToLogin()">확인</button>
           </div>
         </div>
 
@@ -37,31 +45,27 @@
 </div>
 
 <script>
-  document.getElementById("findPassForm").addEventListener("submit", function(event) {
-    event.preventDefault();
+  document.addEventListener("DOMContentLoaded", function() {
+    var errorModal = document.getElementById("errorModal");
+    if (errorModal) {
+      errorModal.style.display = "block";  // 모달을 강제로 보이게 설정
+    }
 
-    const formData = new FormData(this);
-
-    fetch("/auth/findpass", {
-      method: "POST",
-      body: formData
-    })
-            .then(response => response.text())
-            .then(data => {
-              console.log("서버 응답:", data);
-
-              alert("이메일이 전송되었습니다. 로그인 화면으로 이동합니다.");
-              window.location.href = "/auth/login";
-            })
-            .catch(error => {
-              console.error("비밀번호 찾기 오류:", error);
-              alert("서버와의 통신 중 오류가 발생했습니다.");
-            });
+    var successModal = document.getElementById("successModal");
+    if (successModal) {
+      successModal.style.display = "block";  // 성공 모달도 보이게 설정
+      setTimeout(function() {
+        window.location.href = "/auth/login";  // 3초 후 로그인 페이지로 이동
+      }, 3000);
+    }
   });
 
-  function closeModal() {
-    document.getElementById("modal").style.display = "none";
+  function redirectToLogin() {
     window.location.href = "/auth/login";
+  }
+
+  function closeErrorModal() {
+    document.getElementById("errorModal").style.display = "none";
   }
 </script>
 
