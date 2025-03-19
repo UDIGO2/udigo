@@ -35,6 +35,9 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/", "/auth/**", "/member/signup", "/member/api/**", "/auth/login").permitAll();
                     auth.requestMatchers("/css/**", "/js/**", "/image/**", "/reservations/**", "/acm/**", "/board/**").permitAll();
+                    
+                    // 아이디/이메일 중복 확인 API 허용
+                    auth.requestMatchers("/member/check-duplicate").permitAll();
 
                     // ✅ 권한 설정
                     auth.requestMatchers("/member/useCoupon", "/changepassword").permitAll();

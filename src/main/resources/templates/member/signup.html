@@ -140,12 +140,37 @@
             return;
         }
 
-        fetch(`/member/check-duplicate?type=${type}&value=${inputValue}`)
-            .then(response => response.json())
-            .then(data => {
+        fetch(`/member/check-duplicate?type=${type}&value=${inputValue}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`서버 응답 오류: ${response.status}`);
+            }
+            
+            if (response.headers.get('content-type') && 
+                response.headers.get('content-type').includes('application/json')) {
+                return response.json();
+            } else {
+                throw new Error('서버가 JSON 응답을 반환하지 않았습니다.');
+            }
+        })
+        .then(data => {
+            console.log('서버 응답:', data);
+            if (data && data.message) {
                 alert(data.message);
-            })
-            .catch(error => console.error("오류 발생:", error));
+            } else {
+                alert('서버 응답을 처리할 수 없습니다.');
+            }
+        })
+        .catch(error => {
+            console.error("오류 발생:", error);
+            alert("중복 확인 중 오류가 발생했습니다. 다시 시도해 주세요.");
+        });
     }
 
     // ✅ 핸드폰 번호 입력 시 자동으로 하이픈(-) 추가하는 함수

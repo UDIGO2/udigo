@@ -1,17 +1,22 @@
 document.addEventListener("DOMContentLoaded", function () {
-});
-// 로그인 상태 확인
-let memberCode = localStorage.getItem("memberCode");
+    // 로그인 상태 확인 및 관리자 정보 표시
+    let memberCode = localStorage.getItem("memberCode");
+    let memberId = localStorage.getItem("memberId");
+    let memberName = localStorage.getItem("memberName");
 
-if (memberCode) {
-    console.log(`✅ 현재 로그인된 사용자: ${memberCode}`);
-} else {
-    console.log("❌ 로그인되지 않음.");
-}
+    if (memberCode && memberId) {
+        console.log(`✅ 현재 로그인된 관리자: ${memberId} (코드: ${memberCode})`);
+        
+        // 관리자 정보 표시 업데이트
+        const adminInfoElement = document.querySelector('.admin-info h2');
+        if (adminInfoElement) {
+            adminInfoElement.textContent = `${memberId}님`;
+        }
+    } else {
+        console.log("❌ 로그인되지 않음.");
+    }
 
-
-// DOM Elements
-document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
     // ✅ Navigation handling
     const navLinks = document.querySelectorAll('.nav-links a');
     navLinks.forEach(link => {
