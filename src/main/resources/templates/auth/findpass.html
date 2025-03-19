@@ -9,36 +9,36 @@
 </head>
 <body>
 
-<!-- ✅ 헤더 추가 -->
 <div th:replace="~{fragments/header :: header}"></div>
 
-<h2>비밀번호 찾기</h2>
+  <div id="change-password-page">
+      <main class="main-content">
+        <form id="findPassForm" action="/auth/findpass" method="post" onsubmit="return false;">
+          <h2>비밀번호 찾기</h2>
+          <label for="memberId">아이디:</label>
+          <input type="text" id="memberId" name="memberId" required>
 
-<!-- ✅ 비밀번호 찾기 폼 -->
-<form id="findPassForm" action="/auth/findpass" method="post" onsubmit="return false;">
-  <label for="memberId">아이디:</label>
-  <input type="text" id="memberId" name="memberId" required>
+          <label for="email">이메일:</label>
+          <input type="email" id="email" name="email" required>
 
-  <label for="email">이메일:</label>
-  <input type="email" id="email" name="email" required>
+          <button type="submit">비밀번호 찾기</button>
+        </form>
 
-  <button type="submit">비밀번호 찾기</button>
-</form>
 
-<!-- ✅ 모달창 (결과 메시지) -->
-<div id="modal" class="modal" th:if="${success}">
-  <div class="modal-content">
-    <p th:text="${success}"></p>
-    <button onclick="closeModal()">확인</button>
-  </div>
+        <div id="modal" class="modal" th:if="${success}">
+          <div class="modal-content">
+            <p th:text="${success}"></p>
+            <button onclick="closeModal()">확인</button>
+          </div>
+        </div>
+
+      </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </div>
-
-<!-- ✅ 푸터 추가 -->
-<div th:replace="~{fragments/footer :: footer}"></div>
 
 <script>
   document.getElementById("findPassForm").addEventListener("submit", function(event) {
-    event.preventDefault();  // ✅ 기본 폼 제출 막기
+    event.preventDefault();
 
     const formData = new FormData(this);
 
@@ -46,12 +46,12 @@
       method: "POST",
       body: formData
     })
-            .then(response => response.text()) // ✅ JSON이 아니라 TEXT로 받기
+            .then(response => response.text())
             .then(data => {
               console.log("서버 응답:", data);
 
               alert("이메일이 전송되었습니다. 로그인 화면으로 이동합니다.");
-              window.location.href = "/auth/login"; // ✅ 로그인 페이지로 이동
+              window.location.href = "/auth/login";
             })
             .catch(error => {
               console.error("비밀번호 찾기 오류:", error);
@@ -61,7 +61,7 @@
 
   function closeModal() {
     document.getElementById("modal").style.display = "none";
-    window.location.href = "/auth/login"; // ✅ 로그인 페이지로 이동
+    window.location.href = "/auth/login";
   }
 </script>
 
