@@ -205,7 +205,7 @@ CREATE TABLE `tbl_reservations` (
                                     `check_in` DATETIME NOT NULL COMMENT '체크인 날짜',
                                     `check_out` DATETIME NOT NULL COMMENT '체크아웃 날짜',
                                     `guest_count` INT NOT NULL COMMENT '숙박인원',
-                                    `is_resv` INT NOT NULL DEFAULT FALSE COMMENT '예약 상태',
+                                    `is_resv` INT NOT NULL DEFAULT 1 COMMENT '예약 상태',
                                     `created_at` DATETIME NOT NULL COMMENT '생성일자',
                                     CONSTRAINT `FK_tbl_acm_TO_tbl_reservations_1` FOREIGN KEY (`acm_id`) REFERENCES `tbl_acm` (`acm_id`),
                                     CONSTRAINT `FK_tbl_member_TO_tbl_reservations_1` FOREIGN KEY (`member_code`) REFERENCES `tbl_member` (`member_code`)
@@ -295,5 +295,40 @@ CREATE TABLE `tbl_member_roles` (
                                     CONSTRAINT `FK_tbl_roles_TO_tbl_member_roles_1` FOREIGN KEY (`role_code`) REFERENCES `tbl_roles` (`role_code`)
 );
 ALTER TABLE tbl_member ADD COLUMN role VARCHAR(20) DEFAULT 'USER';
+
+-- 결제가 생성될 때 예약과 자동 연결하는 트리거 추가
+DELIMITER $$
+
+CREATE TRIGGER after_pay_insert
+AFTER INSERT ON tbl_pay
+FOR EACH ROW
+BEGIN
+    -- 해당 멤버코드와 숙소ID로 가장 최근 예약을 찾아 pay_id 업데이트
+    UPDATE tbl_reservations
+    SET pay_id = NEW.pay_id
+    WHERE member_code = NEW.member_code
+    AND acm_id = NEW.acm_id
+    AND pay_id IS NULL
+    ORDER BY created_at DESC
+    LIMIT 1;
+END $$
+
+DELIMITER ;
+
+-- 결제 상태가 변경될 때 환불 금액 자동 업데이트 트리거 추가
+DELIMITER $$
+
+CREATE TRIGGER before_pay_update
+BEFORE UPDATE ON tbl_pay
+FOR EACH ROW
+BEGIN
+    -- 결제 상태가 변경되고 취소나 환불 상태로 바뀔 때
+    IF OLD.pay_status != NEW.pay_status AND (NEW.pay_status = '결제취소' OR NEW.pay_status = '환불완료') THEN
+        -- 환불 금액을 원래 결제 금액으로 설정
+        SET NEW.pay_ref = OLD.pay_price;
+    END IF;
+END $$
+
+DELIMITER ;
 
 

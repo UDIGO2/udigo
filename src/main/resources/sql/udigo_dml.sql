@@ -356,24 +356,24 @@ INSERT INTO tbl_pay (
     pay_price, discount, pay_ref, transaction_id, pay_provider
 ) VALUES
 -- 1번 결제 데이터 (카카오페이, 결제완료)
-(1, 101, 101, '카드결제', 1, '카드', '2025-03-11 14:25:00',
+(1, 101, 101, '카드결제', '결제완료', '카드', '2025-03-11 14:25:00',
  150000, 5000, 0, 'TID1234567890', 'KAKAO'),
 
-(2, 102, 102, '간편결제', 1, '네이버페이', '025-03-14 11:30:00',
+(2, 102, 102, '간편결제', '결제완료', '네이버페이', '025-03-14 11:30:00',
  130000, 5000, 0, 'TID1122334455', 'NAVER'),
 
 -- 2번 결제 데이터 (토스페이, 결제취소)
-(3, 103, 103, '간편결제', 2, '계좌이체', '2025-03-12 10:10:00',
+(3, 103, 103, '간편결제', '결제취소', '계좌이체', '2025-03-12 10:10:00',
  200000, 5000, 200000, 'TID0987654321', 'TOSS'),
 
 -- 3번 결제 데이터 (이니시스, 환불완료)
-(4, 104, 203, '카드결제', 2, '신한카드', '2025-03-15 16:20:00',
+(4, 104, 203, '카드결제', '결제취소', '신한카드', '2025-03-15 16:20:00',
  170000, 5000, 170000, 'TID5566778899', 'SHINHAN'),
 
-(5, 105, 301, '카드결제', 3, '카드', '2025-03-13 18:45:00',
+(5, 105, 301, '카드결제', '환불완료', '카드', '2025-03-13 18:45:00',
  180000, 5000, 180000, 'TID5678901234', 'INICIS'),
 
-(6, 106, 401, '카드결제', 3, '카카오페이', '2025-03-16 09:00:00',
+(6, 106, 401, '카드결제', '환불완료', '카카오페이', '2025-03-16 09:00:00',
  140000, 5000, 140000, 'TID7788990011', 'KAKAO');
 
 -- 게시판 관련 dml
@@ -530,6 +530,14 @@ INSERT INTO tbl_pay (
              150000, 0, 0, 'TEST-TRANSACTION-123', 'TEST-PG'
          );
 
+-- 테스트용 결제 데이터 생성
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+             109, 101, 503, '카드결제', '결제완료', '신용카드', NOW(),
+             150000, 0, 0, 'TEST-TRANSACTION-123', 'TEST-PG'
+         );
 -- 테스트용 예약 데이터 생성 (pay_id 연결)
 INSERT INTO tbl_reservations (
     acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
@@ -541,7 +549,12 @@ INSERT INTO tbl_reservations (
 ) VALUES (
              101, 101, '2025-04-19', '2025-04-20', 2, 1, NOW(), 103
          );
-
+-- 테스트용 예약 데이터 생성 (pay_id 연결)
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+             503, 101, '2025-04-10', '2025-04-14', 2, 1, NOW(), 109
+         );
 -- 테스트 데이터 확인 쿼리
 SELECT
     p.pay_id, p.pay_method, p.pay_status, p.pay_price,
@@ -553,3 +566,334 @@ FROM
         JOIN tbl_acm a ON r.acm_id = a.acm_id
 WHERE
     p.pay_id = 102;
+
+-- 기존 예약과 결제 더미 데이터 연결
+UPDATE tbl_reservations SET pay_id = 1 WHERE resv_id = 1;
+UPDATE tbl_reservations SET pay_id = 2 WHERE resv_id = 2;
+UPDATE tbl_reservations SET pay_id = 3 WHERE resv_id = 3;
+UPDATE tbl_reservations SET pay_id = 4 WHERE resv_id = 4;
+UPDATE tbl_reservations SET pay_id = 5 WHERE resv_id = 5;
+UPDATE tbl_reservations SET pay_id = 6 WHERE resv_id = 6;
+
+-- 연결된 데이터 확인 쿼리
+SELECT 
+    r.resv_id, r.acm_id, r.member_code, r.check_in, r.check_out, 
+    p.pay_id, p.pay_method, p.pay_status, p.pay_price, p.pay_date
+FROM 
+    tbl_reservations r
+    JOIN tbl_pay p ON r.pay_id = p.pay_id
+ORDER BY r.resv_id;
+
+-- 결제와 예약 연결 더미데이터 20쌍 생성
+-- 기존 데이터 삭제 
+DELETE FROM tbl_reservations WHERE pay_id IS NOT NULL;
+DELETE FROM tbl_pay;
+
+-- 1번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    1, 101, 101, '카드결제', '결제완료', '신용카드', '2025-01-10 09:15:00',
+    165000, 5000, 0, 'TID-20250110-001', 'SHINHAN'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    101, 101, '2025-01-15', '2025-01-18', 2, 1, '2025-01-10 09:15:00', 1
+);
+
+-- 2번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    2, 102, 102, '간편결제', '결제완료', '카카오페이', '2025-01-12 14:25:00',
+    223000, 7000, 0, 'TID-20250112-002', 'KAKAO'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    102, 102, '2025-01-20', '2025-01-23', 3, 1, '2025-01-12 14:25:00', 2
+);
+
+-- 3번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    3, 103, 201, '카드결제', '결제완료', '신용카드', '2025-01-15 10:35:00',
+    185000, 0, 0, 'TID-20250115-003', 'HYUNDAI'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    201, 103, '2025-01-25', '2025-01-28', 2, 1, '2025-01-15 10:35:00', 3
+);
+
+-- 4번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    4, 104, 202, '간편결제', '결제취소', '네이버페이', '2025-01-18 16:45:00',
+    130000, 10000, 130000, 'TID-20250118-004', 'NAVER'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    202, 104, '2025-01-28', '2025-01-30', 1, 0, '2025-01-18 16:45:00', 4
+);
+
+-- 5번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    5, 105, 301, '카드결제', '결제완료', '신용카드', '2025-01-20 11:30:00',
+    255000, 15000, 0, 'TID-20250120-005', 'SAMSUNG'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    301, 105, '2025-02-01', '2025-02-04', 4, 1, '2025-01-20 11:30:00', 5
+);
+
+-- 6번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    6, 106, 302, '간편결제', '결제완료', '토스', '2025-01-22 09:15:00',
+    175000, 5000, 0, 'TID-20250122-006', 'TOSS'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    302, 106, '2025-02-05', '2025-02-08', 2, 1, '2025-01-22 09:15:00', 6
+);
+
+-- 7번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    7, 101, 401, '카드결제', '환불완료', '신용카드', '2025-01-25 13:20:00',
+    210000, 0, 210000, 'TID-20250125-007', 'SHINHAN'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    401, 101, '2025-02-10', '2025-02-13', 3, 0, '2025-01-25 13:20:00', 7
+);
+
+-- 8번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    8, 102, 402, '간편결제', '결제완료', '카카오페이', '2025-01-27 17:45:00',
+    198000, 12000, 0, 'TID-20250127-008', 'KAKAO'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    402, 102, '2025-02-15', '2025-02-18', 2, 1, '2025-01-27 17:45:00', 8
+);
+
+-- 9번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    9, 103, 501, '카드결제', '결제완료', '신용카드', '2025-01-30 10:10:00',
+    245000, 5000, 0, 'TID-20250130-009', 'HYUNDAI'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    501, 103, '2025-02-20', '2025-02-24', 3, 1, '2025-01-30 10:10:00', 9
+);
+
+-- 10번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    10, 104, 502, '간편결제', '결제완료', '네이버페이', '2025-02-01 14:30:00',
+    168000, 12000, 0, 'TID-20250201-010', 'NAVER'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    502, 104, '2025-02-25', '2025-02-28', 2, 1, '2025-02-01 14:30:00', 10
+);
+
+-- 11번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    11, 105, 503, '카드결제', '결제취소', '신용카드', '2025-02-03 09:45:00',
+    220000, 0, 220000, 'TID-20250203-011', 'SAMSUNG'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    503, 105, '2025-03-01', '2025-03-04', 2, 0, '2025-02-03 09:45:00', 11
+);
+
+-- 12번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    12, 106, 601, '간편결제', '결제완료', '토스', '2025-02-05 16:15:00',
+    195000, 5000, 0, 'TID-20250205-012', 'TOSS'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    601, 106, '2025-03-05', '2025-03-08', 3, 1, '2025-02-05 16:15:00', 12
+);
+
+-- 13번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    13, 101, 602, '카드결제', '결제완료', '신용카드', '2025-02-08 11:25:00',
+    235000, 15000, 0, 'TID-20250208-013', 'SHINHAN'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    602, 101, '2025-03-10', '2025-03-14', 4, 1, '2025-02-08 11:25:00', 13
+);
+
+-- 14번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    14, 102, 103, '간편결제', '결제완료', '카카오페이', '2025-02-10 14:55:00',
+    178000, 12000, 0, 'TID-20250210-014', 'KAKAO'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    103, 102, '2025-03-15', '2025-03-18', 2, 1, '2025-02-10 14:55:00', 14
+);
+
+-- 15번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    15, 103, 104, '카드결제', '환불완료', '신용카드', '2025-02-12 09:30:00',
+    156000, 4000, 156000, 'TID-20250212-015', 'HYUNDAI'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    104, 103, '2025-03-20', '2025-03-22', 1, 0, '2025-02-12 09:30:00', 15
+);
+
+-- 16번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    16, 104, 105, '간편결제', '결제완료', '네이버페이', '2025-02-15 15:40:00',
+    189000, 11000, 0, 'TID-20250215-016', 'NAVER'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    105, 104, '2025-03-25', '2025-03-28', 2, 1, '2025-02-15 15:40:00', 16
+);
+
+-- 17번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    17, 105, 203, '카드결제', '결제완료', '신용카드', '2025-02-18 10:20:00',
+    224000, 16000, 0, 'TID-20250218-017', 'SAMSUNG'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    203, 105, '2025-04-01', '2025-04-05', 3, 1, '2025-02-18 10:20:00', 17
+);
+
+-- 18번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    18, 106, 204, '간편결제', '결제취소', '토스', '2025-02-20 13:15:00',
+    165000, 5000, 165000, 'TID-20250220-018', 'TOSS'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    204, 106, '2025-04-05', '2025-04-08', 2, 0, '2025-02-20 13:15:00', 18
+);
+
+-- 19번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    19, 101, 205, '카드결제', '결제완료', '신용카드', '2025-02-22 17:25:00',
+    212000, 8000, 0, 'TID-20250222-019', 'SHINHAN'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    205, 101, '2025-04-10', '2025-04-14', 3, 1, '2025-02-22 17:25:00', 19
+);
+
+-- 20번 쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+    20, 102, 303, '간편결제', '결제완료', '카카오페이', '2025-02-25 11:40:00',
+    195000, 15000, 0, 'TID-20250225-020', 'KAKAO'
+);
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+    303, 102, '2025-04-15', '2025-04-19', 4, 1, '2025-02-25 11:40:00', 20
+);
+
+-- 연결된 데이터 확인 쿼리
+SELECT 
+    r.resv_id, r.acm_id, r.member_code, r.check_in, r.check_out, 
+    p.pay_id, p.pay_method, p.pay_status, p.pay_price, p.pay_date
+FROM 
+    tbl_reservations r
+    JOIN tbl_pay p ON r.pay_id = p.pay_id
+ORDER BY p.pay_id;

@@ -16,7 +16,7 @@ body {
 /* Hero Banner */
 .hero {
     position: relative;
-    height: 500px;
+    height: 80vh;
     overflow: hidden;
 }
 
@@ -26,6 +26,15 @@ body {
     object-fit: cover;
 }
 
+.hero video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 .hero-content {
     position: absolute;
     top: 50%;
@@ -33,6 +42,19 @@ body {
     transform: translate(-50%, -50%);
     text-align: center;
     color: #fff;
+    z-index: 1;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hero-content h1 {
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 2px;
+}
+
+.hero-content p {
+    font-size: 1.8rem;
+    font-weight: 300;
 }
 
 /* Search Bar Improvements */
@@ -184,4 +206,11 @@ body {
 
 .view-more:hover {
     background: #357ABD;
+}
+
+/* 공백 구간 스타일 */
+.spacer {
+    height: 300px; /* 원하는 공백 높이 설정 */
+    width: 100%;
+    background-color: #fff; /* 배경색을 흰색으로 설정 */
 }

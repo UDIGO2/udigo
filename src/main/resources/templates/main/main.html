@@ -19,17 +19,25 @@
 <!-- ---------------------------------- haeder ---------------------------------- -->
 
 <div th:replace="~{fragments/header :: header}"></div>
+<div class="content container">
 
 <!-- --------------------------------- haeder 끝 --------------------------------- -->
 
 <main>
   <section class="hero">
-    <img src="/image/main/hero-pool.jpg" alt="Premium Hotel Pool">
+    <video autoplay muted loop playsinline>
+      <source src="/image/main/efdb63cb-a323-4ced-988c-6b892e5b43eb.mp4" type="video/mp4">
+      <!-- 브라우저가 video 태그를 지원하지 않을 경우 아래 이미지가 표시됩니다 -->
+      귀하의 브라우저는 비디오 태그를 지원하지 않습니다.
+    </video>
     <div class="hero-content">
       <h1>UDIGO</h1>
       <p>Premium HOTEL</p>
     </div>
   </section>
+  
+  <!-- 공백 구간 추가 -->
+  <div class="spacer"></div>
 </main>
 
 <!-- ---------------------------------- footer ---------------------------------- -->
@@ -37,5 +45,6 @@
 <div th:replace="~{fragments/footer :: footer}"></div>
 <script src="/js/header.js"></script>
 
+</div>
 </body>
 </html>

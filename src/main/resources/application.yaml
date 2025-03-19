@@ -2,6 +2,11 @@ server:
   port: 8080  # 애플리케이션 실행 포트
   servlet:
     context-path: ""
+  error:
+    whitelabel:
+      enabled: false  # 화이트라벨 에러 페이지 비활성화
+    path: /error      # 에러 경로 설정
+    include-stacktrace: never  # 스택 트레이스 표시 설정 (필요에 따라 변경)
 
 spring:
   datasource:
