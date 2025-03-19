@@ -224,17 +224,18 @@ CREATE TRIGGER before_insert_tbl_reservations
 BEGIN
     DECLARE overlap_count INT;
 
-    -- 겹치는 예약이 있는지 확인
+    -- 겹치는 예약이 있는지 확인 (체크아웃=체크인은 허용)
     SELECT COUNT(*)
     INTO overlap_count
     FROM tbl_reservations
     WHERE acm_id = NEW.acm_id
-      AND (
-        (NEW.check_in BETWEEN check_in AND check_out)
-            OR (NEW.check_out BETWEEN check_in AND check_out)
-            OR (check_in BETWEEN NEW.check_in AND NEW.check_out)
-            OR (check_out BETWEEN NEW.check_in AND NEW.check_out)
-        );
+      AND is_resv = 1 -- 유효한 예약만 체크
+      AND NOT (NEW.check_out <= check_in OR NEW.check_in >= check_out);
+    
+    -- 위 조건은 다음을 의미합니다:
+    -- 1. 새 예약의 체크아웃이 기존 예약의 체크인보다 이전이거나 같으면 겹치지 않음 (허용)
+    -- 2. 새 예약의 체크인이 기존 예약의 체크아웃보다 이후이거나 같으면 겹치지 않음 (허용)
+    -- 3. 그 외의 경우는 모두 겹침 (불허)
 
     -- 겹치는 예약이 있으면 에러 발생
     IF overlap_count > 0 THEN

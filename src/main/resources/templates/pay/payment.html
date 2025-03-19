@@ -202,6 +202,20 @@
     <p><strong>현장 결제</strong> - 추가 인원 발생 시 추가 금액은 현장에서 납부하셔야 합니다.</p>
     <p><strong>취소 수수료</strong> - 결제 취소는 체크인 7일 이전에만 가능하며, 그 이후에는 환불이 불가합니다.</p>
     <p><strong>필수 이용 수칙</strong> - 각 숙박시설의 규정을 준수해야 합니다. 위반 시 입실 불가, 퇴실 조치 등이 발생할 수 있습니다.</p>
+    <p style="color: #ff5a5f; font-weight: bold; margin-top: 15px;">✅ 테스트 결제용 카드 정보</p>
+    <p><strong>카드번호</strong>: 9430-1234-5678-9012 / <strong>만료일</strong>: 12/25 / <strong>CVC</strong>: 456 / <strong>비밀번호</strong>: 비밀번호 창이 뜨면 아무 번호나 입력하시면 됩니다.</p>
+  </div>
+
+  <!-- 테스트 모드 선택 -->
+  <div class="section" style="background-color: #fffee0; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+    <h2 style="color: #ff5a5f;">테스트 모드 선택</h2>
+    <p style="margin-bottom: 10px;">결제창이 표시되지 않을 경우 테스트 모드를 선택하세요:</p>
+    <div id="payment-debug-info" style="background-color: #f8f8f8; padding: 10px; border-radius: 5px; margin-bottom: 10px; font-size: 12px;">
+      <p><strong>디버깅 정보:</strong> <span id="debug-status">로딩 중...</span></p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <button id="testPayButton" class="payButton" style="background-color: #28a745;">테스트 결제 진행</button>
+    </div>
   </div>
 
   <!-- 결제 버튼 -->
@@ -209,11 +223,28 @@
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script th:inline="javascript">
   document.addEventListener('DOMContentLoaded', function() {
+    // 포트원 라이브러리 로드 확인
+    console.log('DOM 로드 완료');
+    const impLoaded = window.IMP ? '로드됨' : '로드되지 않음';
+    console.log('window.IMP 확인:', impLoaded);
+    
+    // 디버그 정보 업데이트
+    const debugStatus = document.getElementById('debug-status');
+    if (debugStatus) {
+      if (window.IMP) {
+        debugStatus.textContent = 'IMP 라이브러리 로드 성공! 고객사 식별코드: imp10103100';
+        debugStatus.style.color = 'green';
+      } else {
+        debugStatus.textContent = 'IMP 라이브러리 로드 실패! 테스트 결제를 이용해주세요.';
+        debugStatus.style.color = 'red';
+      }
+    }
+    
     const acmId = /*[[${acmId}]]*/ '';
     const acmName = /*[[${acmName}]]*/ '';
     const totalPrice = /*[[${totalPrice}]]*/ 0;
@@ -261,42 +292,247 @@
                            now.getMinutes().toString().padStart(2, '0') + 
                            now.getSeconds().toString().padStart(2, '0');
       
-      // 결제 정보 객체 생성
+      // 포트원 결제 처리
+      const IMP = window.IMP;
+      if (!IMP) {
+        console.error('IMP 객체가 로드되지 않았습니다.');
+        alert('결제 모듈 로드에 실패했습니다. 테스트 결제를 이용해주세요.');
+        return;
+      }
+      
+      // 포트원 객체 초기화 (가맹점 식별코드 사용)
+      IMP.init('imp10103100'); // 실제 고객사 식별코드로 변경
+      console.log('IMP 초기화 완료');
+      
+      // 결제 진행 확인
+      if (!confirm('결제를 진행하시겠습니까?\n실제 결제는 이루어지지 않으며 테스트 카드로 100원만 결제 요청됩니다.')) {
+        return;
+      }
+      
+      try {
+        // 결제 정보
+        const paymentData = {
+          pg: "html5_inicis.INIpayTest",  // 이니시스 테스트 모드로 변경
+          pay_method: "card",
+          merchant_uid: transactionId,
+          name: acmName + " 예약",
+          amount: 100,
+          buyer_name: memberName,
+          buyer_tel: phoneNo
+        };
+        
+        console.log('결제 요청 데이터:', paymentData);
+        
+        // 로딩 상태 표시
+        debugStatus.textContent = '결제 창을 불러오는 중...';
+        debugStatus.style.color = '#3498db';
+        
+        // 결제 요청
+        IMP.request_pay(paymentData, function(rsp) {
+          console.log('결제 응답:', rsp);
+          
+          if (rsp.success) {
+            // 결제 성공 시
+            console.log('결제 성공:', rsp);
+            debugStatus.textContent = '결제 성공! 서버에 정보를 저장합니다.';
+            debugStatus.style.color = 'green';
+            
+            // 결제 정보 객체 생성
+            const paymentData = {
+              acmId: acmId,
+              acmName: acmName,
+              payMethod: payMethod,
+              payStatus: '결제완료',
+              payType: rsp.card_name || '신용카드',
+              payPrice: finalPrice, // 실제 결제 금액 사용
+              discount: discount,
+              payRef: 0,
+              transactionId: rsp.merchant_uid,
+              payProvider: rsp.pg_provider || 'INIpayTest',
+              payApprovalNo: rsp.imp_uid || '',
+              checkIn: checkInDate,
+              checkOut: checkOutDate,
+              guestCount: guestCount,
+              isResv: 1
+            };
+            
+            console.log('서버로 전송할 결제 데이터:', paymentData);
+            
+            // 서버에 결제 정보 전송
+            debugStatus.textContent = '서버에 결제 정보를 저장 중...';
+            debugStatus.style.color = '#3498db';
+            
+            axios.post('/pay/save', paymentData)
+              .then(response => {
+                console.log('서버 응답:', response.data);
+                if (response.data.status) {
+                  debugStatus.textContent = '결제 및 예약 처리가 완료되었습니다!';
+                  debugStatus.style.color = 'green';
+                  const goToReservation = confirm('결제를 성공했습니다\n\n예약 페이지로 이동하시겠습니까?');
+                  if (goToReservation) {
+                    window.location.href = '/resv/current';
+                  } else {
+                    window.location.href = '/'; // 메인 페이지로 이동
+                  }
+                } else {
+                  console.error('서버 응답 에러:', response.data);
+                  // 오류 메시지 추출 및 표시
+                  let errorMsg = '결제는 성공했으나 예약 처리 중 오류가 발생했습니다.';
+                  
+                  if (response.data.message && response.data.message.includes('예약 날짜가 겹칩니다')) {
+                    errorMsg = '선택하신 날짜에 이미 예약이 있습니다. 다른 날짜를 선택해주세요.';
+                    debugStatus.textContent = '예약 날짜 중복 오류: ' + errorMsg;
+                  } else if (response.data.message) {
+                    errorMsg += ' ' + response.data.message;
+                    debugStatus.textContent = '서버 처리 오류: ' + response.data.message;
+                  } else {
+                    debugStatus.textContent = '서버 처리 오류: 알 수 없는 오류';
+                  }
+                  
+                  debugStatus.style.color = 'red';
+                  alert(errorMsg);
+                }
+              })
+              .catch(error => {
+                console.error('결제 처리 오류:', error);
+                
+                // 오류 응답에서 상세 메시지 추출
+                let errorMsg = '결제 처리 중 오류가 발생했습니다.';
+                
+                if (error.response && error.response.data) {
+                  console.log('에러 응답 데이터:', error.response.data);
+                  
+                  if (error.response.data.message && error.response.data.message.includes('예약 날짜가 겹칩니다')) {
+                    errorMsg = '선택하신 날짜에 이미 예약이 있습니다. 다른 날짜를 선택해주세요.';
+                    debugStatus.textContent = '예약 날짜 중복 오류: ' + errorMsg;
+                  } else if (typeof error.response.data === 'string' && error.response.data.includes('예약 날짜가 겹칩니다')) {
+                    errorMsg = '선택하신 날짜에 이미 예약이 있습니다. 다른 날짜를 선택해주세요.';
+                    debugStatus.textContent = '예약 날짜 중복 오류: ' + errorMsg;
+                  } else if (error.response.data.message) {
+                    errorMsg += ' ' + error.response.data.message;
+                    debugStatus.textContent = '서버 통신 오류: ' + error.response.data.message;
+                  }
+                } else if (error.message) {
+                  debugStatus.textContent = '서버 통신 오류: ' + error.message;
+                }
+                
+                debugStatus.style.color = 'red';
+                alert(errorMsg);
+              });
+          } else {
+            // 결제 실패 시
+            console.error('결제 실패:', rsp);
+            debugStatus.textContent = '결제 실패: ' + rsp.error_msg;
+            debugStatus.style.color = 'red';
+            alert('결제에 실패하였습니다. ' + rsp.error_msg);
+          }
+        });
+      } catch (error) {
+        console.error('결제 처리 오류:', error);
+        document.getElementById('debug-status').textContent = '결제 오류: ' + error.message;
+        document.getElementById('debug-status').style.color = 'red';
+        alert('결제 처리 중 오류가 발생했습니다. 테스트 결제를 이용해 주세요.\n오류: ' + error.message);
+      }
+    });
+
+    // 테스트 결제 버튼 클릭 이벤트
+    document.getElementById('testPayButton').addEventListener('click', function() {
+      const phoneNo = document.getElementById('phoneNo').value;
+      if (!phoneNo) {
+        alert('전화번호를 입력해주세요.');
+        return;
+      }
+      
+      const payMethod = document.getElementById('payMethod').value;
+      
+      // 현재 날짜 및 시간으로 고유 ID 생성
+      const now = new Date();
+      const transactionId = 'TEST_' + now.getFullYear() + 
+                           (now.getMonth() + 1).toString().padStart(2, '0') + 
+                           now.getDate().toString().padStart(2, '0') + 
+                           now.getHours().toString().padStart(2, '0') + 
+                           now.getMinutes().toString().padStart(2, '0') + 
+                           now.getSeconds().toString().padStart(2, '0');
+      
+      // 테스트 결제 정보 객체 생성
       const paymentData = {
         acmId: acmId,
         acmName: acmName,
         payMethod: payMethod,
         payStatus: '결제완료',
-        payType: payMethod === '카드결제' ? '신용카드' : '간편결제',
+        payType: '신용카드(테스트)',
         payPrice: finalPrice,
         discount: discount,
         payRef: 0,
         transactionId: transactionId,
-        payProvider: 'UDIGO',
+        payProvider: '테스트결제',
         checkIn: checkInDate,
         checkOut: checkOutDate,
         guestCount: guestCount,
         isResv: 1
       };
       
-      // 서버에 결제 정보 전송
-      axios.post('/pay/save', paymentData)
-        .then(response => {
-          if (response.data.status) {
-            const goToReservation = confirm('결제를 성공했습니다\n\n예약 페이지로 이동하시겠습니까?');
-            if (goToReservation) {
-              window.location.href = '/resv/current';
+      if (confirm('테스트 결제를 진행하시겠습니까?\n\n결제금액: ' + finalPrice.toLocaleString() + '원')) {
+        // 서버에 결제 정보 전송
+        debugStatus.textContent = '테스트 결제 정보를 서버에 저장 중...';
+        debugStatus.style.color = '#3498db';
+        
+        axios.post('/pay/save', paymentData)
+          .then(response => {
+            if (response.data.status) {
+              debugStatus.textContent = '테스트 결제 및 예약 처리가 완료되었습니다!';
+              debugStatus.style.color = 'green';
+              const goToReservation = confirm('테스트 결제가 성공했습니다\n\n예약 페이지로 이동하시겠습니까?');
+              if (goToReservation) {
+                window.location.href = '/resv/current';
+              } else {
+                window.location.href = '/'; // 메인 페이지로 이동
+              }
             } else {
-              window.location.href = '/'; // 메인 페이지로 이동
+              // 오류 메시지 추출 및 표시
+              let errorMsg = '결제는 성공했으나 예약 처리 중 오류가 발생했습니다.';
+              
+              if (response.data.message && response.data.message.includes('예약 날짜가 겹칩니다')) {
+                errorMsg = '선택하신 날짜에 이미 예약이 있습니다. 다른 날짜를 선택해주세요.';
+                debugStatus.textContent = '예약 날짜 중복 오류: ' + errorMsg;
+              } else if (response.data.message) {
+                errorMsg += ' ' + response.data.message;
+                debugStatus.textContent = '서버 처리 오류: ' + response.data.message;
+              } else {
+                debugStatus.textContent = '서버 처리 오류가 발생했습니다.';
+              }
+              
+              debugStatus.style.color = 'red';
+              alert(errorMsg);
             }
-          } else {
-            alert('결제 처리 중 오류가 발생했습니다.');
-          }
-        })
-        .catch(error => {
-          console.error('결제 처리 오류:', error);
-          alert('결제 처리 중 오류가 발생했습니다.');
-        });
+          })
+          .catch(error => {
+            console.error('결제 처리 오류:', error);
+            
+            // 오류 응답에서 상세 메시지 추출
+            let errorMsg = '결제 처리 중 오류가 발생했습니다.';
+            
+            if (error.response && error.response.data) {
+              console.log('에러 응답 데이터:', error.response.data);
+              
+              if (error.response.data.message && error.response.data.message.includes('예약 날짜가 겹칩니다')) {
+                errorMsg = '선택하신 날짜에 이미 예약이 있습니다. 다른 날짜를 선택해주세요.';
+                debugStatus.textContent = '예약 날짜 중복 오류: ' + errorMsg;
+              } else if (typeof error.response.data === 'string' && error.response.data.includes('예약 날짜가 겹칩니다')) {
+                errorMsg = '선택하신 날짜에 이미 예약이 있습니다. 다른 날짜를 선택해주세요.';
+                debugStatus.textContent = '예약 날짜 중복 오류: ' + errorMsg;
+              } else if (error.response.data.message) {
+                errorMsg += ' ' + error.response.data.message;
+                debugStatus.textContent = '서버 통신 오류: ' + error.response.data.message;
+              }
+            } else if (error.message) {
+              debugStatus.textContent = '서버 통신 오류: ' + error.message;
+            }
+            
+            debugStatus.style.color = 'red';
+            alert(errorMsg);
+          });
+      }
     });
   });
 </script>

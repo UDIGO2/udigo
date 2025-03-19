@@ -125,7 +125,8 @@
             p.pay_method as payMethod,
             p.pay_status as payStatus,
             p.pay_type as payType,
-            p.transaction_id as transactionId
+            p.transaction_id as transactionId,
+            p.pay_ref as payRef
         FROM
             tbl_pay p
             JOIN tbl_reservations r ON p.pay_id = r.pay_id  -- tbl_pay와 tbl_reservations를 pay_id로 JOIN

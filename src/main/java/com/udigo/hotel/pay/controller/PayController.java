@@ -115,4 +115,25 @@ public class PayController {
                     .body(Map.of("message", " 결제 저장 실패!", "status", false));
         }
     }
+    
+    // 모바일 결제 완료 후 리다이렉션 처리
+    @GetMapping("/complete")
+    public String paymentComplete(@RequestParam(required = false) String merchant_uid,
+                                 @RequestParam(required = false) String imp_uid,
+                                 @RequestParam(required = false) String error_msg,
+                                 Model model) {
+        
+        logger.info("모바일 결제 완료 - merchant_uid: {}, imp_uid: {}", merchant_uid, imp_uid);
+        
+        if (error_msg != null && !error_msg.isEmpty()) {
+            logger.error("결제 오류 발생: {}", error_msg);
+            model.addAttribute("errorMsg", error_msg);
+            return "pay/paymentError";
+        }
+        
+        // 여기서 실제로는 imp_uid를 사용하여 포트원 API로 결제 정보를 검증할 수 있음
+        // 검증이 완료되면 savePayment 메서드처럼 결제 정보를 저장
+        
+        return "redirect:/resv/current";
+    }
 }

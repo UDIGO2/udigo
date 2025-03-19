@@ -121,7 +121,7 @@
                 LEFT JOIN tbl_pay p ON r.pay_id = p.pay_id
         WHERE
             r.member_code = #{memberCode}
-          AND r.check_in &gt; DATE_ADD(CURDATE(), INTERVAL 3 DAY)
+          AND r.check_in &gt;= DATE_ADD(CURDATE(), INTERVAL 1 DAY)
           AND r.is_resv = 1
         ORDER BY
             r.check_in ASC
@@ -176,4 +176,26 @@
         ORDER BY
             r.check_in ASC
     </select>
+
+    <!-- 예약 ID로 예약 정보 조회 -->
+    <select id="findById" parameterType="int" resultType="com.udigo.hotel.resv.model.dto.ResvDTO">
+        SELECT
+            r.resv_id, r.acm_id, r.member_code, r.check_in, r.check_out,
+            r.guest_count, r.is_resv, r.created_at, r.pay_id,
+            a.acm_name, a.acm_photo1, a.acm_price as acm_price
+        FROM
+            tbl_reservations r
+        JOIN
+            tbl_acm a ON r.acm_id = a.acm_id
+        WHERE
+            r.resv_id = #{resvId}
+    </select>
+    
+    <!-- 결제 테이블의 상태를 '환불완료'로 변경하고 환불 금액을 저장 -->
+    <update id="updatePaymentForRefund">
+        UPDATE tbl_pay
+        SET pay_status = '환불완료',
+            pay_ref = #{refundAmount}
+        WHERE pay_id = #{payId}
+    </update>
 </mapper>

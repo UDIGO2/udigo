@@ -521,11 +521,25 @@ INSERT INTO tbl_pay (
              150000, 0, 0, 'TEST-TRANSACTION-123', 'TEST-PG'
          );
 
+-- 테스트용 결제 데이터 생성
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+             103, 101, 101, '카드결제', '결제완료', '신용카드', NOW(),
+             150000, 0, 0, 'TEST-TRANSACTION-123', 'TEST-PG'
+         );
+
 -- 테스트용 예약 데이터 생성 (pay_id 연결)
 INSERT INTO tbl_reservations (
     acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
 ) VALUES (
              101, 101, '2025-04-10', '2025-04-14', 2, 1, NOW(), 102
+         );
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+             101, 101, '2025-04-19', '2025-04-20', 2, 1, NOW(), 103
          );
 
 -- 테스트 데이터 확인 쿼리

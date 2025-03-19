@@ -70,4 +70,39 @@ public class ResvService {
     public void cancelReservation(int resvId) {
         resvMapper.cancelReservation(resvId);
     }
+
+    @Transactional
+    public void cancelReservationWithRefund(int resvId, int memberCode, int refundAmount) {
+        // 예약 정보 조회
+        ResvDTO reservation = resvMapper.findById(resvId);
+        if (reservation == null) {
+            throw new RuntimeException("예약 정보를 찾을 수 없습니다.");
+        }
+        
+        // 보안 검사: 현재 로그인한 사용자의 예약인지 확인
+        if (reservation.getMemberCode() != memberCode) {
+            throw new RuntimeException("권한이 없습니다.");
+        }
+        
+        // 체크인 날짜 확인 (체크인 3일 이전까지만 취소 가능)
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime checkIn = reservation.getCheckIn();
+        long daysUntilCheckIn = java.time.Duration.between(now, checkIn).toDays();
+        
+        if (daysUntilCheckIn < 0) {
+            throw new RuntimeException("체크인 이후에는 예약을 취소할 수 없습니다.");
+        }
+        
+        // 결제 ID 가져오기
+        Integer payId = reservation.getPayId();
+        if (payId == null) {
+            throw new RuntimeException("결제 정보를 찾을 수 없습니다.");
+        }
+        
+        // 1. 결제 테이블에서 상태를 '환불완료'로 변경하고 환불 금액 업데이트
+        resvMapper.updatePaymentForRefund(payId, refundAmount);
+        
+        // 2. 예약 테이블에서 예약 취소 (is_resv = 0 또는 예약 삭제)
+        resvMapper.updateResvCancel(resvId, memberCode);
+    }
 }

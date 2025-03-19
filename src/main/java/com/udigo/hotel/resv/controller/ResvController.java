@@ -129,7 +129,9 @@ public class ResvController {
     // 예약 취소 처리
     @PostMapping("/cancel/{resvId}")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> cancelReservation(@PathVariable int resvId) {
+    public ResponseEntity<Map<String, Object>> cancelReservation(
+            @PathVariable int resvId,
+            @RequestBody Map<String, Object> requestData) {
         Map<String, Object> response = new HashMap<>();
 
         try {
@@ -142,11 +144,21 @@ public class ResvController {
 
             CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
             int memberCode = userDetails.getMemberCode();
+            
+            // 환불 금액 가져오기
+            int refundAmount = 0;
+            if (requestData.containsKey("refundAmount")) {
+                refundAmount = Integer.parseInt(requestData.get("refundAmount").toString());
+            }
 
-            resvService.cancelReservation(resvId, memberCode);
+            // 예약 취소 및 환불 처리
+            resvService.cancelReservationWithRefund(resvId, memberCode, refundAmount);
+            
             response.put("success", true);
+            response.put("refundAmount", refundAmount);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
+            e.printStackTrace();
             response.put("success", false);
             response.put("message", e.getMessage());
             return ResponseEntity.badRequest().body(response);

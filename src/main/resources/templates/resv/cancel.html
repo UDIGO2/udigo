@@ -178,7 +178,8 @@
     </div>
 
     <div class="info-text">
-        * 체크인 3일 전까지만 취소가 가능합니다.
+        * 체크인 3일 전까지만 전액 환불이 가능합니다.<br>
+        * 당일 예약 취소는 UDIGO 고객센터에 연락 부탁드립니다.
     </div>
 
     <div th:if="${#lists.isEmpty(reservations)}">
@@ -344,17 +345,62 @@
 
     // 예약 취소 함수
     function cancelReservation(resvId) {
-        if (confirm('정말로 예약을 취소하시겠습니까?')) {
+        // 버튼을 클릭한 예약의 카드 요소를 찾습니다
+        const reservationCard = document.querySelector(`button[data-resv-id="${resvId}"]`).closest('.reservation-card');
+        
+        // 예약 카드에서 필요한 데이터를 찾습니다
+        const resvDetails = reservationCard.querySelector('.resv-details');
+        const checkIn = new Date(resvDetails.dataset.checkin);
+        const checkOut = new Date(resvDetails.dataset.checkout);
+        const price = parseInt(resvDetails.dataset.price);
+        
+        // 숙박 일수 계산
+        const days = Math.round((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+        
+        // 총 금액 계산
+        let totalAmount = price * days;
+        
+        // 할인 적용
+        const reservationData = JSON.parse(resvDetails.getAttribute('data-reservation')) || {};
+        const discount = reservationData.discount || 0;
+        if (discount > 0) {
+            totalAmount -= discount;
+            if (totalAmount < 0) totalAmount = 0;
+        }
+        
+        // 체크인 날짜까지 남은 일수 계산
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const daysUntilCheckIn = Math.round((checkIn - today) / (1000 * 60 * 60 * 24));
+        
+        // 환불 금액 계산 (체크인 3일 이전: 100%, 1-2일 전: 70%, 당일: 50%)
+        let refundRate = 1.0; // 기본 100%
+        let refundMessage = "전액 환불";
+        
+        if (daysUntilCheckIn <= 0) {
+            refundRate = 0.5; // 당일 취소: 50%
+            refundMessage = "50% 환불";
+        } else if (daysUntilCheckIn <= 2) {
+            refundRate = 0.7; // 1-2일 전 취소: 70%
+            refundMessage = "70% 환불";
+        }
+        
+        const refundAmount = Math.round(totalAmount * refundRate);
+        
+        if (confirm(`정말로 예약을 취소하시겠습니까?\n\n취소 수수료 정책:\n- 체크인 3일 이전: 전액 환불\n- 체크인 1-2일 전: 70% 환불\n- 체크인 당일: 50% 환불\n\n예상 환불 금액: ${refundAmount.toLocaleString()}원 (${refundMessage})`)) {
             fetch(`/resv/cancel/${resvId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify({
+                    refundAmount: refundAmount
+                })
             })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert('예약이 취소되었습니다.');
+                        alert(`예약이 취소되었습니다.\n환불 금액: ${refundAmount.toLocaleString()}원이 환불 처리되었습니다.`);
                         location.reload();
                     } else {
                         alert(data.message || '예약 취소에 실패했습니다.');
