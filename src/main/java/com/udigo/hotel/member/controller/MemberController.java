@@ -13,6 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 @RequestMapping("/member")
 public class MemberController {
@@ -21,51 +24,60 @@ public class MemberController {
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
 
-
     public MemberController(MemberService memberService, PasswordEncoder passwordEncoder) {
         this.memberService = memberService;
         this.passwordEncoder = passwordEncoder;
     }
 
-    /** 회원가입 페이지 이동 **/
+    /** ✅ 회원가입 페이지 이동 **/
     @GetMapping("/signup")
     public String signupForm(Model model) {
         model.addAttribute("member", new MemberDTO());
         return "member/signup"; // signup.html 페이지로 이동
     }
 
-    /** 회원가입 처리 **/
+    /** ✅ 회원가입 처리 **/
     @PostMapping("/signup")
-    public String signup(@ModelAttribute MemberDTO member, RedirectAttributes redirectAttributes) {
+    public String signup(@ModelAttribute MemberDTO member, Model model) {
         try {
             memberService.signup(member);
-            redirectAttributes.addFlashAttribute("successMessage", "회원가입이 완료되었습니다!");
-            return "redirect:/member/signup";
+            model.addAttribute("successMessage", "회원가입이 완료되었습니다!");
+            return "member/signup";
         } catch (IllegalArgumentException e) { // 아이디 중복 등 사용자 입력 오류
-            redirectAttributes.addFlashAttribute("errorMessage", "이미 사용 중인 아이디입니다. 다른 아이디를 입력해주세요.");
+            model.addAttribute("errorMessage", "이미 사용 중인 아이디입니다. 다른 아이디를 입력해주세요.");
         } catch (Exception e) { // 기타 모든 예외 (DB 오류 포함)
-            redirectAttributes.addFlashAttribute("errorMessage", "회원가입에 실패했습니다. 다시 시도해주세요.");
+            model.addAttribute("errorMessage", "회원가입에 실패했습니다. 다시 시도해주세요.");
         }
-        return "redirect:/member/signup";
+        return "member/signup";
     }
 
-    @PostMapping("/checkDuplicate")
-    public String checkDuplicate(@RequestParam("memberId") String memberId, RedirectAttributes redirectAttributes) {
-        boolean isDuplicate = memberService.isMemberIdDuplicate(memberId);
+    /** ✅ 아이디 & 이메일 중복 확인 (AJAX 지원, JSON 응답) **/
+    @GetMapping("/check-duplicate")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> checkDuplicate(
+            @RequestParam("type") String type,
+            @RequestParam("value") String value) {
 
-        if (isDuplicate) {
-            redirectAttributes.addFlashAttribute("duplicateMessage", "이미 존재하는 아이디입니다.");
+        boolean isDuplicate;
+        if ("id".equals(type)) {
+            isDuplicate = memberService.isMemberIdDuplicate(value);
+        } else if ("email".equals(type)) {
+            isDuplicate = memberService.isEmailDuplicate(value);
         } else {
-            redirectAttributes.addFlashAttribute("duplicateMessage", "사용 가능한 아이디입니다.");
-            redirectAttributes.addFlashAttribute("checkedMemberId", memberId); // 입력 유지
+            return ResponseEntity.badRequest().body(Map.of("message", "잘못된 요청입니다."));
         }
 
-        return "redirect:/member/signup"; // 회원가입 페이지로 이동
+        Map<String, Object> response = new HashMap<>();
+        response.put("isDuplicate", isDuplicate);
+        response.put("message", isDuplicate ? "이미 사용 중입니다." : "사용 가능합니다.");
+
+        return ResponseEntity.ok(response);
     }
 
+    /** ✅ 마이페이지 이동 **/
     @GetMapping("/mypage")
     public String myPage(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();       // security 관련부분
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getPrincipal() instanceof CustomUserDetails) {
             CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
             model.addAttribute("memberId", userDetails.getMemberId());
@@ -75,6 +87,7 @@ public class MemberController {
         return "member/mypage";
     }
 
+    /** ✅ 회원 정보 조회 **/
     @GetMapping("/myinfo")
     public String myInfo(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -91,6 +104,7 @@ public class MemberController {
         return "redirect:/auth/login";
     }
 
+    /** ✅ 회원 정보 수정 **/
     @PostMapping("/myinfo/update")
     public String updateMyInfo(@ModelAttribute MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -108,7 +122,7 @@ public class MemberController {
         return "redirect:/auth/login";
     }
 
-    /* 쿠폰 사용 API */
+    /** ✅ 쿠폰 사용 **/
     @PostMapping("/useCoupon")
     public String useCoupon(@ModelAttribute MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
         try {
@@ -117,24 +131,16 @@ public class MemberController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "쿠폰 사용 실패: " + e.getMessage());
         }
-        return "redirect:/member/mypage"; //  마이페이지로 리디렉트
+        return "redirect:/member/mypage";
     }
 
-    /* GET 요청 지원: 브라우저에서 실행 가능하도록 변경 */
-    @GetMapping("/useCoupon")
-    public String useCouponGet(@ModelAttribute MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
-        return useCoupon(memberDTO, redirectAttributes);
-    }
-
-
-
-    // ✅ 비밀번호 변경 페이지 이동
+    /** ✅ 비밀번호 변경 페이지 이동 **/
     @GetMapping("/changepassword")
     public String showChangePasswordForm() {
-        return "member/changepassword"; // Thymeleaf 템플릿 이동
+        return "member/changepassword";
     }
 
-    // ✅ 비밀번호 변경 처리 (POST 요청)
+    /** ✅ 비밀번호 변경 처리 **/
     @PostMapping("/changepassword")
     public String changePassword(
             @RequestParam("currentPassword") String currentPassword,
@@ -147,27 +153,28 @@ public class MemberController {
         String memberId = authentication.getName();
         MemberDTO member = memberService.getMemberById(memberId);
 
-        // ✅ 회원 존재 여부 확인
+        // 회원 존재 여부 확인
         if (member == null) {
             model.addAttribute("error", "회원 정보를 찾을 수 없습니다.");
             return "member/changepassword";
         }
 
+        // 현재 비밀번호 일치 확인
         if (!passwordEncoder.matches(currentPassword, member.getPassword())) {
             model.addAttribute("error", "현재 비밀번호가 올바르지 않습니다.");
             return "member/changepassword";
         }
 
-        // ✅ 새 비밀번호와 확인 비밀번호 일치 확인
+        // 새 비밀번호와 확인 비밀번호 일치 확인
         if (!newPassword.equals(confirmPassword)) {
             model.addAttribute("error", "새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
             return "member/changepassword";
         }
 
-        // ✅ 비밀번호 업데이트 후 성공 메시지 추가
+        // 비밀번호 업데이트 후 성공 메시지 추가
         memberService.updatePassword(memberId, passwordEncoder.encode(newPassword));
         redirectAttributes.addFlashAttribute("successMessage", "비밀번호가 성공적으로 변경되었습니다.");
 
-        return "redirect:/member/changepassword";  // 로그인 페이지로 이동
+        return "redirect:/member/changepassword";
     }
 }

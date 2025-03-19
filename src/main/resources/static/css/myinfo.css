@@ -27,25 +27,25 @@
 }
 
 .myinfo-title {
-    font-size: 32px;
+    font-size: 40px;
     font-weight: bold;
+    color: #333;
 }
 
 /* ✅ 상단 탭 버튼 */
 .info-tabs {
     display: flex;
-    justify-content: center;
     gap: 8px;
 }
 
 .info-tab {
-    width: 60px;
     text-align: center;
-    padding: 7px;
-    border-radius: 8px;
-    font-size: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
     font-weight: bold;
     text-decoration: none;
+    transition: background-color 0.2s ease-in-out;
 }
 
 /* ✅ 버튼 색상 수정 */
@@ -54,14 +54,22 @@
     color: white;
 }
 
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
 .btn-danger {
     background-color: #007bff;
     color: white;
 }
 
+.btn-danger:hover {
+    background-color: #0056b3;
+}
+
 /* ✅ 입력 필드 스타일 */
 .info-group {
-    margin-bottom: 12px;
+    margin-bottom: 15px;
 }
 
 .info-group label {
@@ -69,7 +77,7 @@
     font-weight: bold;
     margin-bottom: 5px;
     display: block;
-    color: #333;
+    color: #555;
 }
 
 .info-group input {
@@ -81,18 +89,26 @@
     background-color: #f8f8f8;
 }
 
+/* ✅ 읽기 전용 입력 필드 스타일 */
+.info-group input[readonly] {
+    background-color: #e9ecef;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
 /* ✅ 수정하기 버튼 */
 .update-btn {
     width: 100%;
     background-color: #007bff;
     color: white;
-    padding: 15px;
+    padding: 14px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
     margin-top: 20px;
+    transition: background-color 0.2s ease-in-out;
 }
 
 .update-btn:hover {
@@ -104,7 +120,38 @@
     display: block;
     text-align: right;
     margin-top: 20px;
-    font-size: 13px;
+    font-size: 14px;
     color: #888;
     text-decoration: none;
+}
+
+.logout:hover {
+    color: #555;
+}
+
+/* ✅ 반응형 디자인 (모바일 대응) */
+@media (max-width: 500px) {
+    .myinfo-container {
+        width: 90%;
+        padding: 30px;
+    }
+
+    .myinfo-title {
+        font-size: 22px;
+    }
+
+    .info-tab {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+
+    .info-group input {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .update-btn {
+        font-size: 14px;
+        padding: 12px;
+    }
 }

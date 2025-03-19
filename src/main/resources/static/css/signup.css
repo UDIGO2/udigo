@@ -57,10 +57,11 @@ h2 {
     width: 110px;
     margin-left: 10px;
     padding: 11px;
-    background-color: #ddd;
-    border: none;
+    background-color: #fff;
+    border: 1px solid #000; /* 기존과 동일한 스타일 적용 */
     border-radius: 4px;
     cursor: pointer;
+    font-size: 14px;
 }
 
 /* 약관 체크박스 */

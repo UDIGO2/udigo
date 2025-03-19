@@ -34,26 +34,35 @@
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
             </th:block>
 
+            <!-- ✅ 아이디 (수정 불가) -->
             <div class="info-group">
                 <label for="memberId">아이디</label>
                 <input type="text" id="memberId" name="memberId" th:value="${member.memberId}" readonly>
             </div>
 
+            <!-- ✅ 이름 -->
             <div class="info-group">
                 <label for="memberName">이름</label>
                 <input type="text" id="memberName" name="memberName" th:value="${member.memberName}">
             </div>
 
+            <!-- ✅ 이메일 (수정 가능 + 중복 확인 버튼 추가) -->
             <div class="info-group">
                 <label for="email">이메일</label>
-                <input type="text" id="email" name="email" th:value="${member.email}">
+                <div class="btn-container">
+                    <input type="text" id="email" name="email" th:value="${member.email}">
+                    <button type="button" class="btn-check" onclick="checkDuplicate('email', 'email')">중복 확인</button>
+                </div>
+                <small id="emailMessage" style="color: red;"></small> <!-- 중복 확인 메시지 표시 -->
             </div>
 
+            <!-- ✅ 핸드폰 번호 (자동 하이픈 적용) -->
             <div class="info-group">
                 <label for="phoneNo">휴대폰 번호</label>
-                <input type="text" id="phoneNo" name="phoneNo" th:value="${member.phoneNo}">
+                <input type="text" id="phoneNo" name="phoneNo" th:value="${member.phoneNo}" oninput="formatPhoneNumber(this)">
             </div>
 
+            <!-- ✅ 수정하기 버튼 -->
             <button type="submit" class="update-btn">수정하기</button>
         </form>
 
@@ -104,6 +113,42 @@
             alert("수정이 완료되었습니다!");
             history.replaceState({}, null, window.location.pathname);
         }
+    }
+
+    // ✅ 중복 확인 (아이디 & 이메일 공통)
+    function checkDuplicate(inputId, type) {
+        let inputField = document.getElementById(inputId);
+        let inputValue = inputField.value.trim();
+        let messageField = document.getElementById(inputId + "Message");
+
+        if (inputValue === "") {
+            alert(type === "id" ? "아이디를 입력하세요." : "이메일을 입력하세요.");
+            return;
+        }
+
+        fetch(`/member/check-duplicate?type=${type}&value=${inputValue}`)
+            .then(response => response.json())
+            .then(data => {
+                messageField.textContent = data.message;
+                messageField.style.color = data.isDuplicate ? "red" : "green";
+            })
+            .catch(error => console.error("오류 발생:", error));
+    }
+
+    // ✅ 핸드폰 번호 입력 시 자동으로 하이픈(-) 추가하는 함수
+    function formatPhoneNumber(input) {
+        let number = input.value.replace(/[^0-9]/g, ""); // 숫자만 남기고 나머지는 제거
+        let formatted = "";
+
+        if (number.length <= 3) {
+            formatted = number;
+        } else if (number.length <= 7) {
+            formatted = number.slice(0, 3) + "-" + number.slice(3);
+        } else {
+            formatted = number.slice(0, 3) + "-" + number.slice(3, 7) + "-" + number.slice(7, 11);
+        }
+
+        input.value = formatted;
     }
 </script>
 

@@ -9,6 +9,7 @@
     <link rel="stylesheet" th:href="@{/css/signup.css}">
 </head>
 <body>
+
 <!--  헤더 추가 -->
 <div th:replace="~{fragments/header :: header}"></div>
 
@@ -24,10 +25,10 @@
         <form th:action="@{/member/signup}" method="post" th:object="${member}">
             <!-- 아이디 -->
             <div class="form-group">
-                <label for="memberId">아이디</label>
+                <label for="member_id">아이디</label>
                 <div class="btn-container">
-                    <input type="text" id="memberId" name="memberId" th:value="${checkedMemberId}" required oninput="checkIdInput()">
-                    <button type="button" id="checkDuplicateBtn" onclick="checkDuplicateId()" disabled>중복 확인</button>
+                    <input type="text" id="member_id" name="member_id" placeholder="아이디" oninput="checkIdInput()">
+                    <button type="button" class="btn-check" id="checkDuplicateBtn" onclick="checkDuplicate('member_id', 'id')" disabled>중복 확인</button>
                 </div>
             </div>
 
@@ -47,24 +48,22 @@
             <div class="form-group">
                 <label for="passwordConfirm">비밀번호 확인</label>
                 <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="비밀번호 확인" required onkeyup="checkPasswordMatch()">
+                <small id="passwordMatchMessage" style="display: none;"></small>
             </div>
-
-            <!-- 비밀번호 확인 메시지 -->
-            <small id="passwordMatchMessage" style="display: none;"></small>
 
             <!-- 이메일 -->
             <div class="form-group">
                 <label for="email">이메일</label>
                 <div class="btn-container">
                     <input type="email" id="email" name="email" placeholder="이메일" required>
-                    <button type="button" class="btn-check" onclick="checkEmail()">중복 확인</button>
+                    <button type="button" class="btn-check" onclick="checkDuplicate('email', 'email')">중복 확인</button>
                 </div>
             </div>
 
             <!-- 핸드폰 번호 -->
             <div class="form-group">
                 <label for="phoneNo">핸드폰 번호</label>
-                <input type="text" id="phoneNo" name="phoneNo" placeholder="핸드폰 번호" required>
+                <input type="text" id="phoneNo" name="phoneNo" placeholder="핸드폰 번호" required oninput="formatPhoneNumber(this)">
             </div>
 
             <!-- 이용약관 동의 -->
@@ -93,35 +92,19 @@
     document.addEventListener("DOMContentLoaded", function() {
         var successMessage = /*[[${successMessage}]]*/ null;
         var errorMessage = /*[[${errorMessage}]]*/ null;
-        var duplicateMessage = /*[[${duplicateMessage}]]*/ null;
-        var checkedMemberId = /*[[${checkedMemberId}]]*/ null;
 
         if (successMessage && successMessage.trim() !== "" && successMessage.trim() !== "null") {
-            alert(successMessage); // 첫 번째 알림창 (회원가입 완료)
-
-            // 두 번째 알림창 (첫 가입 쿠폰 지급)
+            alert(successMessage);
             alert("🎉 첫 가입 환영! 5000원 쿠폰 지급");
-
-            // 마지막 알림 확인 후 로그인 페이지로 이동
             window.location.href = "/login";
         }
 
         if (errorMessage && errorMessage.trim() !== "" && errorMessage.trim() !== "null") {
             alert("회원가입에 실패했습니다. 다시 시도해주세요.");
         }
-
-        // ✅ 아이디 중복 확인 메시지
-        if (duplicateMessage && duplicateMessage.trim() !== "" && duplicateMessage.trim() !== "null") {
-            alert(duplicateMessage);
-        }
-
-        // ✅ 아이디가 중복 확인 후 유지되도록 설정
-        if (checkedMemberId && checkedMemberId.trim() !== "" && checkedMemberId.trim() !== "null") {
-            document.getElementById("memberId").value = checkedMemberId;
-        }
     });
 
-    //  비밀번호 확인 기능 추가
+    // ✅ 비밀번호 확인 기능
     function checkPasswordMatch() {
         var password = document.getElementById("password").value;
         var passwordConfirm = document.getElementById("passwordConfirm").value;
@@ -132,45 +115,55 @@
             return;
         }
 
-        if (password === passwordConfirm) {
-            message.style.display = "block";
-            message.style.color = "green";
-            message.innerHTML = "✔ 비밀번호가 일치합니다.";
-        } else {
-            message.style.display = "block";
-            message.style.color = "red";
-            message.innerHTML = "❌ 비밀번호가 일치하지 않습니다.";
-        }
+        message.style.display = "block";
+        message.style.color = password === passwordConfirm ? "green" : "red";
+        message.innerHTML = password === passwordConfirm ? "✔ 비밀번호가 일치합니다." : "❌ 비밀번호가 일치하지 않습니다.";
     }
 
-    // ✅ 아이디 입력 시 버튼 활성화/비활성화
+    // ✅ 아이디 입력 시 버튼 활성화
     function checkIdInput() {
-        let memberId = document.getElementById("memberId").value.trim();
+        let memberId = document.getElementById("member_id").value.trim();
         let checkBtn = document.getElementById("checkDuplicateBtn");
 
-        if (memberId.length > 0) {
-            checkBtn.disabled = false; // 입력값이 있을 경우 활성화
-            checkBtn.style.backgroundColor = "#007bff"; // ✅ 활성화 시 색상 변경
-            checkBtn.style.cursor = "pointer";
-        } else {
-            checkBtn.disabled = true; // 입력값이 없으면 비활성화
-            checkBtn.style.backgroundColor = "#ccc"; // ✅ 비활성화 색상 적용
-            checkBtn.style.cursor = "default";
-        }
+        checkBtn.disabled = memberId.length === 0;
+        checkBtn.style.backgroundColor = memberId.length > 0 ? "#007bff" : "#ccc";
+        checkBtn.style.cursor = memberId.length > 0 ? "pointer" : "default";
     }
 
-    // ✅ 아이디 중복 확인
-    function checkDuplicateId() {
-        let memberId = document.getElementById("memberId").value.trim();
+    // ✅ 중복 확인 (아이디 & 이메일 공통)
+    function checkDuplicate(inputId, type) {
+        let inputField = document.getElementById(inputId);
+        let inputValue = inputField.value.trim();
 
-        if (memberId.length === 0) {
-            alert("아이디를 입력해주세요.");
+        if (inputValue === "") {
+            alert(type === "id" ? "아이디를 입력하세요." : "이메일을 입력하세요.");
             return;
         }
 
-        // 서버에 GET 요청을 보내어 아이디 중복 확인
-        location.href = "/member/checkDuplicate?memberId=" + encodeURIComponent(memberId);
+        fetch(`/member/check-duplicate?type=${type}&value=${inputValue}`)
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => console.error("오류 발생:", error));
+    }
+
+    // ✅ 핸드폰 번호 입력 시 자동으로 하이픈(-) 추가하는 함수
+    function formatPhoneNumber(input) {
+        let number = input.value.replace(/[^0-9]/g, ""); // 숫자만 남기고 나머지는 제거
+        let formatted = "";
+
+        if (number.length <= 3) {
+            formatted = number;
+        } else if (number.length <= 7) {
+            formatted = number.slice(0, 3) + "-" + number.slice(3);
+        } else {
+            formatted = number.slice(0, 3) + "-" + number.slice(3, 7) + "-" + number.slice(7, 11);
+        }
+
+        input.value = formatted;
     }
 </script>
+
 </body>
 </html>

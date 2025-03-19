@@ -39,7 +39,7 @@ public class SecurityConfig {
                     //  권한 설정
                     auth.requestMatchers("/member/useCoupon", "/changepassword").permitAll();
                     auth.requestMatchers("/search", "/hotel/**", "/regional-recommendations").permitAll();
-
+                    auth.requestMatchers("/member/check-duplicate").permitAll();
                     //  게시판 관련 권한 설정
                     auth.requestMatchers("/board/notice", "/board/FAQ").permitAll();  // 공지사항 & FAQ는 모두 접근 가능
                     auth.requestMatchers("/board/ask/**").authenticated();  // 1:1 문의는 로그인 필요

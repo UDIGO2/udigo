@@ -24,6 +24,18 @@ public class MemberService {
         this.emailService = emailService;
     }
 
+    /* ✅ 아이디 중복 확인 */
+    public boolean isMemberIdDuplicate(String memberId) {
+        MemberDTO member = memberMapper.findByMemberId(memberId);
+        return member != null; // 데이터가 존재하면 중복 아이디
+    }
+
+    /* ✅ 이메일 중복 확인 (추가) */
+    public boolean isEmailDuplicate(String email) {
+        MemberDTO member = memberMapper.findByEmail(email);
+        return member != null; // 데이터가 존재하면 중복 이메일
+    }
+
     /* 회원가입 */
     public void signup(MemberDTO memberDTO) {
         if (memberDTO.getPassword() == null || memberDTO.getPassword().trim().isEmpty()) {
@@ -110,7 +122,7 @@ public class MemberService {
         return "임시 비밀번호가 이메일로 전송되었습니다.";
     }
 
-    //  전체 회원 목록 가져오기
+    /* 전체 회원 목록 가져오기 */
     public List<MemberDTO> getAllMembers() {
         return memberMapper.selectAllMembers();
     }
@@ -141,7 +153,7 @@ public class MemberService {
         return couponUsed != null && couponUsed == 1;
     }
 
-    //  비밀번호 변경
+    /* 비밀번호 변경 */
     public void updatePassword(String memberId, String newPassword) {
         if (memberId == null || newPassword == null) {
             throw new IllegalArgumentException("memberId 또는 newPassword가 null입니다.");
@@ -159,10 +171,5 @@ public class MemberService {
     public boolean withdrawMember(String memberId) {
         int result = memberMapper.updateWithdrawMember(memberId);
         return result > 0; //  업데이트 성공 여부 반환
-    }
-
-    public boolean isMemberIdDuplicate(String memberId) {
-        MemberDTO member = memberMapper.findByMemberId(memberId);
-        return member != null; // 데이터가 존재하면 중복 아이디
     }
 }
