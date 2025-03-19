@@ -39,4 +39,6 @@ public interface AcmMapper {
 
     // 관리자용 숙소 추가
     void insertAcm(AcmDTO acmDTO);
+
+    void updateAcm(AcmDTO acm);
 }

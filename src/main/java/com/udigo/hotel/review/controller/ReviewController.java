@@ -41,13 +41,15 @@ public class ReviewController {
     }
 
     @GetMapping("/writeReview")
-    public String writeReview(@RequestParam(required = false) Integer resvId,
-                              @RequestParam(required = false) Integer acmId,
-                              Model model) {
-        if (resvId == null) resvId = 1;  // 임시 데이터
-        if (acmId == null) acmId = 202;  // 임시 데이터
-
+    public String writeReview(@RequestParam Integer resvId,
+                            @RequestParam Integer acmId,
+                            Model model) {
+        System.out.println("resvId--->"+resvId);
+        System.out.println("acmId--->"+acmId);
         ReviewDTO review = reviewService.findReviewsByWrite(resvId, acmId);
+        if (review == null) {
+            return "redirect:/error";  // 적절한 에러 페이지로 리다이렉트
+        }
         model.addAttribute("review", review);
         return "review/writeReview";
     }
@@ -56,7 +58,7 @@ public class ReviewController {
     public String submitReview(@ModelAttribute ReviewDTO reviewDTO,
                                @RequestParam("photos") List<MultipartFile> photos,
                                RedirectAttributes rttr) throws IOException {
-        System.out.println("up11111");
+        //System.out.println("up1");
         // 리뷰 내용만 검증
         if (reviewDTO.getContent() == null || reviewDTO.getContent().trim().isEmpty()) {
             return "redirect:/review/writeReview?resvId=" + reviewDTO.getResvId()
@@ -86,8 +88,7 @@ public class ReviewController {
 
     /* ====== adminPage ====== */
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/adminReviewList")
+    @GetMapping("/admin/review/list")
     public String adminReviewList(@RequestParam(defaultValue = "1") int page, Model model) {
         Map<String, Object> reviewData = reviewService.getAllReviews(page);
         model.addAttribute("reviews", reviewData.get("reviews"));
@@ -97,16 +98,22 @@ public class ReviewController {
         return "review/adminReviewList";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin/delete")
     public String adminDeleteReview(@RequestParam int reviewId) {
         reviewService.deleteReviewByAdmin(reviewId);
-        return "redirect:/review/admin/list";
+        return "redirect:/review/admin/review/list";
     }
 
     @ExceptionHandler({IOException.class, RuntimeException.class})
     public String handleException(Exception e) {
         // 로그 기록 추가
         return "redirect:/error";
+    }
+
+    // 숙소별 리뷰 조회 API
+    @GetMapping("/api/acm/{acmId}")
+    @ResponseBody
+    public List<ReviewDTO> getReviewsByAcm(@PathVariable int acmId) {
+        return reviewService.getReviewsByAcmId(acmId);
     }
 }

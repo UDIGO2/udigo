@@ -106,7 +106,7 @@
 
                 <a th:href="@{'/acm/detail/' + ${resv.acmId}}" class="details-button">상세 정보</a>
                 <a th:if="${resv.isResv == 1}"
-                   th:href="@{'/review/write/' + ${resv.resvId}}"
+                   th:href="@{'/review/writeReview?resvId=' + ${resv.resvId} + '&acmId=' + ${resv.acmId}}"
                    class="review-button">후기 등록</a>
             </div>
         </div>

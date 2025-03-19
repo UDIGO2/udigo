@@ -22,28 +22,23 @@
     </select>
 
     <select id="findReviewsByWrite" resultType="com.udigo.hotel.review.dto.ReviewDTO">
-        /* ReviewMapper.findReviewsByMember */
+        /* ReviewMapper.findReviewsByWrite */
         SELECT
-            r.review_id,
-            r.member_code,
-            r.acm_id,
-            r.resv_id,
-            r.content,
-            r.written_at,
+            b.resv_id,
+            b.member_code,
+            b.acm_id,
             a.acm_name,
             a.acm_price,
             b.check_in,
-            b.check_out
+            b.check_out,
+            b.guest_count,
+            a.acm_photo1
         FROM
-            tbl_reviews r
-                LEFT JOIN tbl_acm a ON r.acm_id = a.acm_id
-                LEFT JOIN tbl_reservations b ON r.resv_id = b.resv_id
+            tbl_reservations b
+            JOIN tbl_acm a ON b.acm_id = a.acm_id
         WHERE
             b.resv_id = #{resvId}
-        AND
-            r.acm_id = #{acmId}
-        ORDER BY
-            r.written_at DESC
+            AND b.acm_id = #{acmId}
     </select>
 
     <delete id="deleteReview">
@@ -81,9 +76,21 @@
 
     <!-- 관리자용 전체 리뷰 조회 (페이징) -->
     <select id="findAllReviews" resultType="com.udigo.hotel.review.dto.ReviewDTO">
-        SELECT r.*, a.acm_name, a.acm_photo1, a.acm_photo2, a.acm_photo3
-        FROM tbl_reviews r
-                 JOIN tbl_acm a ON r.acm_id = a.acm_id
+        SELECT 
+            r.review_id,
+            r.member_code,
+            r.acm_id,
+            r.content,
+            r.written_at,
+            r.re_photo1,
+            r.re_photo2,
+            r.re_photo3,
+            a.acm_name,
+            m.member_name
+        FROM 
+            tbl_reviews r
+            JOIN tbl_acm a ON r.acm_id = a.acm_id
+            JOIN tbl_member m ON r.member_code = m.member_code
         ORDER BY r.written_at DESC
         LIMIT #{offset}, #{limit}
     </select>

@@ -136,4 +136,25 @@
         )
     </insert>
 
+    <update id="updateAcm" parameterType="com.udigo.hotel.acm.model.dto.AcmDTO">
+        UPDATE
+            tbl_acm
+        SET
+            acm_name = #{ acmName }
+            acm_address= #{ acmAddress }
+            acm_location= #{ acmLocation }
+            acm_price = #{ acmPrice }
+            acm_info = #{ acmInfo }
+            acm_phone = #{ acmPhone } ,
+            regist_date = #{ registDate },
+            max_guest = #{maxGuest},
+            liked_count = #{likedCount},
+            acm_photo1 = #{acmPhoto1},
+            acm_photo2 = #{acmPhoto2},
+            acm_photo3 = #{acmPhoto3},
+            acm_photo4 = #{acmPhoto4},
+            acm_photo5 = #{acmPhoto5}
+        WHERE
+            acm_id = # { acmId }
+    </update>
 </mapper>

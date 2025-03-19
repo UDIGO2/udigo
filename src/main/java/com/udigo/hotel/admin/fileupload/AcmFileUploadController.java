@@ -1,11 +1,10 @@
-package com.udigo.hotel.review.fileupload;
+package com.udigo.hotel.admin.fileupload;
 
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.IOException;
 
-public class FileUploadController {
+public class AcmFileUploadController {
 
     /**
      * 파일을 지정된 디렉토리에 저장하는 메소드
@@ -16,20 +15,12 @@ public class FileUploadController {
      * @return 저장된 파일 이름
      * @throws IOException 파일 저장 중 발생할 수 있는 예외 처리
      */
-
-
-
     public static String saveFile(String fileDir, String fileName, MultipartFile file)
             throws IOException {
-        System.out.println("--- 이미지 저장 시작 ---");
-        System.out.println("fileDir = " + fileDir);
-        System.out.println("fileName = " + fileName);
-        System.out.println("file = " + file);
-
         String projectPath = System.getProperty("user.dir");
 
-        // 저장되는 경로 build 쪽 참고
-        String buildPath = projectPath + "/build/resources/main/static/image/review";
+        // 저장되는 경로 build 쪽의 new 폴더
+        String buildPath = projectPath + "/build/resources/main/static/image/new";
         File dir = new File(buildPath);
 
         // 디렉토리가 존재하지 않으면 생성
@@ -58,12 +49,15 @@ public class FileUploadController {
     }
 
     /**
-     * 이미지 삭제 메소드 (현재 미완성 상태)
+     * 이미지 삭제 메소드
      *
-     * @return 항상 false 반환
+     * @param fileName 삭제할 파일 이름
+     * @return 삭제 성공 여부
      */
-    public static boolean deleteFile() {
-        System.out.println("--- 이미지 삭제는 직접 구현해보세요~ ---");
-        return false;
+    public static boolean deleteFile(String fileName) {
+        String projectPath = System.getProperty("user.dir");
+        String buildPath = projectPath + "/build/resources/main/static/image/new/" + fileName;
+        File file = new File(buildPath);
+        return file.exists() && file.delete();
     }
-}
+} 

@@ -49,23 +49,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 case '숙소 정보 관리 >':
                     window.location.href = "/admin/acm/list";
                     break;
-                case '숙소 정보 수정 >':
-                    window.location.href = "/acm/edit";
-                    break;
                 case '숙소 등록 >':
-                    window.location.href = "/admin/acm/add";
-                    break;
-                case '숙소 정보 삭제 >':
-                    if (confirm("숙소 정보를 삭제하시겠습니까?")) {
-                        // 🚀 서버에 삭제 요청을 보내는 코드 필요
-                        console.log("숙소 삭제 요청 보냄");
-                    }
+                    window.location.href = "/admin/acm/register";
                     break;
                 case '숙소 후기 삭제 >':
-                    if (confirm("숙소 후기를 삭제하시겠습니까?")) {
-                        // 🚀 서버에 후기 삭제 요청을 보내는 코드 필요
-                        console.log("숙소 후기 삭제 요청 보냄");
-                    }
+                    window.location.href = "/review/admin/review/list";
                     break;
             }
         });
@@ -99,5 +87,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-
+    // ✅ Review delete link handling
+    const reviewDeleteLink = document.querySelector('a[href="/review/admin/review/list"]');
+    if (reviewDeleteLink) {
+        reviewDeleteLink.addEventListener('click', function(e) {
+            if (!confirm('후기 삭제 페이지로 이동하시겠습니까?')) {
+                e.preventDefault();
+            }
+        });
+    }
 });

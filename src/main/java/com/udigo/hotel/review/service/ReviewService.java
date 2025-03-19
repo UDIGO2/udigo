@@ -38,18 +38,19 @@ public class ReviewService {
     }
 
     public void saveReview(ReviewDTO reviewDTO, List<MultipartFile> photos) throws IOException {
-        System.out.println("photos--->"+photos);
+//        System.out.println("photos--->"+photos);
         // 이미지 저장
         if (!photos.isEmpty()) {
             int i = 1;
             for (MultipartFile photo : photos) {  // 'for' 문을 올바르게 수정
-                System.out.println("photo--->"+photo);
-                if (!photo.isEmpty()) {  // 파일이 비어 있지 않은지 확인
-                    // 이미지 파일의 이름을 고유하게 생성
+//                System.out.println("photo--->"+photo);
+
+                if (!photo.isEmpty()) {
+
                     String imageName = UUID.randomUUID().toString().replace("-", "");
-                    System.out.println("IMAGE_DIR--->"+IMAGE_DIR);
-                    System.out.println("imageName--->"+imageName);
-                    System.out.println("photo--->"+photo);
+//                    System.out.println("IMAGE_DIR--->"+IMAGE_DIR);
+//                    System.out.println("imageName--->"+imageName);
+//                    System.out.println("photo--->"+photo);
                     // 이미지 파일 저장
                     String savedFileName = FileUploadController.saveFile(IMAGE_DIR, imageName, photo);
 
@@ -69,11 +70,11 @@ public class ReviewService {
         reviewMapper.insertReview(reviewDTO);
     }
 
-    // 관리자용 메소드 추가
+    // 관리자용 전체 리뷰 조회 (페이징)
     public Map<String, Object> getAllReviews(int page) {
-        int limit = 10; // 한 페이지당 보여줄 리뷰 수
+        int limit = 10; // 페이지당 리뷰 수
         int offset = (page - 1) * limit;
-
+        
         List<ReviewDTO> reviews = reviewMapper.findAllReviews(offset, limit);
         int totalReviews = reviewMapper.getTotalReviewCount();
         int totalPages = (int) Math.ceil((double) totalReviews / limit);
@@ -87,6 +88,7 @@ public class ReviewService {
         return result;
     }
 
+    // 관리자용 리뷰 삭제
     public void deleteReviewByAdmin(int reviewId) {
         reviewMapper.deleteReviewByAdmin(reviewId);
     }
@@ -96,4 +98,3 @@ public class ReviewService {
         return reviewMapper.findReviewsByAcmId(acmId);
     }
 }
-
