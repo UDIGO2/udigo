@@ -36,7 +36,7 @@ public class MemberController {
         return "member/signup"; // signup.html 페이지로 이동
     }
 
-    /** ✅ 회원가입 처리 **/
+    /**  회원가입 처리 **/
     @PostMapping("/signup")
     public String signup(@ModelAttribute MemberDTO member, Model model) {
         try {
@@ -51,7 +51,7 @@ public class MemberController {
         return "member/signup";
     }
 
-    /** ✅ 아이디 & 이메일 중복 확인 (AJAX 지원, JSON 응답) **/
+    /**  아이디 & 이메일 중복 확인 (AJAX 지원, JSON 응답) **/
     @GetMapping("/check-duplicate")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> checkDuplicate(
@@ -59,7 +59,7 @@ public class MemberController {
             @RequestParam("value") String value) {
 
         boolean isDuplicate;
-        if ("id".equals(type)) {
+        if ("memberId".equals(type)) {
             isDuplicate = memberService.isMemberIdDuplicate(value);
         } else if ("email".equals(type)) {
             isDuplicate = memberService.isEmailDuplicate(value);
@@ -74,7 +74,7 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
-    /** ✅ 마이페이지 이동 **/
+    /**  마이페이지 이동 **/
     @GetMapping("/mypage")
     public String myPage(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -87,7 +87,7 @@ public class MemberController {
         return "member/mypage";
     }
 
-    /** ✅ 회원 정보 조회 **/
+    /** 회원 정보 조회 **/
     @GetMapping("/myinfo")
     public String myInfo(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -104,7 +104,7 @@ public class MemberController {
         return "redirect:/auth/login";
     }
 
-    /** ✅ 회원 정보 수정 **/
+    /**  회원 정보 수정 **/
     @PostMapping("/myinfo/update")
     public String updateMyInfo(@ModelAttribute MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -122,7 +122,7 @@ public class MemberController {
         return "redirect:/auth/login";
     }
 
-    /** ✅ 쿠폰 사용 **/
+    /** 쿠폰 사용 **/
     @PostMapping("/useCoupon")
     public String useCoupon(@ModelAttribute MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
         try {
@@ -134,13 +134,13 @@ public class MemberController {
         return "redirect:/member/mypage";
     }
 
-    /** ✅ 비밀번호 변경 페이지 이동 **/
+    /**  비밀번호 변경 페이지 이동 **/
     @GetMapping("/changepassword")
     public String showChangePasswordForm() {
         return "member/changepassword";
     }
 
-    /** ✅ 비밀번호 변경 처리 **/
+    /**  비밀번호 변경 처리 **/
     @PostMapping("/changepassword")
     public String changePassword(
             @RequestParam("currentPassword") String currentPassword,
