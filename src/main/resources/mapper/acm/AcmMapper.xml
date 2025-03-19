@@ -140,11 +140,11 @@
         UPDATE
             tbl_acm
         SET
-            acm_name = #{ acmName }
-            acm_address= #{ acmAddress }
-            acm_location= #{ acmLocation }
-            acm_price = #{ acmPrice }
-            acm_info = #{ acmInfo }
+            acm_name = #{ acmName },
+            acm_address= #{ acmAddress },
+            acm_location= #{ acmLocation },
+            acm_price = #{ acmPrice },
+            acm_info = #{ acmInfo },
             acm_phone = #{ acmPhone } ,
             regist_date = #{ registDate },
             max_guest = #{maxGuest},
@@ -155,6 +155,6 @@
             acm_photo4 = #{acmPhoto4},
             acm_photo5 = #{acmPhoto5}
         WHERE
-            acm_id = # { acmId }
+            acm_id = #{ acmId }
     </update>
 </mapper>
