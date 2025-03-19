@@ -2,6 +2,7 @@ package com.udigo.hotel.pay.model.dao;
 
 import com.udigo.hotel.acm.model.dto.AcmDTO;
 import com.udigo.hotel.member.model.dto.MemberDTO;
+import com.udigo.hotel.pay.model.dto.PayDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -38,4 +39,15 @@ public interface PayMapper {
     
     // 관리자용 - 모든 결제 내역 조회
     List<Map<String, Object>> getAllPayments();
+
+    /**
+     * 회원별 결제 내역 조회
+     * @param memberCode 회원 코드
+     * @param startDate 시작 날짜 (선택)
+     * @param endDate 종료 날짜 (선택)
+     * @return 회원의 결제 내역 목록
+     */
+    List<PayDTO> findPaymentsByMemberId(@Param("memberCode") int memberCode, 
+                                       @Param("startDate") String startDate,
+                                       @Param("endDate") String endDate);
 }

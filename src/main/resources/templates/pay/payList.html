@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 결제 내역</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8f9fa;
+            color: #495057;
+        }
+        .payment-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .payment-header {
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .payment-title {
+            color: #343a40;
+            font-weight: 700;
+        }
+        .table thead {
+            background-color: #007bff;
+            color: white;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0, 123, 255, 0.05);
+        }
+        .payment-data {
+            font-size: 0.9rem;
+        }
+        .payment-data th, .payment-data td {
+            vertical-align: middle;
+        }
+        .badge {
+            font-size: 0.8rem;
+            padding: 0.4rem 0.6rem;
+        }
+        .payment-method {
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .detail-btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+        }
+        .total-info {
+            margin-top: 1.5rem;
+            text-align: right;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #343a40;
+        }
+        .payment-status {
+            font-weight: bold;
+        }
+        .payment-status.complete {
+            color: #28a745;
+        }
+        .payment-status.pending {
+            color: #ffc107;
+        }
+        .payment-status.refund {
+            color: #dc3545;
+        }
+        .payment-status.failed {
+            color: #dc3545;
+        }
+        .search-box {
+            margin-bottom: 1.5rem;
+        }
+        .daterange {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+        .to-text {
+            margin: 0 5px;
+        }
+        /* 컬럼 너비 조정 */
+        .payment-data th:nth-child(1), .payment-data td:nth-child(1) { width: 7%; } /* 결제번호 */
+        .payment-data th:nth-child(2), .payment-data td:nth-child(2) { width: 10%; } /* 결제일시 */
+        .payment-data th:nth-child(3), .payment-data td:nth-child(3) { width: 15%; } /* 숙소명 */
+        .payment-data th:nth-child(4), .payment-data td:nth-child(4) { width: 10%; } /* 체크인 */
+        .payment-data th:nth-child(5), .payment-data td:nth-child(5) { width: 10%; } /* 체크아웃 */
+        .payment-data th:nth-child(6), .payment-data td:nth-child(6) { width: 5%; } /* 인원 */
+        .payment-data th:nth-child(7), .payment-data td:nth-child(7) { width: 10%; } /* 결제금액 */
+        .payment-data th:nth-child(8), .payment-data td:nth-child(8) { width: 8%; } /* 할인금액 */
+        .payment-data th:nth-child(9), .payment-data td:nth-child(9) { width: 10%; } /* 환불금액 */
+        .payment-data th:nth-child(10), .payment-data td:nth-child(10) { width: 7%; } /* 결제방법 */
+        .payment-data th:nth-child(11), .payment-data td:nth-child(11) { width: 8%; } /* 결제상태 */
+        
+        /* 환불금액 스타일 */
+        .refund-amount {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 20px;
+        }
+        
+        .nav-tabs a {
+            padding: 10px 20px;
+            color: #495057;
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .nav-tabs a:hover {
+            color: #007bff;
+        }
+        
+        .nav-tabs a.active {
+            color: #007bff;
+            font-weight: bold;
+            border-bottom: 2px solid #007bff;
+        }
+        
+        .content {
+            padding: 20px 0;
+        }
+        
+        .no-data {
+            padding: 50px;
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<div class="payment-container">
+    <div class="payment-header">
+        <h2 class="payment-title">
+            <i class="fas fa-receipt me-2"></i>나의 결제 내역
+        </h2>
+    </div>
+
+    <div class="nav-tabs">
+        <a href="/resv/current">현재 예약</a>
+        <a href="/resv/past">이전 예약</a>
+        <a href="/resv/cancel">예약 취소</a>
+        <a href="/pay/payList" class="active">결제 내역</a>
+    </div>
+
+    <div class="search-box">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="daterange">
+                    <input type="date" class="form-control" id="start-date">
+                    <span class="to-text">~</span>
+                    <input type="date" class="form-control" id="end-date">
+                    <button class="btn btn-primary" id="search-date-btn">
+                        <i class="fas fa-search me-1"></i> 기간 검색
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="숙소명 검색" id="keyword-search">
+                    <button class="btn btn-primary" id="search-keyword-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover payment-data">
+            <thead>
+            <tr>
+                <th>결제번호</th>
+                <th>결제일시</th>
+                <th>숙소명</th>
+                <th>체크인</th>
+                <th>체크아웃</th>
+                <th>인원</th>
+                <th>결제금액</th>
+                <th>할인금액</th>
+                <th>환불금액</th>
+                <th>결제방법</th>
+                <th>결제상태</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 결제 내역이 없을 경우 -->
+            <tr th:if="${#lists.isEmpty(payments)}">
+                <td colspan="11" class="text-center no-data">결제 내역이 존재하지 않습니다.</td>
+            </tr>
+
+            <!-- 결제 내역 목록 표시 -->
+            <tr th:each="payment : ${payments}">
+                <td th:text="${payment.payId}"></td>
+                <td th:text="${#temporals.format(payment.payDate, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${payment.acmName}"></td>
+                <td th:text="${#temporals.format(payment.checkIn, 'yyyy-MM-dd')}"></td>
+                <td th:text="${#temporals.format(payment.checkOut, 'yyyy-MM-dd')}"></td>
+                <td class="text-center" th:text="${payment.guestCount} + '명'"></td>
+                <td class="text-end" th:text="${#numbers.formatInteger(payment.payPrice, 0, 'COMMA')} + '원'"></td>
+                <td class="text-end" th:text="${payment.discount != null ? #numbers.formatInteger(payment.discount, 0, 'COMMA') + '원' : '0원'}"></td>
+                <td class="text-end" th:text="${payment.payRef}"></td>
+                <td class="payment-method" th:text="${payment.payMethod}"></td>
+                <td class="payment-status" th:text="${payment.payStatus}">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="total-info">
+        총 <span th:text="${#lists.size(payments)}"></span>건의 결제 내역이 있습니다.
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 오늘 날짜 설정
+        const today = new Date();
+        const threeMonthsAgo = new Date();
+        threeMonthsAgo.setMonth(today.getMonth() - 3);
+
+        // 날짜 형식 변환 함수
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // 기본 날짜 설정
+        document.getElementById('end-date').value = formatDate(today);
+        document.getElementById('start-date').value = formatDate(threeMonthsAgo);
+
+        // URL 파라미터에서 날짜 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const paramStartDate = urlParams.get('startDate');
+        const paramEndDate = urlParams.get('endDate');
+        
+        // URL 파라미터에 날짜가 있으면 그것을 사용
+        if (paramStartDate) {
+            document.getElementById('start-date').value = paramStartDate;
+        }
+        if (paramEndDate) {
+            document.getElementById('end-date').value = paramEndDate;
+        }
+
+        // 날짜 검색 기능
+        document.getElementById('search-date-btn').addEventListener('click', function() {
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            
+            if (!startDate || !endDate) {
+                alert('시작일과 종료일을 모두 선택해주세요.');
+                return;
+            }
+            
+            window.location.href = `/pay/payList?startDate=${startDate}&endDate=${endDate}`;
+        });
+
+        // 키워드 검색 기능
+        document.getElementById('search-keyword-btn').addEventListener('click', function() {
+            const keyword = document.getElementById('keyword-search').value.trim();
+
+            if (keyword === '') {
+                alert('검색어를 입력해주세요.');
+                return;
+            }
+
+            const rows = document.querySelectorAll('tbody tr');
+            let foundCount = 0;
+
+            rows.forEach(row => {
+                if (row.cells.length <= 1) return; // 결제 내역이 없는 행은 건너뜀
+
+                const acmNameCell = row.cells[2].textContent.toLowerCase();
+
+                if (acmNameCell.includes(keyword.toLowerCase())) {
+                    row.style.display = '';
+                    foundCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            const totalInfo = document.querySelector('.total-info');
+            totalInfo.textContent = `검색 결과: ${foundCount}건의 결제 내역이 있습니다.`;
+        });
+    });
+</script>
+</body>
+</html>

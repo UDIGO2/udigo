@@ -136,4 +136,39 @@
             p.pay_date DESC
     </select>
 
+    <!-- 회원별 결제 내역 조회 (날짜 필터링 가능) -->
+    <select id="findPaymentsByMemberId" resultMap="payResultMap">
+        SELECT
+            p.pay_id,
+            p.member_code,
+            p.acm_id,
+            p.pay_price,
+            p.pay_date,
+            p.pay_method,
+            p.pay_status,
+            p.discount,
+            p.pay_ref,
+            p.pay_type,
+            a.acm_name,
+            m.member_name,
+            r.check_in,
+            r.check_out,
+            r.guest_count
+        FROM
+            tbl_pay p
+        JOIN
+            tbl_member m ON p.member_code = m.member_code
+        JOIN
+            tbl_acm a ON p.acm_id = a.acm_id
+        LEFT JOIN
+            tbl_reservations r ON p.pay_id = r.pay_id
+        WHERE
+            p.member_code = #{memberCode}
+            <if test="startDate != null and endDate != null">
+                AND p.pay_date BETWEEN #{startDate} AND #{endDate}
+            </if>
+        ORDER BY
+            p.pay_date DESC
+    </select>
+
 </mapper>

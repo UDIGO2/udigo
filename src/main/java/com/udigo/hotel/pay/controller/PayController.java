@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.time.format.DateTimeFormatter;
+import jakarta.servlet.http.HttpServletRequest;
+import com.udigo.hotel.pay.model.dto.PayDTO;
 
 @Controller
 @RequestMapping("/pay")
@@ -135,5 +138,48 @@ public class PayController {
         // 검증이 완료되면 savePayment 메서드처럼 결제 정보를 저장
         
         return "redirect:/resv/current";
+    }
+
+    /**
+     * 회원별 결제 내역 조회 페이지
+     * @param model 모델
+     * @param startDate 시작 날짜 (선택)
+     * @param endDate 종료 날짜 (선택)
+     * @return 결제 내역 페이지
+     */
+    @GetMapping("/payList")
+    public String getPaymentsByMember(Model model,
+                                      @RequestParam(required = false) String startDate,
+                                      @RequestParam(required = false) String endDate) {
+        // 로그인 정보에서 회원 정보 가져오기
+        CustomUserDetails userDetails = getMemberData();
+        if (userDetails == null) {
+            return "redirect:/auth/login"; // 로그인 페이지로 리다이렉트
+        }
+        
+        int memberCode = userDetails.getMemberCode();
+        
+        // 기간 설정이 없을 경우 기본값 (최근 3개월)
+        if (startDate == null || endDate == null) {
+            LocalDate today = LocalDate.now();
+            LocalDate threeMonthsAgo = today.minusMonths(3);
+            
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            endDate = today.format(formatter);
+            startDate = threeMonthsAgo.format(formatter);
+        }
+        
+        // 종료일에 시간을 23:59:59로 설정하기 위해 하루를 더함
+        LocalDate endDatePlusOne = LocalDate.parse(endDate).plusDays(1);
+        String endDateWithTime = endDatePlusOne.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        
+        // 회원의 결제 내역 조회
+        List<PayDTO> payments = payService.getMemberPayments(memberCode, startDate, endDateWithTime);
+        
+        model.addAttribute("payments", payments);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        
+        return "pay/payList";
     }
 }

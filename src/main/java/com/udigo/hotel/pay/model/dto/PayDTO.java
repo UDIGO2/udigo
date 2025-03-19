@@ -1,6 +1,7 @@
 package com.udigo.hotel.pay.model.dto;
 
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 //@Data
@@ -10,21 +11,23 @@ public class PayDTO {
     private int acmId;
     private String acmName;
     private int guestCount;
-    private String checkIn;
-    private String checkOut;
+    private LocalDate checkIn;
+    private LocalDate checkOut;
     private String payMethod;
     private String payStatus;
     private String payType;
     private LocalDateTime payDate;
     private int payPrice;
     private int discount;
+    private Integer payRef;
     private String transactionId;
     private String payProvider;
+    private String memberName;
 
     public PayDTO() {
     }
 
-    public PayDTO(int payId, int memberCode, int acmId, String acmName, int guestCount, String checkIn, String checkOut, String payMethod, String payStatus, String payType, LocalDateTime payDate, int payPrice, int discount, String transactionId, String payProvider) {
+    public PayDTO(int payId, int memberCode, int acmId, String acmName, int guestCount, LocalDate checkIn, LocalDate checkOut, String payMethod, String payStatus, String payType, LocalDateTime payDate, int payPrice, int discount, Integer payRef, String transactionId, String payProvider, String memberName) {
         this.payId = payId;
         this.memberCode = memberCode;
         this.acmId = acmId;
@@ -38,8 +41,10 @@ public class PayDTO {
         this.payDate = payDate;
         this.payPrice = payPrice;
         this.discount = discount;
+        this.payRef = payRef;
         this.transactionId = transactionId;
         this.payProvider = payProvider;
+        this.memberName = memberName;
     }
 
     public int getPayId() {
@@ -74,13 +79,13 @@ public class PayDTO {
 
     public void setGuestCount(int guestCount) { this.guestCount = guestCount; }
 
-    public String getCheckIn() { return checkIn; }
+    public LocalDate getCheckIn() { return checkIn; }
 
-    public void setCheckIn(String checkIn) { this.checkIn = checkIn; }
+    public void setCheckIn(LocalDate checkIn) { this.checkIn = checkIn; }
 
-    public String getCheckOut() { return checkOut; }
+    public LocalDate getCheckOut() { return checkOut; }
 
-    public void setCheckOut(String checkOut) { this.checkOut = checkOut; }
+    public void setCheckOut(LocalDate checkOut) { this.checkOut = checkOut; }
 
     public String getPayMethod() {
         return payMethod;
@@ -130,6 +135,14 @@ public class PayDTO {
         this.discount = discount;
     }
 
+    public Integer getPayRef() {
+        return payRef;
+    }
+
+    public void setPayRef(Integer payRef) {
+        this.payRef = payRef;
+    }
+
     public String getTransactionId() {
         return transactionId;
     }
@@ -146,6 +159,14 @@ public class PayDTO {
         this.payProvider = payProvider;
     }
 
+    public String getMemberName() {
+        return memberName;
+    }
+
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
+    }
+
     @Override
     public String toString() {
         return "PayDTO{" +
@@ -154,16 +175,18 @@ public class PayDTO {
                 ", acmId=" + acmId +
                 ", acmName='" + acmName + '\'' +
                 ", guestCount=" + guestCount +
-                ", checkIn='" + checkIn + '\'' +
-                ", checkOut='" + checkOut + '\'' +
+                ", checkIn=" + checkIn +
+                ", checkOut=" + checkOut +
                 ", payMethod='" + payMethod + '\'' +
                 ", payStatus='" + payStatus + '\'' +
                 ", payType='" + payType + '\'' +
                 ", payDate=" + payDate +
                 ", payPrice=" + payPrice +
                 ", discount=" + discount +
+                ", payRef=" + payRef +
                 ", transactionId='" + transactionId + '\'' +
                 ", payProvider='" + payProvider + '\'' +
+                ", memberName='" + memberName + '\'' +
                 '}';
     }
 }

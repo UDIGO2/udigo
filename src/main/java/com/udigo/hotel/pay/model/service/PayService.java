@@ -3,10 +3,10 @@ package com.udigo.hotel.pay.model.service;
 import com.udigo.hotel.acm.model.dto.AcmDTO;
 import com.udigo.hotel.member.model.dto.MemberDTO;
 import com.udigo.hotel.pay.model.dao.PayMapper;
+import com.udigo.hotel.pay.model.dto.PayDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.Map;
 
@@ -54,5 +54,16 @@ public class PayService {
     // 관리자용 - 모든 결제 내역 조회
     public List<Map<String, Object>> getAllPayments() {
         return payMapper.getAllPayments();
+    }
+
+    /**
+     * 로그인한 회원의 결제 내역 조회
+     * @param memberCode 회원 코드
+     * @param startDate 시작 날짜 (선택)
+     * @param endDate 종료 날짜 (선택)
+     * @return 회원의 결제 내역 목록
+     */
+    public List<PayDTO> getMemberPayments(int memberCode, String startDate, String endDate) {
+        return payMapper.findPaymentsByMemberId(memberCode, startDate, endDate);
     }
 }
