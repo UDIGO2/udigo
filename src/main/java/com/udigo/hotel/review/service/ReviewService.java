@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.List;
 import java.util.HashMap;
@@ -24,6 +25,23 @@ public class ReviewService {
 
     @Autowired
     private ReviewMapper reviewMapper;
+
+    // 애플리케이션 시작 시 이미지 URL 업데이트 실행
+    @PostConstruct
+    public void initializeImageUrls() {
+        try {
+            updateAllImageUrls();
+            System.out.println("리뷰 이미지 URL 업데이트 완료");
+        } catch (Exception e) {
+            System.err.println("리뷰 이미지 URL 업데이트 중 오류 발생: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    // 모든 리뷰 이미지 URL 업데이트
+    public void updateAllImageUrls() {
+        reviewMapper.updateImageUrls();
+    }
 
     public List<ReviewDTO> getReviewsByMember(int memberCode) {
         return reviewMapper.findReviewsByMember(memberCode);
@@ -54,15 +72,19 @@ public class ReviewService {
                     // 이미지 파일 저장
                     String savedFileName = FileUploadController.saveFile(IMAGE_DIR, imageName, photo);
 
-                    // 사진 URL을 리뷰에 추가 (여기서는 예시로 productImageUrl을 사용)
+                    // 전체 이미지 URL 생성 (컨텍스트 경로 포함)
+                    String fullImageUrl = "/image/review/" + savedFileName;
+
+                    // 사진 URL을 리뷰에 추가
                     if(i == 1){
-                        reviewDTO.setRePhoto1(savedFileName);
+                        reviewDTO.setRePhoto1(fullImageUrl);
                     }else if(i == 2){
-                        reviewDTO.setRePhoto2(savedFileName);
+                        reviewDTO.setRePhoto2(fullImageUrl);
                     }else if(i == 3){
-                        reviewDTO.setRePhoto3(savedFileName);
+                        reviewDTO.setRePhoto3(fullImageUrl);
                     }
                     System.out.println("savedFileName--->"+savedFileName);
+                    System.out.println("fullImageUrl--->"+fullImageUrl);
                 }
                 i++;
             }

@@ -41,4 +41,7 @@ public interface AcmMapper {
     void insertAcm(AcmDTO acmDTO);
 
     void updateAcm(AcmDTO acm);
+
+    // 모든 숙소 정보 조회
+    List<AcmDTO> selectAllAcms();
 }

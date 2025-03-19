@@ -146,7 +146,7 @@
             acm_price = #{ acmPrice },
             acm_info = #{ acmInfo },
             acm_phone = #{ acmPhone } ,
-            regist_date = #{ registDate },
+            regist_date = #{ acmDate },
             max_guest = #{maxGuest},
             liked_count = #{likedCount},
             acm_photo1 = #{acmPhoto1},
@@ -157,4 +157,11 @@
         WHERE
             acm_id = #{ acmId }
     </update>
+
+    <!-- 모든 숙소 정보 조회 -->
+    <select id="selectAllAcms" resultMap="acmResultMap">
+        SELECT *
+        FROM tbl_acm
+        ORDER BY acm_id DESC
+    </select>
 </mapper>

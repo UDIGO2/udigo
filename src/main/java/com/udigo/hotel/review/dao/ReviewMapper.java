@@ -20,5 +20,8 @@ public interface ReviewMapper {
 
     // 숙소별 후기 조회
     List<ReviewDTO> findReviewsByAcmId(@Param("acmId") int acmId);
+    
+    // 이미지 URL 업데이트
+    void updateImageUrls();
 }
 

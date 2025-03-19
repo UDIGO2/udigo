@@ -29,9 +29,9 @@ public class AdminAcmController {
     // 관리자용 숙소 목록 페이지
     @GetMapping("/list")
     public String listAcms(Model model) {
-        List<AcmDTO> acms = acmService.getInitialAcms();
+        List<AcmDTO> acms = acmService.getAllAcms();
         model.addAttribute("acms", acms);
-        return "admin/adminAcmList"; // "admin/acm/adminAcmList"에서 "admin/adminAcmList"로 수정
+        return "admin/adminAcmList";
     }
 
     // 더 많은 숙소 데이터 로드 (AJAX)
@@ -68,7 +68,7 @@ public class AdminAcmController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Failed to delete accommodation");
+            response.put("message", "해당 숙소는 이미 예약된 데이터가 있는 숙소입니다. 연관 데이터 삭제 후 다시 시도하세요.");
             return ResponseEntity.badRequest().body(response);
         }
     }
@@ -192,6 +192,9 @@ public class AdminAcmController {
             existingAcm.setMaxGuest(acm.getMaxGuest());
             existingAcm.setAcmPhone(acm.getAcmPhone());
             existingAcm.setAcmInfo(acm.getAcmInfo());
+            
+            // 현재 시간으로 acmDate 설정
+            existingAcm.setAcmDate(LocalDateTime.now());
 
             // 데이터베이스에 저장
             acmService.updateAcm(existingAcm);

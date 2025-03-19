@@ -87,4 +87,9 @@ public class AcmService {
         // 데이터베이스에 수정된 데이터 저장
         acmMapper.updateAcm(acm); // AcmMapper에 updateAcm 메소드가 구현되어 있어야 합니다.
     }
+
+    // 모든 숙소 정보 조회
+    public List<AcmDTO> getAllAcms() {
+        return acmMapper.selectAllAcms();
+    }
 }

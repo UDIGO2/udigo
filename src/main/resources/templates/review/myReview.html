@@ -20,7 +20,8 @@
         <div class="review-item" th:each="review : ${reviews}">
             <div class="review-content">
                 <div class="review-image">
-                    <img th:src="${review.rePhoto1}" alt="숙소 이미지">
+                    <img th:if="${review.rePhoto1 != null && !review.rePhoto1.isEmpty()}" th:src="@{${review.rePhoto1}}" alt="숙소 이미지">
+                    <img th:if="${review.rePhoto1 == null || review.rePhoto1.isEmpty()}" th:src="@{/image/default-review.jpg}" alt="기본 이미지">
                 </div>
                 <div class="review-info">
                     <h3 th:text="${review.acmId}">숙소 이름</h3>

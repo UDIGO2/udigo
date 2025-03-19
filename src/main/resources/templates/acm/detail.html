@@ -807,13 +807,17 @@
                 if (review.rePhoto1 || review.rePhoto2 || review.rePhoto3) {
                     photosHTML = '<div class="review-photos">';
                     if (review.rePhoto1) {
-                        photosHTML += `<img src="${review.rePhoto1}" alt="후기 사진 1">`;
+                        // 이미지 경로가 이미 절대 경로로 시작하면 그대로 사용, 아니면 컨텍스트 경로 추가
+                        const photo1Path = review.rePhoto1.startsWith('/') ? review.rePhoto1 : `/${review.rePhoto1}`;
+                        photosHTML += `<img src="${photo1Path}" alt="후기 사진 1">`;
                     }
                     if (review.rePhoto2) {
-                        photosHTML += `<img src="${review.rePhoto2}" alt="후기 사진 2">`;
+                        const photo2Path = review.rePhoto2.startsWith('/') ? review.rePhoto2 : `/${review.rePhoto2}`;
+                        photosHTML += `<img src="${photo2Path}" alt="후기 사진 2">`;
                     }
                     if (review.rePhoto3) {
-                        photosHTML += `<img src="${review.rePhoto3}" alt="후기 사진 3">`;
+                        const photo3Path = review.rePhoto3.startsWith('/') ? review.rePhoto3 : `/${review.rePhoto3}`;
+                        photosHTML += `<img src="${photo3Path}" alt="후기 사진 3">`;
                     }
                     photosHTML += '</div>';
                 }

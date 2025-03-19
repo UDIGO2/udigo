@@ -11,6 +11,9 @@
             r.resv_id,
             r.content,
             r.written_at,
+            r.re_photo1,
+            r.re_photo2,
+            r.re_photo3,
             a.acm_name
         FROM
             tbl_reviews r
@@ -113,4 +116,24 @@
         WHERE r.acm_id = #{acmId}
         ORDER BY r.written_at DESC
     </select>
+
+    <!-- 이미지 URL 업데이트 -->
+    <update id="updateImageUrls">
+        UPDATE tbl_reviews
+        SET re_photo1 = CASE 
+            WHEN re_photo1 IS NOT NULL AND re_photo1 != '' AND re_photo1 NOT LIKE '/%' 
+            THEN CONCAT('/image/review/', re_photo1)
+            ELSE re_photo1
+            END,
+            re_photo2 = CASE 
+            WHEN re_photo2 IS NOT NULL AND re_photo2 != '' AND re_photo2 NOT LIKE '/%' 
+            THEN CONCAT('/image/review/', re_photo2)
+            ELSE re_photo2
+            END,
+            re_photo3 = CASE 
+            WHEN re_photo3 IS NOT NULL AND re_photo3 != '' AND re_photo3 NOT LIKE '/%' 
+            THEN CONCAT('/image/review/', re_photo3)
+            ELSE re_photo3
+            END
+    </update>
 </mapper>
