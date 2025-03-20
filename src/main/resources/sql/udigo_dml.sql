@@ -19,6 +19,26 @@ VALUES (105,'member05', '조수민', 'sumin@naver.com', '$2b$12$1C5njm.3fcbzVILG
 INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked)
 VALUES (106,'member06', '허아름', 'areum@daum.net', '$2b$12$1C5njm.3fcbzVILGq/K0l.f8LUSdVKyksThdTZm85CYcJpCVv0hBO', '016-4814-3905', NOW(), FALSE, FALSE);
 
+-- 쿠폰을 사용한 회원 (ACTIVE)
+INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked, status, rejoin_at, coupon_used, deleted_at)
+VALUES (107, 'member07', '김철수', 'chulsoo@example.com', '$2b$12$N7uLMTh9nydkZ6zSx/HWJe0wuqrKV.7BDuIrZMwYYNfGlPt3Hoynm', '010-5678-1234', NOW(), TRUE, FALSE, 'ACTIVE', NULL, TRUE, NULL);
+
+-- 회원 탈퇴한 경우 (WITHDRAWN)
+INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked, status, rejoin_at, coupon_used, deleted_at)
+VALUES (108, 'member08', '이영희', 'younghee@example.com', '$2b$12$Ph.Zj22hkoQpzSZ2m9Tx3.2wgkcpUHwehmS6GlNsL7qS5eCvOZSf2', '010-3456-7890', NOW(), TRUE, FALSE, 'WITHDRAWN', NULL, FALSE, NOW());
+
+-- 회원 탈퇴 후 재가입 가능한 경우 (탈퇴 후 30일 경과)
+INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked, status, rejoin_at, coupon_used, deleted_at)
+VALUES (109, 'member09', '박민수', 'minsoo@example.com', '$2b$12$LbsixVHkdKcociTjrMfReOjHntFgg.2Cg4S7s4FKynIc3WuzPjwK2', '010-2222-3333', NOW() - INTERVAL 40 DAY, TRUE, FALSE, 'WITHDRAWN', NOW() - INTERVAL 10 DAY, FALSE, NULL);
+
+-- 쿠폰을 사용하고 회원 탈퇴한 경우
+INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked, status, rejoin_at, coupon_used, deleted_at)
+VALUES (110, 'member10', '최지현', 'jihyun@example.com', '$2b$12$76ZNMl3GOINU.OU6YYvtYOrKXaLfqg50JMD262vLE73b6Fgyu12M6', '010-7777-8888', NOW() - INTERVAL 20 DAY, TRUE, FALSE, 'WITHDRAWN', NULL, TRUE, NOW());
+
+-- 탈퇴 후 재가입 가능하지만 쿠폰을 사용한 경우
+INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked, status, rejoin_at, coupon_used, deleted_at)
+VALUES (111, 'member11', '송다은', 'daeun@example.com', '$2b$12$XORYPlsOAhKsrvLtS08fHOO/IkHt72mkZiFM48vq15RiH0ZhiFpTq', '010-9999-0000', NOW() - INTERVAL 45 DAY, TRUE, FALSE, 'WITHDRAWN', NOW() - INTERVAL 15 DAY, TRUE, NULL);
+
 UPDATE tbl_member SET role = 'ADMIN' WHERE member_code = 1;
 
 INSERT INTO tbl_roles (role_code, role_name) VALUES (1, 'ADMIN');
@@ -33,9 +53,13 @@ INSERT INTO tbl_member_roles (member_code, role_code) VALUES (103, 2);
 INSERT INTO tbl_member_roles (member_code, role_code) VALUES (104, 2);
 INSERT INTO tbl_member_roles (member_code, role_code) VALUES (105, 2);
 INSERT INTO tbl_member_roles (member_code, role_code) VALUES (106, 2);
+INSERT INTO tbl_member_roles (member_code, role_code) VALUES (107, 1); -- 쿠폰 사용자
+INSERT INTO tbl_member_roles (member_code, role_code) VALUES (108, 1); -- 탈퇴한 사용자
+INSERT INTO tbl_member_roles (member_code, role_code) VALUES (109, 1); -- 재가입 가능한 사용자
+INSERT INTO tbl_member_roles (member_code, role_code) VALUES (110, 2); -- 쿠폰 사용 후 탈퇴한 사용자
+INSERT INTO tbl_member_roles (member_code, role_code) VALUES (111, 1); -- 쿠폰 사용 후 재가입 가능한 사용자
 
-ALTER TABLE tbl_member AUTO_INCREMENT = 107;
-
+ALTER TABLE tbl_member AUTO_INCREMENT = 112;
 --  서울/경기 호텔 데이터
 INSERT INTO tbl_acm (acm_location, acm_name, acm_address , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3, acm_photo4, acm_photo5)
 VALUES('서울/경기', '롯데호텔 서울', '서울특별시 중구 을지로 30', 150000,
@@ -199,7 +223,7 @@ VALUES ('제주', '롯데호텔 제주', '제주특별자치도 서귀포시 중
 INSERT INTO tbl_acm (acm_location, acm_name, acm_address , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3, acm_photo4)
 VALUES ('제주','제주 신라호텔','제주 서귀포시 중문관광로72번길 75', 250000,
         '내 집과 같은 편안함으로 공간 이상의 가치가 숨쉬고 있는 제주 신라호텔.',
-        '064-735-5114', NOW(), 4,800,
+        '064-735-5114', NOW(), 4,10,
         '/image/acm/jeju/silla1.jpg',
         '/image/acm/jeju/silla2.jpg',
         '/image/acm/jeju/silla3.jpg',
@@ -1253,6 +1277,38 @@ INSERT INTO tbl_reservations (
              402, 101, '2025-03-29', '2025-04-02', 4, 1, '2025-03-18 17:20:00', 60
          );
 
+-- 61쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+             61, 101, 501, '간편결제', '결제완료', '네이버페이', '2025-03-18 17:20:00',
+             250000, 0, 0, 'TID-20250318-060', 'NAVER'
+         );
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+             501, 101, '2025-03-23', '2025-03-25', 4, 1, '2025-03-18 17:20:00', 61
+         );
+
+-- 62쌍
+INSERT INTO tbl_pay (
+    pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
+    pay_price, discount, pay_ref, transaction_id, pay_provider
+) VALUES (
+             62, 102, 501, '간편결제', '결제완료', '네이버페이', '2025-03-18 17:20:00',
+             250000, 0, 0, 'TID-20250318-060', 'NAVER'
+         );
+
+INSERT INTO tbl_reservations (
+    acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
+) VALUES (
+             501, 102, '2025-03-29', '2025-04-02', 4, 1, '2025-03-18 17:20:00', 62
+         );
+
+
+
 -- 게시판 관련 dml
 
 -- 공지사항 (board_type = 1) 20개
@@ -1350,18 +1406,18 @@ INSERT INTO `tbl_board_comments` (`post_id`, `content`, `created_at`) VALUES
 
 # 리뷰 데이터 / 리뷰 이미지 추가 예정
 INSERT INTO `tbl_reviews` (member_code, acm_id, resv_id, content, written_at, re_photo1, re_photo2, re_photo3) VALUES
-(101, 101, 1, '이 호텔은 정말 최고였습니다! 객실은 넓고 깨끗했으며, 침대는 아주 편안했습니다. 특히 창문에서 보이는 도시 전경이 환상적이었어요. 직원들도 매우 친절하고 전문적이었습니다. 다음에 서울에 가면 꼭 다시 방문할 것입니다.', '2025-01-20 15:30:00', '/image/review/review1.jpg', '/image/review/review2.jpg', '/image/review/review3.jpg'),
-(102, 102, 2, '서비스와 시설 모두 기대 이상이었습니다. 조식도 종류가 다양하고 맛있었어요. 위치도 쇼핑과 관광하기 좋은 곳에 있어 편리했습니다. 다만 욕실 샤워 수압이 조금 약한 것이 아쉬웠어요. 그래도 전반적으로 만족스러운 숙박이었습니다.', '2025-01-25 16:45:00', '/image/review/review4.jpg', '/image/review/review5.jpg', NULL),
+(101, 101, 1, '이 호텔은 정말 최고였습니다! 객실은 넓고 깨끗했으며, 침대는 아주 편안했습니다. 특히 창문에서 보이는 도시 전경이 환상적이었어요. 직원들도 매우 친절하고 전문적이었습니다. 다음에 서울에 가면 꼭 다시 방문할 것입니다.', '2025-01-20 15:30:00', '/image/review/review1.jpg.jpeg', '/image/review/review2.jpg.jpg', '/image/review/review3.jpg.jpeg'),
+(102, 102, 2, '서비스와 시설 모두 기대 이상이었습니다. 조식도 종류가 다양하고 맛있었어요. 위치도 쇼핑과 관광하기 좋은 곳에 있어 편리했습니다. 다만 욕실 샤워 수압이 조금 약한 것이 아쉬웠어요. 그래도 전반적으로 만족스러운 숙박이었습니다.', '2025-01-25 16:45:00', '/image/review/review4.jpg.jpg', '/image/review/review5.jpg.jpeg', NULL),
 (103, 201, 3, '충청 지역 여행에 딱 맞는 숙소였습니다. 특히 수영장 시설이 정말 좋았고, 아이들이 너무 좋아했어요. 주변에 자연환경도 아름다워서 산책하기 좋았습니다. 객실도 넓고 청결했어요. 다음 가족여행에도 이용하고 싶습니다.', '2025-01-30 10:15:00', NULL, NULL, NULL),
-(104, 301, 5, '강원도의 아름다운 풍경을 즐기기에 최적의 위치에 있는 숙소였습니다. 방 안에서도 산과 바다가 보여 전망이 훌륭했어요. 객실 내부도 모던하고 깔끔했습니다. 다만, 주차 공간이 조금 부족한 것이 아쉬웠어요. 그래도 다시 방문하고 싶은 곳입니다.', '2025-02-05 14:20:00', '/image/review/review6.jpg', '/image/review/review7.jpg', NULL),
-(105, 401, 11, '제주 여행의 완벽한 마무리를 할 수 있었습니다. 객실에서 보이는 오션뷰가 정말 환상적이었어요! 직원들도 매우 친절했고, 특히 조식이 다양하고 맛있었습니다. 호텔 내 부대시설도 잘 갖춰져 있어 비가 와도 지루하지 않았어요.', '2025-02-10 18:30:00', '/image/review/review8.jpg', '/image/review/review9.jpg', '/image/review/review10.jpg'),
+(104, 301, 5, '강원도의 아름다운 풍경을 즐기기에 최적의 위치에 있는 숙소였습니다. 방 안에서도 산과 바다가 보여 전망이 훌륭했어요. 객실 내부도 모던하고 깔끔했습니다. 다만, 주차 공간이 조금 부족한 것이 아쉬웠어요. 그래도 다시 방문하고 싶은 곳입니다.', '2025-02-05 14:20:00', '/image/review/review6.jpg.jpg', '/image/review/review7.jpg.jpeg', NULL),
+(105, 401, 11, '제주 여행의 완벽한 마무리를 할 수 있었습니다. 객실에서 보이는 오션뷰가 정말 환상적이었어요! 직원들도 매우 친절했고, 특히 조식이 다양하고 맛있었습니다. 호텔 내 부대시설도 잘 갖춰져 있어 비가 와도 지루하지 않았어요.', '2025-02-10 18:30:00', '/image/review/review8.jpg.jpg', '/image/review/review9.jpg.jpeg', '/image/review/review10.jpg.jpg'),
 (106, 501, 14, '전라도의 맛과 멋을 느낄 수 있는 좋은 위치에 있었습니다. 한옥 스타일의 인테리어가 정말 마음에 들었어요. 침구도 고급스럽고 편안했습니다. 주변에 맛집도 많아서 식사하기도 편리했습니다. 다음에 전라도 여행 시 꼭 다시 묵고 싶습니다.', '2025-02-15 13:40:00', NULL, NULL, NULL),
-(101, 601, 17, '경상도 여행의 중심지에 위치해 이동하기 편리했습니다. 객실은 깔끔했고, 침대가 너무 푹신해서 잠을 정말 잘 잤어요. 특히 스파 시설이 훌륭해 피로를 풀기 좋았습니다. 다음에 기회가 되면 꼭 다시 방문하고 싶어요.', '2025-02-20 17:15:00', '/image/review/review11.jpg', '/image/review/review12.jpg', NULL),
-(102, 103, 25, '가족 여행으로 방문했는데, 아이들이 정말 좋아했습니다. 키즈룸도 잘 되어있고, 직원분들도 아이들에게 친절했어요. 객실도 넓고 깨끗해서 만족스러웠습니다. 조식도 종류가 다양해서 좋았어요. 가족 여행에 강력 추천합니다!', '2025-02-25 11:30:00', '/image/review/review13.jpg', '/image/review/review14.jpg', NULL),
+(101, 601, 17, '경상도 여행의 중심지에 위치해 이동하기 편리했습니다. 객실은 깔끔했고, 침대가 너무 푹신해서 잠을 정말 잘 잤어요. 특히 스파 시설이 훌륭해 피로를 풀기 좋았습니다. 다음에 기회가 되면 꼭 다시 방문하고 싶어요.', '2025-02-20 17:15:00', '/image/review/review11.jpg.jpg', '/image/review/review12.jpg.jpg', NULL),
+(102, 103, 25, '가족 여행으로 방문했는데, 아이들이 정말 좋아했습니다. 키즈룸도 잘 되어있고, 직원분들도 아이들에게 친절했어요. 객실도 넓고 깨끗해서 만족스러웠습니다. 조식도 종류가 다양해서 좋았어요. 가족 여행에 강력 추천합니다!', '2025-02-25 11:30:00', '/image/review/review13.jpg.jpg', '/image/review/review14.jpg.jpg', NULL),
 (103, 204, 28, '비즈니스 출장으로 방문했는데 매우 만족스러웠습니다. 와이파이가 빠르고 안정적이었고, 책상도 넓어서 업무 보기 좋았어요. 침대도 편안해서 숙면을 취할 수 있었습니다. 주변에 식당도 많아 식사하기도 편리했습니다.', '2025-03-02 09:45:00', NULL, NULL, NULL),
-(104, 305, 22, '커플 여행으로 방문했는데 로맨틱한 분위기가 너무 좋았습니다. 특히 야외 테라스에서 보는 야경이 환상적이었어요. 직원들도 프라이버시를 존중해주어 편안하게 쉴 수 있었습니다. 특별한 날에 다시 방문하고 싶은 곳입니다.', '2025-03-10 20:00:00', '/image/review/review15.jpg', '/image/review/review16.jpg', '/image/review/review17.jpg'),
-(105, 402, 29, '친구들과 함께 여행왔는데 정말 즐거운 시간을 보냈습니다. 객실이 넓어서 4명이 지내기에 충분했고, 각종 편의시설도 잘 갖춰져 있었어요. 특히 바베큐 시설이 있어서 저녁에 고기를 구워 먹을 수 있어 좋았습니다.', '2025-03-25 15:20:00', '/image/review/review18.jpg', NULL, NULL),
-(106, 203, 30, '한적한 곳에서 힐링하기 좋은 숙소였습니다. 주변이 조용해서 푹 쉴 수 있었고, 객실에서 보이는 자연 경관도 아름다웠어요. 조식으로 나온 지역 특산물로 만든 요리도 맛있었습니다. 일상에서 벗어나 쉬고 싶을 때 추천합니다.', '2025-04-05 12:10:00', '/image/review/review19.jpg', NULL, NULL),
+(104, 305, 22, '커플 여행으로 방문했는데 로맨틱한 분위기가 너무 좋았습니다. 특히 야외 테라스에서 보는 야경이 환상적이었어요. 직원들도 프라이버시를 존중해주어 편안하게 쉴 수 있었습니다. 특별한 날에 다시 방문하고 싶은 곳입니다.', '2025-03-10 20:00:00', '/image/review/review15.jpg.jpg', '/image/review/review16.jpg.jpg', '/image/review/review17.jpg.jpg'),
+(105, 402, 29, '친구들과 함께 여행왔는데 정말 즐거운 시간을 보냈습니다. 객실이 넓어서 4명이 지내기에 충분했고, 각종 편의시설도 잘 갖춰져 있었어요. 특히 바베큐 시설이 있어서 저녁에 고기를 구워 먹을 수 있어 좋았습니다.', '2025-03-25 15:20:00', '/image/review/review18.jpg.jpg', NULL, NULL),
+(106, 203, 30, '한적한 곳에서 힐링하기 좋은 숙소였습니다. 주변이 조용해서 푹 쉴 수 있었고, 객실에서 보이는 자연 경관도 아름다웠어요. 조식으로 나온 지역 특산물로 만든 요리도 맛있었습니다. 일상에서 벗어나 쉬고 싶을 때 추천합니다.', '2025-04-05 12:10:00', '/image/review/review19.jpg.jpg', NULL, NULL),
 (101, 304, 37, '겨울 여행으로 방문했는데, 객실 내 난방이 잘 되어 따뜻하게 지낼 수 있었습니다. 특히 온천 시설이 있어 추운 날씨에도 편안하게 즐길 수 있었어요. 주변 스키장과도 가까워서 접근성이 좋았습니다.', '2025-04-15 16:50:00', NULL, NULL, NULL),
 (102, 403, 40, '가족 여행으로 방문했습니다. 객실이 넓고 깨끗했으며, 주방 시설도 잘 갖춰져 있어 간단한 요리를 해먹을 수 있어 좋았어요. 아이들을 위한 놀이시설도 있어 아이들이 심심하지 않게 즐길 수 있었습니다.', '2025-04-20 14:15:00', NULL, NULL, NULL),
 (103, 502, 43, '전반적으로 만족스러운 숙박이었습니다. 객실은 깨끗했고, 직원들도 친절했어요. 조식의 퀄리티가 기대보다 훌륭했습니다. 다만, 주변에 편의시설이 조금 부족한 것이 아쉬웠어요. 그래도 조용히 쉬기에는 좋은 곳이었습니다.', '2025-04-30 11:30:00', NULL, NULL, NULL),
@@ -1371,11 +1427,11 @@ INSERT INTO `tbl_reviews` (member_code, acm_id, resv_id, content, written_at, re
 (101, 104, 50, '친구들과 함께 여행왔는데 정말 즐거운 시간을 보냈습니다. 객실이 넓어서 4명이 지내기에 충분했고, 주변에 맛집과 관광지가 많아 다니기 편리했어요. 다음에 또 방문하고 싶은 숙소입니다.', '2025-06-01 17:00:00', NULL, NULL, NULL),
 (102, 105, 50, '조용하고 한적한 분위기가 마음에 들었습니다. 자연 속에서 힐링할 수 있는 완벽한 장소였어요. 객실도 청결하고 아늑했으며, 주변 산책로도 잘 정비되어 있어 산책하기 좋았습니다. 특히 저녁에 보이는 별들이 인상적이었어요.', '2025-06-10 18:30:00', NULL, NULL, NULL),
 (103, 403, 40, '호텔 직원들의 서비스가 정말 훌륭했습니다. 체크인부터 체크아웃까지 세심한 배려가 느껴졌어요. 객실도 깨끗하고 넓어서 편안하게 지냈습니다. 특히 조식 퀄리티가 기대 이상으로 맛있었어요!', '2025-06-15 11:45:00', NULL, NULL, NULL),
-(104, 204, 28, '조용히 휴식을 취하기에 최적의 장소였습니다. 침구가 특히 편안해서 오랜만에 숙면을 취할 수 있었어요. 주변 환경도 깨끗하고 공기도 좋아 산책하기 좋았습니다. 다음에는 가족들과 함께 오고 싶네요.', '2025-06-20 14:15:00', '/image/review/review13.jpg', '/image/review/review14.jpg', NULL),
+(104, 204, 28, '조용히 휴식을 취하기에 최적의 장소였습니다. 침구가 특히 편안해서 오랜만에 숙면을 취할 수 있었어요. 주변 환경도 깨끗하고 공기도 좋아 산책하기 좋았습니다. 다음에는 가족들과 함께 오고 싶네요.', '2025-06-20 14:15:00', '/image/review/review13.jpg.jpg', '/image/review/review14.jpg.jpg', NULL),
 (105, 505, 43, '가족 여행으로 방문했는데 아이들이 너무 좋아했습니다. 키즈 프로그램이 다양하게 준비되어 있어서 아이들이 지루해하지 않았어요. 부모님도 편안하게 쉴 수 있어서 모두가 만족한 여행이었습니다.', '2025-06-25 16:30:00', NULL, NULL, NULL),
 (106, 301, 33, '친절한 직원분들 덕분에 즐거운 여행이 되었습니다. 체크인할 때부터 지역 관광지 추천까지 세심하게 챙겨주셔서 감사했어요. 객실도 깨끗하고 전망도 좋았습니다. 조식도 다양한 메뉴로 구성되어 있어 만족스러웠어요.', '2025-07-01 09:30:00', NULL, NULL, NULL),
-(101, 202, 52, '비즈니스 출장으로 이용했는데 매우 만족스러웠습니다. 와이파이 속도가 빠르고 책상이 넓어 업무 처리하기 편했어요. 객실도 깔끔하게 정돈되어 있었고, 조식도 다양한 메뉴로 구성되어 있어 좋았습니다.', '2025-07-05 12:45:00', '/image/review/review4.jpg', '/image/review/review5.jpg', NULL),
+(101, 202, 52, '비즈니스 출장으로 이용했는데 매우 만족스러웠습니다. 와이파이 속도가 빠르고 책상이 넓어 업무 처리하기 편했어요. 객실도 깔끔하게 정돈되어 있었고, 조식도 다양한 메뉴로 구성되어 있어 좋았습니다.', '2025-07-05 12:45:00', '/image/review/review4.jpg.jpg', '/image/review/review5.jpg.jpeg', NULL),
 (102, 604, 46, '숙소 위치가 관광하기 정말 좋았습니다. 주요 관광지까지 도보로 이동 가능한 거리였고, 주변에 맛집도 많아서 편리했어요. 객실도 깨끗하고 직원분들도 친절해서 즐거운 여행이 되었습니다.', '2025-07-10 19:20:00', NULL, NULL, NULL),
-(103, 303, 35, '커플 여행으로 방문했는데 로맨틱한 분위기가 너무 좋았습니다. 특히 해질녘 테라스에서 보는 전경이 아름다웠어요. 침구도 편안하고 객실도 청결했습니다. 연인과 함께하기 좋은 숙소입니다.', '2025-07-15 20:30:00', '/image/review/review15.jpg', '/image/review/review16.jpg', '/image/review/review17.jpg'),
+(103, 303, 35, '커플 여행으로 방문했는데 로맨틱한 분위기가 너무 좋았습니다. 특히 해질녘 테라스에서 보는 전경이 아름다웠어요. 침구도 편안하고 객실도 청결했습니다. 연인과 함께하기 좋은 숙소입니다.', '2025-07-15 20:30:00', '/image/review/review15.jpg.jpg', '/image/review/review16.jpg.jpg', '/image/review/review17.jpg.jpg'),
 (105, 603, 46, '가격 대비 정말 훌륭한 숙소였습니다. 객실은 넓고 청결했으며, 어메니티도 고급스러웠어요. 스파 시설도 이용해봤는데 피로가 확 풀리는 느낌이었습니다. 다음에 기회가 되면 꼭 다시 방문하고 싶습니다.', '2025-07-20 15:50:00', NULL, NULL, NULL)
 
