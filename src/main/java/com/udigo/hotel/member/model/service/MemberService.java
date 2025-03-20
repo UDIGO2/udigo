@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,8 +16,8 @@ import java.util.UUID;
 public class MemberService {
 
     private final MemberMapper memberMapper;
-    private final PasswordEncoder passwordEncoder;
-    private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;  // 비밀번호 암호화 객체
+    private final EmailService emailService;        // 이메일 전송 서비스
 
     public MemberService(MemberMapper memberMapper, PasswordEncoder passwordEncoder, EmailService emailService) {
         this.memberMapper = memberMapper;
@@ -24,16 +25,42 @@ public class MemberService {
         this.emailService = emailService;
     }
 
-    /* ✅ 아이디 중복 확인 */
+    /* 아이디 중복 확인 (30일 제한 적용)  */
     public boolean isMemberIdDuplicate(String memberId) {
         MemberDTO member = memberMapper.findByMemberId(memberId);
-        return member != null; // 데이터가 존재하면 중복 아이디
+
+        // 회원이 존재하지 않으면 중복 아님 (가입 가능)
+        if (member == null) {
+            return false;
+        }
+
+        // 탈퇴한 회원인지 확인 (WITHDRAWN 상태이면서 deleted_at이 30일 이내)
+        if ("WITHDRAWN".equals(member.getStatus()) && member.getDeletedAt() != null) {
+            LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(30);
+            if (member.getDeletedAt().isAfter(thirtyDaysAgo)) {
+                return true; // 30일 이내 탈퇴한 회원 → 중복 처리 (가입 불가)
+            }
+        }
+
+        return true; // 활성화된 회원이면 중복 처리 (가입 불가)
+
     }
 
-    /* ✅ 이메일 중복 확인 (추가) */
+    /* 이메일 중복 확인 (30일 제한 적용) */
     public boolean isEmailDuplicate(String email) {
         MemberDTO member = memberMapper.findByEmail(email);
-        return member != null; // 데이터가 존재하면 중복 이메일
+
+        if (member == null) {
+            return false; // 사용 가능
+        }
+
+        // 탈퇴 회원이고 30일 이내라면 중복 처리 (가입 불가)
+        if ("WITHDRAWN".equals(member.getStatus()) && member.getDeletedAt() != null) {
+            LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(30);
+            return member.getDeletedAt().isAfter(thirtyDaysAgo);
+        }
+
+        return true; // 기존 회원이 존재하면 중복 처리 (가입 불가)
     }
 
     /* 회원가입 */
@@ -42,7 +69,7 @@ public class MemberService {
             throw new IllegalArgumentException("비밀번호를 입력해야 합니다.");
         }
 
-        System.out.println("🔍 회원가입 데이터 (DB 저장 전): " + memberDTO.toString());
+        System.out.println("회원가입 데이터 (DB 저장 전): " + memberDTO.toString());
 
         // 비밀번호 암호화 후 저장
         String encodedPassword = passwordEncoder.encode(memberDTO.getPassword());
@@ -76,7 +103,7 @@ public class MemberService {
     }
 
     /* 회원 정보 수정 */
-    @Transactional
+    @Transactional      // 트랜잭션이 필요한 메서드 (수정 중 오류 발생 시 롤백)
     public void updateMember(MemberDTO memberDTO) {
         memberMapper.updateMember(memberDTO);
     }
@@ -98,11 +125,13 @@ public class MemberService {
 
         //  13자리 임시 비밀번호 생성
         String tempPassword = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 13);
+        // `UUID.randomUUID().toString()`을 사용하여 랜덤한 문자열을 생성하는 클래스
+        // 보안상 강력한 난수값을 만들 때 사용됨 (임시 비밀번호 생성 시 활용)
         String encodedPassword = passwordEncoder.encode(tempPassword);
 
         //  DB에 임시 비밀번호 저장
         memberMapper.updatePassword(memberId, encodedPassword);
-        System.out.println("🔐 임시 비밀번호 저장 완료: " + memberId);
+        System.out.println(" 임시 비밀번호 저장 완료: " + memberId);
 
         //  이메일 전송
         String subject = "[UDIGO] 임시 비밀번호 안내";
@@ -172,4 +201,5 @@ public class MemberService {
         int result = memberMapper.updateWithdrawMember(memberId);
         return result > 0; //  업데이트 성공 여부 반환
     }
+
 }

@@ -27,17 +27,17 @@ public class MemberController {
 
     public MemberController(MemberService memberService, PasswordEncoder passwordEncoder) {
         this.memberService = memberService;
-        this.passwordEncoder = passwordEncoder;
+        this.passwordEncoder = passwordEncoder;  // 비밀번호 암호화를 위한 객체
     }
 
-    /** ✅ 회원가입 페이지 이동 **/
+    /* 회원가입 페이지 이동 */
     @GetMapping("/signup")
     public String signupForm(Model model) {
         model.addAttribute("member", new MemberDTO());
         return "member/signup"; // signup.html 페이지로 이동
     }
 
-    /**  회원가입 처리 **/
+    /* 회원가입 처리 */
     @PostMapping("/signup")
     public String signup(@ModelAttribute MemberDTO member, Model model) {
         try {
@@ -52,12 +52,12 @@ public class MemberController {
         return "member/signup";
     }
 
-    /**  아이디 & 이메일 중복 확인 (AJAX 지원, JSON 응답) **/
+    /* 아이디 & 이메일 중복 확인 (AJAX 지원, JSON 응답) */
     @GetMapping("/check-duplicate")
-    @ResponseBody
+    @ResponseBody // JSON 형태의 응답을 반환
     public ResponseEntity<Map<String, Object>> checkDuplicate(
             @RequestParam("type") String type,
-            @RequestParam("value") String value) {
+            @RequestParam("value") String value) {  // 중복 확인할 값 (사용자가 입력한 아이디 또는 이메일)
 
         boolean isDuplicate;
         if ("memberId".equals(type)) {
@@ -72,10 +72,10 @@ public class MemberController {
         response.put("isDuplicate", isDuplicate);
         response.put("message", isDuplicate ? "이미 사용 중입니다." : "사용 가능합니다.");
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(response);     // JSON 형태의 응답 반환
     }
 
-    /**  마이페이지 이동 **/
+    /* 마이페이지 이동 */
     @GetMapping("/mypage")
     public String myPage(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -88,7 +88,7 @@ public class MemberController {
         return "member/mypage";
     }
 
-    /** 회원 정보 조회 **/
+    /* 회원 정보 조회 */
     @GetMapping("/myinfo")
     public String myInfo(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -105,7 +105,7 @@ public class MemberController {
         return "redirect:/auth/login";
     }
 
-    /**  회원 정보 수정 **/
+    /* 회원 정보 수정 */
     @PostMapping("/myinfo/update")
     public String updateMyInfo(@ModelAttribute MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -123,7 +123,7 @@ public class MemberController {
         return "redirect:/auth/login";
     }
 
-    /** 쿠폰 사용 **/
+    /* 쿠폰 사용 */
     @PostMapping("/useCoupon")
     public String useCoupon(@ModelAttribute MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
         try {
@@ -135,13 +135,13 @@ public class MemberController {
         return "redirect:/member/mypage";
     }
 
-    /**  비밀번호 변경 페이지 이동 **/
+    /* 비밀번호 변경 페이지 이동 */
     @GetMapping("/changepassword")
     public String showChangePasswordForm() {
         return "member/changepassword";
     }
 
-    /**  비밀번호 변경 처리 **/
+    /* 비밀번호 변경 처리 */
     @PostMapping("/changepassword")
     public String changePassword(
             @RequestParam("currentPassword") String currentPassword,
@@ -152,7 +152,7 @@ public class MemberController {
             Model model,
             RedirectAttributes redirectAttributes) {
 
-        String memberId = authentication.getName();
+        String memberId = authentication.getName();     // 로그인한 사용자 아이디 가져오기
         MemberDTO member = memberService.getMemberById(memberId);
 
         // 회원 존재 여부 확인
@@ -174,12 +174,12 @@ public class MemberController {
         }
 
         // 비밀번호 업데이트 후 성공 메시지 추가
-        memberService.updatePassword(memberId, passwordEncoder.encode(newPassword));
+        memberService.updatePassword(memberId, passwordEncoder.encode(newPassword));  // 비밀번호 암호화 후 변경
         redirectAttributes.addFlashAttribute("successMessage", "비밀번호가 성공적으로 변경되었습니다.");
 
         // 세션 무효화 (로그아웃 처리)
-        request.getSession().invalidate();
-        SecurityContextHolder.clearContext();
+        request.getSession().invalidate();      // 현재 세션 제거
+        SecurityContextHolder.clearContext();   // Spring Security 인증 정보 제거
 
         redirectAttributes.addFlashAttribute("successMessage", "비밀번호가 성공적으로 변경되었습니다. 다시 로그인해 주세요.");
         return "redirect:/auth/login";

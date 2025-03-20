@@ -49,6 +49,13 @@
                     <span th:unless="${member.couponUsed}" style="color: red;">미사용 ❌</span>
                 </td>
             </tr>
+            <tr>
+                <th>회원 상태</th>
+                <td>
+                    <span th:if="${member.status == 'ACTIVE'}" style="color: blue;">정상 회원</span>
+                    <span th:if="${member.status == 'WITHDRAWN'}" style="color: red;">탈퇴 회원</span>
+                </td>
+            </tr>
         </table>
 
         <div class="actions">

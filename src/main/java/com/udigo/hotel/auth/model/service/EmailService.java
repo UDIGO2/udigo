@@ -22,9 +22,9 @@ public class EmailService {
     }
 
     public void sendEmail(String toEmail, String subject, String text) throws MessagingException {
-        System.out.println("📧 발신자 이메일: " + fromEmail);
-        System.out.println("📩 수신자 이메일: " + toEmail);
-        System.out.println("📜 이메일 제목: " + subject);
+        System.out.println("발신자 이메일: " + fromEmail);
+        System.out.println("수신자 이메일: " + toEmail);
+        System.out.println("이메일 제목: " + subject);
 
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -36,10 +36,10 @@ public class EmailService {
             helper.setText(text, true);
 
             mailSender.send(message);
-            System.out.println("✅ 이메일 전송 성공!");
+            System.out.println("이메일 전송 성공!");
 
         } catch (MessagingException e) {
-            System.err.println("❌ 이메일 전송 오류: " + e.getMessage());
+            System.err.println("이메일 전송 오류: " + e.getMessage());
             throw new RuntimeException("이메일 전송 실패", e);
         }
     }

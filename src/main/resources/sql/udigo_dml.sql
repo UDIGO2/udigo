@@ -19,6 +19,26 @@ VALUES (105,'member05', '조수민', 'sumin@naver.com', '$2b$12$1C5njm.3fcbzVILG
 INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked)
 VALUES (106,'member06', '허아름', 'areum@daum.net', '$2b$12$1C5njm.3fcbzVILGq/K0l.f8LUSdVKyksThdTZm85CYcJpCVv0hBO', '016-4814-3905', NOW(), FALSE, FALSE);
 
+-- 쿠폰을 사용한 회원 (ACTIVE)
+INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked, status, rejoin_at, coupon_used, deleted_at)
+VALUES (107, 'member07', '김철수', 'chulsoo@example.com', '$2b$12$N7uLMTh9nydkZ6zSx/HWJe0wuqrKV.7BDuIrZMwYYNfGlPt3Hoynm', '010-5678-1234', NOW(), TRUE, FALSE, 'ACTIVE', NULL, TRUE, NULL);
+
+-- 회원 탈퇴한 경우 (WITHDRAWN)
+INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked, status, rejoin_at, coupon_used, deleted_at)
+VALUES (108, 'member08', '이영희', 'younghee@example.com', '$2b$12$Ph.Zj22hkoQpzSZ2m9Tx3.2wgkcpUHwehmS6GlNsL7qS5eCvOZSf2', '010-3456-7890', NOW(), TRUE, FALSE, 'WITHDRAWN', NULL, FALSE, NOW());
+
+-- 회원 탈퇴 후 재가입 가능한 경우 (탈퇴 후 30일 경과)
+INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked, status, rejoin_at, coupon_used, deleted_at)
+VALUES (109, 'member09', '박민수', 'minsoo@example.com', '$2b$12$LbsixVHkdKcociTjrMfReOjHntFgg.2Cg4S7s4FKynIc3WuzPjwK2', '010-2222-3333', NOW() - INTERVAL 40 DAY, TRUE, FALSE, 'WITHDRAWN', NOW() - INTERVAL 10 DAY, FALSE, NULL);
+
+-- 쿠폰을 사용하고 회원 탈퇴한 경우
+INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked, status, rejoin_at, coupon_used, deleted_at)
+VALUES (110, 'member10', '최지현', 'jihyun@example.com', '$2b$12$76ZNMl3GOINU.OU6YYvtYOrKXaLfqg50JMD262vLE73b6Fgyu12M6', '010-7777-8888', NOW() - INTERVAL 20 DAY, TRUE, FALSE, 'WITHDRAWN', NULL, TRUE, NOW());
+
+-- 탈퇴 후 재가입 가능하지만 쿠폰을 사용한 경우
+INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked, status, rejoin_at, coupon_used, deleted_at)
+VALUES (111, 'member11', '송다은', 'daeun@example.com', '$2b$12$XORYPlsOAhKsrvLtS08fHOO/IkHt72mkZiFM48vq15RiH0ZhiFpTq', '010-9999-0000', NOW() - INTERVAL 45 DAY, TRUE, FALSE, 'WITHDRAWN', NOW() - INTERVAL 15 DAY, TRUE, NULL);
+
 UPDATE tbl_member SET role = 'ADMIN' WHERE member_code = 1;
 
 INSERT INTO tbl_roles (role_code, role_name) VALUES (1, 'ADMIN');
@@ -33,8 +53,13 @@ INSERT INTO tbl_member_roles (member_code, role_code) VALUES (103, 2);
 INSERT INTO tbl_member_roles (member_code, role_code) VALUES (104, 2);
 INSERT INTO tbl_member_roles (member_code, role_code) VALUES (105, 2);
 INSERT INTO tbl_member_roles (member_code, role_code) VALUES (106, 2);
+INSERT INTO tbl_member_roles (member_code, role_code) VALUES (107, 1); -- 쿠폰 사용자
+INSERT INTO tbl_member_roles (member_code, role_code) VALUES (108, 1); -- 탈퇴한 사용자
+INSERT INTO tbl_member_roles (member_code, role_code) VALUES (109, 1); -- 재가입 가능한 사용자
+INSERT INTO tbl_member_roles (member_code, role_code) VALUES (110, 2); -- 쿠폰 사용 후 탈퇴한 사용자
+INSERT INTO tbl_member_roles (member_code, role_code) VALUES (111, 1); -- 쿠폰 사용 후 재가입 가능한 사용자
 
-ALTER TABLE tbl_member AUTO_INCREMENT = 107;
+ALTER TABLE tbl_member AUTO_INCREMENT = 112;
 
 --  서울/경기 호텔 데이터
 INSERT INTO tbl_acm (acm_location, acm_name, acm_address , acm_price, acm_info, acm_phone,regist_date, max_guest,liked_count, acm_photo1, acm_photo2, acm_photo3, acm_photo4, acm_photo5)
