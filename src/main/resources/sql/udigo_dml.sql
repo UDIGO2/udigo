@@ -1292,7 +1292,7 @@ INSERT INTO tbl_reservations (
              501, 101, '2025-03-23', '2025-03-25', 4, 1, '2025-03-18 17:20:00', 61
          );
 
--- 62쌍
+-- 62번쌍
 INSERT INTO tbl_pay (
     pay_id, member_code, acm_id, pay_method, pay_status, pay_type, pay_date,
     pay_price, discount, pay_ref, transaction_id, pay_provider
