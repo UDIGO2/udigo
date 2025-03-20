@@ -55,8 +55,8 @@
             <div class="form-group">
                 <label for="email">이메일</label>
                 <div class="btn-container">
-                    <input type="email" id="email" name="email" placeholder="이메일" required>
-                    <button type="button" class="btn-check" onclick="checkDuplicate('email', 'email')">중복 확인</button>
+                    <input type="email" id="email" name="email" placeholder="이메일" required oninput="checkEmailInput()">
+                    <button type="button" class="btn-check" id="checkEmailBtn" onclick="checkDuplicate('email', 'email')" disabled>중복 확인</button>
                 </div>
             </div>
 
@@ -147,30 +147,30 @@
                 'Content-Type': 'application/json'
             }
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`서버 응답 오류: ${response.status}`);
-            }
-            
-            if (response.headers.get('content-type') && 
-                response.headers.get('content-type').includes('application/json')) {
-                return response.json();
-            } else {
-                throw new Error('서버가 JSON 응답을 반환하지 않았습니다.');
-            }
-        })
-        .then(data => {
-            console.log('서버 응답:', data);
-            if (data && data.message) {
-                alert(data.message);
-            } else {
-                alert('서버 응답을 처리할 수 없습니다.');
-            }
-        })
-        .catch(error => {
-            console.error("오류 발생:", error);
-            alert("중복 확인 중 오류가 발생했습니다. 다시 시도해 주세요.");
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`서버 응답 오류: ${response.status}`);
+                }
+
+                if (response.headers.get('content-type') &&
+                    response.headers.get('content-type').includes('application/json')) {
+                    return response.json();
+                } else {
+                    throw new Error('서버가 JSON 응답을 반환하지 않았습니다.');
+                }
+            })
+            .then(data => {
+                console.log('서버 응답:', data);
+                if (data && data.message) {
+                    alert(data.message);
+                } else {
+                    alert('서버 응답을 처리할 수 없습니다.');
+                }
+            })
+            .catch(error => {
+                console.error("오류 발생:", error);
+                alert("중복 확인 중 오류가 발생했습니다. 다시 시도해 주세요.");
+            });
     }
 
     // ✅ 핸드폰 번호 입력 시 자동으로 하이픈(-) 추가하는 함수
@@ -187,6 +187,14 @@
         }
 
         input.value = formatted;
+    }
+
+    // 이메일 입력 시 버튼 활성화
+    function checkEmailInput() {
+        let email = document.getElementById("email").value.trim();
+        let checkBtn = document.getElementById("checkEmailBtn");
+
+        checkBtn.disabled = email.length === 0;
     }
 </script>
 
