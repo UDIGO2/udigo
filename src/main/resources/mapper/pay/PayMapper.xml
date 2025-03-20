@@ -3,9 +3,16 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!-- 결제 관련 SQL 매핑 파일 -->
 <mapper namespace="com.udigo.hotel.pay.model.dao.PayMapper">
 
-    <!--  멤버 정보 DTO에 매핑  -->
+    <!--  
+    ============================
+    ResultMap 정의 부분
+    ============================
+    -->
+    
+    <!-- 회원 정보 DTO 매핑 -->
     <resultMap id="memberResultMap" type="com.udigo.hotel.member.model.dto.MemberDTO">
         <id property="memberCode" column="member_code"/>
         <result property="memberId" column="member_id"/>
@@ -13,7 +20,7 @@
         <result column="phoneNo" property="phone_no" />
     </resultMap>
 
-    <!-- 카트 정보 DTO에 매핑 -->
+    <!-- 숙소 정보 DTO 매핑 -->
     <resultMap id="acmResultMap" type="com.udigo.hotel.acm.model.dto.AcmDTO">
         <id property="acmId" column="acm_id"/>
         <result property="acmName" column="acm_name"/>
@@ -21,7 +28,7 @@
         <result column="acmPhoto1" property="acm_photo1" />
     </resultMap>
 
-    <!--  결제 정보 DTO에 매핑  -->
+    <!-- 결제 정보 DTO 매핑 -->
     <resultMap id="payResultMap" type="com.udigo.hotel.pay.model.dto.PayDTO">
         <id property="payId" column="pay_id"/>
         <result property="memberCode" column="member_code"/>
@@ -39,13 +46,16 @@
         <result property="payRef" column="pay_ref"/>
         <result property="transactionId" column="transaction_id"/>
         <result property="payProvider" column="pay_provider"/>
+        <result property="memberName" column="member_name"/>
     </resultMap>
 
-    <!-- ============================ -->
-    <!-- Payment 페이지 -->
-    <!-- ============================ -->
+    <!-- 
+    ============================
+    결제 페이지 관련 쿼리
+    ============================
+    -->
 
-    <!-- 카트에 담긴 숙소 정보 조회 -->
+    <!-- 숙소 ID로 숙소 정보 조회 -->
     <select id="getCartItems" parameterType="int" resultMap="acmResultMap">
         SELECT
             acm_id, acm_name, acm_price, acm_photo1
@@ -53,7 +63,7 @@
         WHERE acm_id = #{acmId}
     </select>
 
-    <!-- 현재 접속한 회원의 정보 조회 -->
+    <!-- 회원 코드로 회원 정보 조회 -->
     <select id="getMemberInfo" parameterType="int" resultMap="memberResultMap">
         SELECT
             member_code, member_id, member_name, phone_no
@@ -68,31 +78,33 @@
             pay_date, pay_price, discount, pay_ref, transaction_id, pay_provider
         )
         VALUES (
-                   #{memberCode}, #{acmId}, #{payMethod}, #{payStatus}, #{payType},
-                   NOW(), #{payPrice}, #{discount}, #{payRef}, #{transactionId}, #{payProvider}
-               )
+            #{memberCode}, #{acmId}, #{payMethod}, #{payStatus}, #{payType},
+            NOW(), #{payPrice}, #{discount}, #{payRef}, #{transactionId}, #{payProvider}
+        )
     </insert>
 
-    <!-- 가장 최근 INSERT 된 PayId 조회 -->
+    <!-- 마지막으로 생성된 결제 ID 조회 (AUTO_INCREMENT) -->
     <select id="getLastPayId" resultType="int">
         SELECT LAST_INSERT_ID()
     </select>
 
-    <!-- 예약 정보 저장 -->
+    <!-- 결제 ID를 사용하여 예약 정보 저장 -->
     <insert id="saveReservationRecord" parameterType="map">
         INSERT INTO tbl_reservations (
             acm_id, member_code, check_in, check_out, guest_count, is_resv, created_at, pay_id
         )
         VALUES (
-                   #{acmId}, #{memberCode}, #{checkIn}, #{checkOut}, #{guestCount}, #{isResv}, NOW(), #{payId}
-               )
+            #{acmId}, #{memberCode}, #{checkIn}, #{checkOut}, #{guestCount}, #{isResv}, NOW(), #{payId}
+        )
     </insert>
 
-    <!-- ============================ -->
-    <!-- PayList 페이지 -->
-    <!-- ============================ -->
+    <!-- 
+    ============================
+    결제 내역 페이지 관련 쿼리
+    ============================
+    -->
 
-    <!-- PayList 페이지에 보여질 숙소 예약 정보 조회 -->
+    <!-- 회원의 결제 및 예약 내역 조회 (간단 정보) -->
     <select id="getPayListItems" parameterType="int" resultType="map">
         SELECT
             p.pay_date as payDate,
@@ -103,13 +115,13 @@
             p.pay_price as payPrice
         FROM
             tbl_pay p
-                JOIN tbl_reservations r ON p.pay_id = r.pay_id  -- tbl_pay와 tbl_reservations를 pay_id로 JOIN
-                JOIN tbl_acm a ON p.acm_id = a.acm_id           -- tbl_pay와 tbl_acm을 acm_id로 JOIN
+            JOIN tbl_reservations r ON p.pay_id = r.pay_id  <!-- 결제-예약 연결 -->
+            JOIN tbl_acm a ON p.acm_id = a.acm_id           <!-- 결제-숙소 연결 -->
         WHERE
-            r.member_code = #{memberCode}                 -- 회원 코드로 필터링 (파라미터로 전달된 값)
+            r.member_code = #{memberCode}                   <!-- 회원 필터링 -->
     </select>
     
-    <!-- 관리자용 - 모든 결제 내역 조회 -->
+    <!-- 관리자용 - 모든 결제 내역 조회 (상세 정보 포함) -->
     <select id="getAllPayments" resultType="map">
         SELECT
             p.pay_id as payId,
@@ -129,9 +141,9 @@
             p.pay_ref as payRef
         FROM
             tbl_pay p
-            JOIN tbl_reservations r ON p.pay_id = r.pay_id  -- tbl_pay와 tbl_reservations를 pay_id로 JOIN
-            JOIN tbl_acm a ON p.acm_id = a.acm_id           -- tbl_pay와 tbl_acm을 acm_id로 JOIN
-            JOIN tbl_member m ON p.member_code = m.member_code  -- tbl_pay와 tbl_member를 member_code로 JOIN
+            JOIN tbl_reservations r ON p.pay_id = r.pay_id     <!-- 결제-예약 연결 -->
+            JOIN tbl_acm a ON p.acm_id = a.acm_id              <!-- 결제-숙소 연결 -->
+            JOIN tbl_member m ON p.member_code = m.member_code <!-- 결제-회원 연결 -->
         ORDER BY 
             p.pay_date DESC
     </select>

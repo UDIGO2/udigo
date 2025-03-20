@@ -28,7 +28,5 @@ public interface BoardMapper {
     // 댓글 관련
     List<BoardCommentDTO> getCommentsByPostId(int postId);
     void addComment(BoardCommentDTO comment);
-    void updateComment(BoardCommentDTO comment);
-    void deleteComment(int commentId);
     void deleteCommentsByPostId(int postId);
 }

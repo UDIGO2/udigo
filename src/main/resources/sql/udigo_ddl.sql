@@ -296,39 +296,4 @@ CREATE TABLE `tbl_member_roles` (
 );
 ALTER TABLE tbl_member ADD COLUMN role VARCHAR(20) DEFAULT 'USER';
 
--- 결제가 생성될 때 예약과 자동 연결하는 트리거 추가
-DELIMITER $$
-
-CREATE TRIGGER after_pay_insert
-AFTER INSERT ON tbl_pay
-FOR EACH ROW
-BEGIN
-    -- 해당 멤버코드와 숙소ID로 가장 최근 예약을 찾아 pay_id 업데이트
-    UPDATE tbl_reservations
-    SET pay_id = NEW.pay_id
-    WHERE member_code = NEW.member_code
-    AND acm_id = NEW.acm_id
-    AND pay_id IS NULL
-    ORDER BY created_at DESC
-    LIMIT 1;
-END $$
-
-DELIMITER ;
-
--- 결제 상태가 변경될 때 환불 금액 자동 업데이트 트리거 추가
-DELIMITER $$
-
-CREATE TRIGGER before_pay_update
-BEFORE UPDATE ON tbl_pay
-FOR EACH ROW
-BEGIN
-    -- 결제 상태가 변경되고 취소나 환불 상태로 바뀔 때
-    IF OLD.pay_status != NEW.pay_status AND (NEW.pay_status = '결제취소' OR NEW.pay_status = '환불완료') THEN
-        -- 환불 금액을 원래 결제 금액으로 설정
-        SET NEW.pay_ref = OLD.pay_price;
-    END IF;
-END $$
-
-DELIMITER ;
-
 

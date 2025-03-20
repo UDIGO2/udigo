@@ -2,20 +2,11 @@ document.addEventListener("DOMContentLoaded", function () {
     getPayListPage();
 });
 
-
-function checkLoginData() {
-    // 로그인 상태 확인
-    let memberCode = localStorage.getItem("memberCode");
-
-    if (memberCode) {
-        console.log(`✅ 현재 로그인된 사용자: ${memberCode}`);
-    } else {
-        console.log("❌ 로그인되지 않음.");
-    }
-}
-
+/**
+ * 결제 내역 페이지에 데이터를 로드하는 함수
+ * 서버로부터 결제 내역을 가져와 테이블에 표시
+ */
 function getPayListPage() {
-
     console.log("숙소 결제 내역 페이지 데이터 전달 받는 AJAX 시작");
 
     fetch("/payList", {
@@ -50,9 +41,6 @@ function getPayListPage() {
 
                     payTable.append(tableRow);
                 });
-
-
-
             } else {
                 alert("결제 내역 불러오기 실패!");
             }

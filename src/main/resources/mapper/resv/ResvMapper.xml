@@ -17,35 +17,6 @@
         <result property="createdAt" column="created_at"/>
     </resultMap>
 
-    <select id="findAll" resultMap="resvMap">
-        SELECT * FROM tbl_reservations
-    </select>
-
-    <select id="findCurrentByMemberCode" resultMap="resvMap">
-        SELECT * FROM tbl_reservations
-        WHERE member_code = #{memberCode}
-          AND check_out &gt; #{now}
-          AND is_resv = true
-    </select>
-
-    <select id="findPastByMemberCode" resultMap="resvMap">
-        SELECT * FROM tbl_reservations
-        WHERE member_code = #{memberCode}
-          AND check_out &lt;= #{now}
-          AND is_resv = true
-    </select>
-
-    <select id="findCancelableByMemberCode" resultMap="resvMap">
-        SELECT * FROM tbl_reservations
-        WHERE member_code = #{memberCode}
-          AND check_in > #{now}
-          AND is_resv = true
-    </select>
-
-    <update id="cancelReservation">
-        UPDATE tbl_reservations SET is_resv = 0 WHERE resv_id = #{resvId}
-    </update>
-
     <!-- 현재 예약 조회 -->
     <select id="selectCurrentResv" resultType="com.udigo.hotel.resv.model.dto.ResvDTO">
         SELECT

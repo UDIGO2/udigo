@@ -21,6 +21,10 @@ import java.time.format.DateTimeFormatter;
 import jakarta.servlet.http.HttpServletRequest;
 import com.udigo.hotel.pay.model.dto.PayDTO;
 
+/*
+ * 결제 관련 요청을 처리하는 컨트롤러
+ * 결제 페이지 표시, 결제 정보 저장, 결제 내역 조회 등의 기능을 제공
+ */
 @Controller
 @RequestMapping("/pay")
 public class PayController {
@@ -31,7 +35,12 @@ public class PayController {
 
     private static final Logger logger = LoggerFactory.getLogger(PayController.class);
 
-    // 접속자 정보 가져오는 메소드
+    /*
+     * 접속자 정보를 가져오는 헬퍼 메소드
+     * Spring Security Context에서 현재 인증된 사용자 정보를 추출
+     * 
+     * @return 현재 인증된 사용자의 CustomUserDetails 객체, 인증되지 않은 경우 null
+     */
     private CustomUserDetails getMemberData() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication(); // 보안 정보 가져오기
         if (auth != null && auth.getPrincipal() instanceof CustomUserDetails) {
@@ -40,7 +49,20 @@ public class PayController {
         return null;
     }
 
-    // 결제 페이지 보여주기
+    /*
+     * 결제 페이지를 표시하는 메소드
+     * 예약 정보를 받아 결제 페이지에 필요한 데이터를 모델에 추가
+     * 
+     * @param acmId 숙소 ID
+     * @param acmName 숙소 이름
+     * @param acmPrice 숙소 가격
+     * @param acmPhoto 숙소 사진 URL
+     * @param checkInDate 체크인 날짜
+     * @param checkOutDate 체크아웃 날짜
+     * @param guestCount 투숙객 수
+     * @param model Spring MVC 모델
+     * @return 결제 페이지 뷰 이름 또는 로그인 페이지로 리다이렉션
+     */
     @PostMapping("/payment")
     public String showPaymentPage(@RequestParam String acmId,
                                   @RequestParam String acmName,
@@ -91,7 +113,13 @@ public class PayController {
         }
     }
 
-    // API 결제 성공 후 컨트롤러에서 결제 데이터 저장
+    /*
+     * API 결제 성공 후 결제 데이터를 저장하는 메소드
+     * 클라이언트에서 전송한 결제 정보를 DB에 저장하고 결과를 JSON으로 반환
+     * 
+     * @param paymentData 클라이언트에서 전송한 결제 정보
+     * @return 결제 저장 결과를 담은 ResponseEntity 객체
+     */
     @PostMapping("/save")
     @ResponseBody
     public ResponseEntity<?> savePayment(@RequestBody Map<String, Object> paymentData) {
@@ -119,7 +147,19 @@ public class PayController {
         }
     }
     
-    // 모바일 결제 완료 후 리다이렉션 처리
+    /*
+     * 모바일 결제 완료 후 리다이렉션을 처리하는 메소드
+     * 모바일에서 결제 완료 후 호출되는 콜백 URL
+     * 
+     * @param merchant_uid 상점 주문번호
+     * @param imp_uid 포트원 결제 고유번호
+     * @param error_msg 오류 메시지
+     * @param model Spring MVC 모델
+     * @return 리다이렉션 URL 또는 오류 페이지
+     * 
+     * @implNote 현재는 단순 리다이렉션만 수행. 결제 검증 로직 추가 필요
+     * @ 포트원 API를 사용하여 imp_uid로 결제 정보를 검증하고 DB에 저장하는 로직 구현
+     */
     @GetMapping("/complete")
     public String paymentComplete(@RequestParam(required = false) String merchant_uid,
                                  @RequestParam(required = false) String imp_uid,
@@ -140,12 +180,14 @@ public class PayController {
         return "redirect:/resv/current";
     }
 
-    /**
+    /*
      * 회원별 결제 내역 조회 페이지
-     * @param model 모델
+     * 로그인한 회원의 결제 내역을 기간별로 조회하여 표시
+     * 
+     * @param model Spring MVC 모델
      * @param startDate 시작 날짜 (선택)
      * @param endDate 종료 날짜 (선택)
-     * @return 결제 내역 페이지
+     * @return 결제 내역 페이지 뷰 이름 또는 로그인 페이지로 리다이렉션
      */
     @GetMapping("/payList")
     public String getPaymentsByMember(Model model,

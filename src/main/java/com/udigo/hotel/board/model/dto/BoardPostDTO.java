@@ -1,7 +1,20 @@
 package com.udigo.hotel.board.model.dto;
 
 import java.time.LocalDateTime;
-
+/**
+ * 게시글 정보를 담는 DTO 클래스
+ *.
+ * 필드:
+ * - postId: 게시글 ID
+ * - memberCode: 작성자 회원 코드
+ * - boardType: 게시판 타입 (1: 공지사항, 2: FAQ, 3: 1:1 문의)
+ * - title: 제목
+ * - content: 내용
+ * - createdAt: 작성일시
+ * - updatedAt: 수정일시
+ * - memberName: 작성자 이름 (JOIN 조회시 사용)
+ * - comment: 답변 정보 (1:1 문의 답변)
+ */
 public class BoardPostDTO {
     private int postId;
     private int memberCode;
@@ -10,8 +23,8 @@ public class BoardPostDTO {
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private String memberName;  // 작성자 이름
-    private BoardCommentDTO comment;  // 답변 정보
+    private String memberName;
+    private BoardCommentDTO comment;
 
     // Getters and Setters
     public int getPostId() {
@@ -86,7 +99,7 @@ public class BoardPostDTO {
         this.comment = comment;
     }
 
-    // 답변 여부 확인 메소드
+    // 답변 여부 확인 메소드(HTML 템플릿에서 사용)
     public boolean hasComment() {
         return comment != null;
     }
