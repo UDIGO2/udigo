@@ -25,12 +25,12 @@ public class MemberController {
     @Autowired
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;  // 비밀번호 암호화를 위한 객체
-    private final AuthService authService;
 
-    public MemberController(MemberService memberService, PasswordEncoder passwordEncoder, AuthService authService) {
+
+    public MemberController(MemberService memberService, PasswordEncoder passwordEncoder) {
         this.memberService = memberService;
         this.passwordEncoder = passwordEncoder;
-        this.authService = authService;
+
     }
 
     /* 회원가입 페이지 이동 */
@@ -64,9 +64,9 @@ public class MemberController {
 
         boolean isDuplicate;
         if ("memberId".equals(type)) {
-            isDuplicate = authService.isMemberIdDuplicate(value);
+            isDuplicate = memberService.isMemberIdDuplicate(value);
         } else if ("email".equals(type)) {
-            isDuplicate = authService.isEmailDuplicate(value);
+            isDuplicate = memberService.isEmailDuplicate(value);
         } else {
             return ResponseEntity.badRequest().body(Map.of("message", "잘못된 요청입니다."));
         }

@@ -51,43 +51,7 @@ public class AuthService implements UserDetailsService {
         return member;
     }
 
-    /* 아이디 중복 확인 (30일 제한 적용)  */
-    public boolean isMemberIdDuplicate(String memberId) {
-        MemberDTO member = memberMapper.findByMemberId(memberId);
 
-        // 회원이 존재하지 않으면 중복 아님 (가입 가능)
-        if (member == null) {
-            return false;
-        }
-
-        // 탈퇴한 회원인지 확인 (WITHDRAWN 상태이면서 deleted_at이 30일 이내)
-        if ("WITHDRAWN".equals(member.getStatus()) && member.getDeletedAt() != null) {
-            LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(30);
-            if (member.getDeletedAt().isAfter(thirtyDaysAgo)) {
-                return true; // 30일 이내 탈퇴한 회원 → 중복 처리 (가입 불가)
-            }
-        }
-
-        return true; // 활성화된 회원이면 중복 처리 (가입 불가)
-
-    }
-
-    /* 이메일 중복 확인 (30일 제한 적용) */
-    public boolean isEmailDuplicate(String email) {
-        MemberDTO member = memberMapper.findByEmail(email);
-
-        if (member == null) {
-            return false; // 사용 가능
-        }
-
-        // 탈퇴 회원이고 30일 이내라면 중복 처리 (가입 불가)
-        if ("WITHDRAWN".equals(member.getStatus()) && member.getDeletedAt() != null) {
-            LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(30);
-            return member.getDeletedAt().isAfter(thirtyDaysAgo);
-        }
-
-        return true; // 기존 회원이 존재하면 중복 처리 (가입 불가)
-    }
 
 
 }

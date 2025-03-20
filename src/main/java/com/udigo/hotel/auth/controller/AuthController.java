@@ -1,11 +1,9 @@
 package com.udigo.hotel.auth.controller;
 
-import com.udigo.hotel.auth.model.service.AuthService;
 import com.udigo.hotel.member.model.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -17,9 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
@@ -27,13 +22,11 @@ public class AuthController {
 
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
-    private final AuthService authService;
 
     @Autowired
-    public AuthController(MemberService memberService, PasswordEncoder passwordEncoder,  AuthService authService) {
+    public AuthController(MemberService memberService, PasswordEncoder passwordEncoder) {
         this.memberService = memberService;
         this.passwordEncoder = passwordEncoder;  // 비밀번호 암호화를 위한 객체
-        this.authService = authService;
     }
 
     /* 로그인 페이지 이동 */
@@ -171,22 +164,8 @@ public class AuthController {
         }
     }
 
-    /* 아이디 중복 확인 */
-    @GetMapping("/check-id")
-    public ResponseEntity<Map<String, Boolean>> checkIdDuplicate(@RequestParam String memberId) {
-        boolean isDuplicate = authService.isMemberIdDuplicate(memberId);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("duplicate", isDuplicate);
-        return ResponseEntity.ok(response);
-    }
 
-    /* 이메일 중복 확인 */
-    @GetMapping("/check-email")
-    public ResponseEntity<Map<String, Boolean>> checkEmailDuplicate(@RequestParam String email) {
-        boolean isDuplicate = authService.isEmailDuplicate(email);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("duplicate", isDuplicate);
-        return ResponseEntity.ok(response);
-    }
+
+
 
 }
