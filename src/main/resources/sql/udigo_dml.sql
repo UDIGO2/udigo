@@ -2,7 +2,7 @@ INSERT INTO tbl_member (member_code, member_id, member_name, email, password, ph
 VALUES (1,'admin', 'admin', 'admin@naver.com', '$2b$12$1C5njm.3fcbzVILGq/K0l.f8LUSdVKyksThdTZm85CYcJpCVv0hBO', NULL, NOW(), TRUE, FALSE);
 
 INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked)
-VALUES (101,'member01', '김건우', 'gunwoo@naver.com', '$2b$12$1C5njm.3fcbzVILGq/K0l.f8LUSdVKyksThdTZm85CYcJpCVv0hBO', '010-3868-8803', NOW(), FALSE, FALSE);
+VALUES (101,'member01', '김건우', 'gdo698@naver.com', '$2b$12$1C5njm.3fcbzVILGq/K0l.f8LUSdVKyksThdTZm85CYcJpCVv0hBO', '010-3868-8803', NOW(), FALSE, FALSE);
 
 INSERT INTO tbl_member (member_code, member_id, member_name, email, password, phone_no, join_date, email_verified, is_locked)
 VALUES (102,'member02', '김나영', 'nayou5g@naver.com', '$2b$12$1C5njm.3fcbzVILGq/K0l.f8LUSdVKyksThdTZm85CYcJpCVv0hBO', '016-3494-8126', NOW(), FALSE, FALSE);
@@ -1148,7 +1148,7 @@ INSERT INTO tbl_pay (
     pay_price, discount, pay_ref, transaction_id, pay_provider
 ) VALUES (
              52, 101, 201, '간편결제', '결제완료', '카카오페이', '2025-03-03 14:25:00',
-             195000, 5000, 0, 'TID-20250303-052', 'KAKAO'
+             408400, 5000, 0, 'TID-20250303-052', 'KAKAO'
          );
 
 INSERT INTO tbl_reservations (
