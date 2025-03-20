@@ -10,7 +10,6 @@
 </head>
 <body>
 
-<!--  헤더 추가 -->
 <div th:replace="~{fragments/header :: header}"></div>
 
 <!--  회원가입 폼을 감싸는 컨테이너 -->
@@ -82,10 +81,8 @@
     </div>
 </div>
 
-<!--  푸터 추가 -->
 <div th:replace="~{fragments/footer :: footer}"></div>
 
-<!--  JavaScript 추가 -->
 <script src="/js/header.js"></script>
 
 <script th:inline="javascript">
@@ -104,7 +101,7 @@
         }
     });
 
-    // ✅ 비밀번호 확인 기능
+    // 비밀번호 확인 기능
     function checkPasswordMatch() {
         var password = document.getElementById("password").value;
         var passwordConfirm = document.getElementById("passwordConfirm").value;
@@ -120,7 +117,7 @@
         message.innerHTML = password === passwordConfirm ? "✔ 비밀번호가 일치합니다." : "❌ 비밀번호가 일치하지 않습니다.";
     }
 
-    // ✅ 아이디 입력 시 버튼 활성화
+    // 아이디 입력 시 버튼 활성화
     function checkIdInput() {
         let memberId = document.getElementById("memberId").value.trim();
         let checkBtn = document.getElementById("checkDuplicateBtn");
@@ -130,7 +127,15 @@
         checkBtn.style.cursor = memberId.length > 0 ? "pointer" : "default";
     }
 
-    // ✅ 중복 확인 (아이디 & 이메일 공통)
+    // 이메일 입력 시 버튼 활성화
+    function checkEmailInput() {
+        let email = document.getElementById("email").value.trim();
+        let checkBtn = document.getElementById("checkEmailBtn");
+
+        checkBtn.disabled = email.length === 0;
+    }
+
+    // 중복 확인 (아이디 & 이메일 공통)
     function checkDuplicate(inputId, type) {
         let inputField = document.getElementById(inputId);
         let inputValue = inputField.value.trim();
@@ -173,7 +178,7 @@
             });
     }
 
-    // ✅ 핸드폰 번호 입력 시 자동으로 하이픈(-) 추가하는 함수
+    // 핸드폰 번호 입력 시 자동으로 하이픈(-) 추가하는 함수
     function formatPhoneNumber(input) {
         let number = input.value.replace(/[^0-9]/g, ""); // 숫자만 남기고 나머지는 제거
         let formatted = "";
@@ -189,13 +194,7 @@
         input.value = formatted;
     }
 
-    // 이메일 입력 시 버튼 활성화
-    function checkEmailInput() {
-        let email = document.getElementById("email").value.trim();
-        let checkBtn = document.getElementById("checkEmailBtn");
 
-        checkBtn.disabled = email.length === 0;
-    }
 </script>
 
 </body>

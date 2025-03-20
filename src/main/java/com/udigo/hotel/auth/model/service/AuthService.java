@@ -25,26 +25,26 @@ public class AuthService implements UserDetailsService {
         this.authMapper = authMapper;
     }
 
-    /** ✅ 회원 정보 조회 및 인증 */
+    /* 회원 정보 조회 및 인증 */
     @Override
     public UserDetails loadUserByUsername(String memberId) throws UsernameNotFoundException {
 
-        // 🔹 회원 정보 조회
+        // 회원 정보 조회
         MemberDTO member = memberMapper.findByMemberId(memberId);
 
         if (member == null) {
             throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다: " + memberId);
         }
 
-        // 🔹 회원 권한 조회
+        // 회원 권한 조회
         List<AuthorityDTO> authorities = authMapper.findAuthorityByMemberCode(member.getMemberCode());
 
-        // 🔹 Spring Security에서 사용할 GrantedAuthority 변환
+        // Spring Security에서 사용할 GrantedAuthority 변환
         List<GrantedAuthority> grantedAuthorities = authorities.stream()
                 .map(auth -> new SimpleGrantedAuthority(auth.getRoleName()))
                 .collect(Collectors.toList());
 
-        // 🔹 회원 객체에 권한 정보 설정
+        // 회원 객체에 권한 정보 설정
         member.setAuthorities(grantedAuthorities);
 
         return member;

@@ -21,6 +21,7 @@
                 <th>회원 ID</th>
                 <th>이름</th>
                 <th>가입일</th>
+                <th>상태</th>
                 <th>상세조회</th>
             </tr>
             </thead>
@@ -30,6 +31,10 @@
                 <td th:text="${member.memberId}"></td>
                 <td th:text="${member.memberName}"></td>
                 <td th:text="${member.formattedJoinDate}"></td>
+                <td>
+                    <span th:if="${member.status == 'ACTIVE'}" style="color: blue;">정상 회원</span>
+                    <span th:if="${member.status == 'WITHDRAWN'}" style="color: red;">탈퇴 회원</span>
+                </td>
                 <td>
                     <a th:href="@{/admin/member/detail/{memberId}(memberId=${member.memberId})}" class="btn-detail">상세조회</a>
                 </td>

@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
-/* ✅ 전체 레이아웃 */
+/* 전체 레이아웃 */
 #myinfo-page {
     font-family: 'Noto Sans KR', sans-serif;
     display: flex;
@@ -11,7 +11,7 @@
     background-color: #f9fafb;
 }
 
-/* ✅ 컨테이너 */
+/* 컨테이너 */
 .myinfo-container {
     width: 400px;
     background: white;
@@ -20,7 +20,7 @@
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* ✅ 제목 & 버튼 같은 라인 */
+/* 제목 & 버튼 같은 라인 */
 .myinfo-header {
     display: flex;
     justify-content: space-between;
@@ -34,7 +34,7 @@
     color: #333;
 }
 
-/* ✅ 상단 탭 버튼 */
+/* 상단 탭 버튼 */
 .info-tabs {
     display: flex;
     gap: 8px;
@@ -50,7 +50,7 @@
     transition: background-color 0.2s ease-in-out;
 }
 
-/* ✅ 버튼 색상 수정 */
+/* 버튼 색상 수정 */
 .btn-primary {
     background-color: #007bff;
     color: white;
@@ -69,7 +69,7 @@
     background-color: #0056b3;
 }
 
-/* ✅ 입력 필드 스타일 */
+/* 입력 필드 스타일 */
 .info-group {
     margin-bottom: 15px;
 }
@@ -91,14 +91,33 @@
     background-color: #f8f8f8;
 }
 
-/* ✅ 읽기 전용 입력 필드 스타일 */
+/* 읽기 전용 입력 필드 스타일 */
 .info-group input[readonly] {
     background-color: #e9ecef;
     color: #6c757d;
     cursor: not-allowed;
 }
 
-/* ✅ 수정하기 버튼 */
+/* 회원 상태 표시 스타일 */
+.status {
+    font-weight: bold;
+    padding: 6px 10px;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+/* 회원 상태 색상 */
+.status-active {
+    color: #007bff;
+    background-color: #e0f0ff;
+}
+
+.status-withdrawn {
+    color: #dc3545;
+    background-color: #fdecea;
+}
+
+/* 수정하기 버튼 */
 .update-btn {
     width: 100%;
     background-color: #007bff;
@@ -117,7 +136,7 @@
     background-color: #0056b3;
 }
 
-/* ✅ 로그아웃 버튼 */
+/* 로그아웃 버튼 */
 .logout {
     display: block;
     text-align: right;
@@ -131,7 +150,7 @@
     color: #555;
 }
 
-/* ✅ 반응형 디자인 (모바일 대응) */
+/* 반응형 디자인 (모바일 대응) */
 @media (max-width: 500px) {
     .myinfo-container {
         width: 90%;
