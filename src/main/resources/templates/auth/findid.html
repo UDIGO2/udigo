@@ -8,6 +8,7 @@
 </head>
 <body>
 <div th:replace="~{fragments/header :: header}"></div>
+
 <main class="main-content">
     <div id="findid-page">
         <form id="findid-form" action="/auth/findid" method="post">
@@ -23,8 +24,10 @@
             <button onclick="closeModal()" class="modal-btn">확인</button>
         </div>
     </div>
+
     <div th:replace="~{fragments/footer :: footer}"></div>
 </main>
+
 <script>
     window.onload = function () {
         var findId = "[[${findId != null ? findId : ''}]]";
@@ -48,11 +51,8 @@
         if (modal) {
             modal.style.display = "none";
         }
-        window.location.href = "/auth/login"; // 로그인 페이지로 이동
+        window.location.href = "/auth/login";
     }
 </script>
-
-
-
 </body>
 </html>

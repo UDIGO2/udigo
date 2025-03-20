@@ -1,11 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
+/* 기본 스타일 초기화 */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* 전체 페이지 스타일 */
 body {
     font-family: 'Noto Sans KR', sans-serif;
     line-height: 1.6;
@@ -16,20 +18,21 @@ body {
     flex-direction: column;
 }
 
+/* 아이디 찾기 페이지 컨테이너 */
 #findid-page {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: calc(100vh - 200px);  /* 헤더와 푸터 높이를 고려하여 조정 */
+    min-height: calc(100vh - 200px);
     background-color: #f8f8f8;
     padding: 20px 0;
 }
 
-/* 폼 스타일 */
+/* 아이디 찾기 폼 */
 #findid-form {
     display: flex;
-    flex-direction: column;  /* 세로 방향으로 변경 */
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     background: white;
@@ -37,11 +40,11 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     font-family: "Noto Sans KR", sans-serif;
-    width: 400px;  /* 폼 너비 고정 */
-    gap: 15px;  /* 요소들 사이 간격 */
+    width: 400px;
+    gap: 15px;
 }
 
-/*  제목 스타일 */
+/* 폼 제목 스타일 */
 #findid-form h2 {
     text-align: center;
     font-size: 22px;
@@ -49,25 +52,26 @@ body {
     margin-bottom: 15px;
 }
 
-/* 입력 필드 스타일 */
+/* 입력 필드 라벨 스타일 */
 #findid-form label {
     font-size: 16px;
     font-weight: 500;
-    width: 100%;  /* 전체 너비 사용 */
-    text-align: left;  /* 왼쪽 정렬 */
+    width: 100%;
+    text-align: left; /
 }
 
+/* 입력 필드 스타일 */
 #findid-form input {
-    width: 100%;  /* 전체 너비 사용 */
+    width: 100%;
     padding: 12px;
     font-size: 14px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
-/* 버튼 스타일 */
+/* 폼 버튼 스타일 */
 #findid-form button {
-    width: 100%;  /* 전체 너비 사용 */
+    width: 100%;
     padding: 12px;
     font-size: 16px;
     background-color: #007bff;
@@ -79,6 +83,7 @@ body {
     margin-top: 10px;
 }
 
+/* 버튼 hover 효과 */
 #findid-form button:hover {
     background-color: #0056b3;
 }
@@ -111,7 +116,7 @@ body {
     border-bottom: 1px solid #ddd;
 }
 
-/* 닫기 버튼 (X) */
+/* 모달 닫기 버튼 (X) */
 .modal-header .close-btn {
     cursor: pointer;
     font-size: 20px;
@@ -125,7 +130,7 @@ body {
     padding: 15px 0;
 }
 
-/* 입력 필드 */
+/* 모달 입력 필드 */
 .modal input {
     width: 90%;
     padding: 10px;
@@ -134,7 +139,7 @@ body {
     border-radius: 5px;
 }
 
-/* 확인 버튼 */
+/* 모달 확인 버튼 */
 .modal-btn {
     width: 100%;
     padding: 10px;
@@ -147,8 +152,7 @@ body {
     margin-top: 10px;
 }
 
+/* 모달 버튼 hover 효과 */
 .modal-btn:hover {
     background-color: #0056b3;
 }
-
-

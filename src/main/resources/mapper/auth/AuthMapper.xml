@@ -4,27 +4,25 @@
 
 <mapper namespace="com.udigo.hotel.auth.model.dao.AuthMapper">
 
-    <!-- AuthorityDTO 매핑 -->
+    <!-- 권한 정보 매핑 -->
     <resultMap id="authorityResultMap" type="com.udigo.hotel.auth.model.dto.AuthorityDTO">
         <id property="roleCode" column="role_code"/>
         <result property="roleName" column="role_name"/>
     </resultMap>
 
-    <!-- MemberRoleDTO 매핑 (AuthorityDTO 포함) -->
+    <!-- 회원 역할 매핑 (권한 정보 포함) -->
     <resultMap id="memberRoleResultMap" type="com.udigo.hotel.auth.model.dto.MemberRoleDTO">
         <id property="memberCode" column="member_code"/>
         <result property="roleCode" column="role_code"/>
-        <association property="authority" resultMap="authorityResultMap"/> <!-- ✅ 권한 정보 포함 -->
+        <association property="authority" resultMap="authorityResultMap"/>
     </resultMap>
 
-    <!-- 특정 회원의 역할 매핑 정보 조회 (권한 정보 포함) -->
+    <!-- 특정 회원의 역할 및 권한 정보 조회 -->
     <select id="findMemberRolesByMemberCode" parameterType="int" resultMap="memberRoleResultMap">
         SELECT mr.member_code, r.role_code, r.role_name
         FROM tbl_member_roles mr
-                 JOIN tbl_roles r ON mr.role_code = r.role_code
+        JOIN tbl_roles r ON mr.role_code = r.role_code
         WHERE mr.member_code = #{memberCode}
     </select>
-
-
 
 </mapper>

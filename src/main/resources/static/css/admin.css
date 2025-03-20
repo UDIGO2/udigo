@@ -6,19 +6,22 @@
     box-sizing: border-box;
 }
 
+/* 전체 페이지 기본 스타일 */
 body {
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Noto Sans KR', sans-serif; /* 한국어 폰트 적용 */
     line-height: 1.6;
     color: #333;
     font-weight: 500;
 }
 
+/* 메인 콘텐츠 스타일 */
 .main-content {
     width: 80%;
     margin: 50px auto;
     text-align: center;
 }
 
+/* 제목 스타일 */
 h1 {
     font-size: 2rem;
     margin-bottom: 20px;
@@ -28,31 +31,34 @@ h1 {
 /* 테이블 스타일 */
 table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: collapse; /* 테두리 중첩 제거 */
     margin-top: 20px;
     background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 테이블 그림자 효과 */
     border-radius: 8px;
     overflow: hidden;
 }
 
+/* 테이블 헤더 스타일 */
 thead {
-    background-color: #007BFF;
+    background-color: #007BFF; /* 파란색 배경 */
     color: white;
 }
 
+/* 테이블 셀 스타일 */
 th, td {
     padding: 12px;
     border: 1px solid #ddd;
     text-align: center;
 }
 
+/* 테이블 헤더 글씨 스타일 */
 th {
     font-weight: bold;
     font-size: 1.1rem;
 }
 
-/* 홀수 행 배경색 변경 */
+/* 테이블의 홀수 행 배경색 변경 */
 tbody tr:nth-child(odd) {
     background-color: #f9f9f9;
 }
@@ -69,10 +75,12 @@ tbody tr:nth-child(odd) {
     transition: background 0.3s ease-in-out;
 }
 
+/* 상세조회 버튼 hover 효과 */
 .btn-detail:hover {
     background-color: #0056b3;
 }
 
+/* 회원 상세 정보 컨테이너 스타일 */
 .memberdetail-container {
     max-width: 600px;
     margin: 50px auto;
@@ -83,11 +91,7 @@ tbody tr:nth-child(odd) {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
+/* 회원 상세 정보 테이블 스타일 */
 .member-info-table {
     width: 100%;
     border-collapse: collapse;
@@ -98,16 +102,19 @@ h1 {
     border-bottom: 1px solid #ddd;
 }
 
+/* 회원 상세 정보 테이블 헤더 스타일 */
 .member-info-table th {
     background: #f0f0f0;
     text-align: left;
 }
 
+/* 액션 버튼 영역 */
 .actions {
     text-align: center;
     margin-top: 20px;
 }
 
+/* 뒤로 가기 버튼 스타일 */
 .btn-back {
     display: inline-block;
     padding: 10px 20px;
@@ -117,7 +124,7 @@ h1 {
     border-radius: 5px;
 }
 
+/* 뒤로 가기 버튼 hover 효과 */
 .btn-back:hover {
     background: #0056b3;
 }
-

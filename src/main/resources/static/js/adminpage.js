@@ -1,32 +1,32 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Navigation handling
+    // 내비게이션 링크 핸들링
     const navLinks = document.querySelectorAll('.nav-links a');
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            window.location.href = link.href; // 링크 정상 동작 추가
+            window.location.href = link.href;
         });
     });
 
-    // Member information link handling
+    // 회원 정보 링크 핸들링
     const memberInfoLink = document.querySelector('.member-section .full-width-link');
     if (memberInfoLink) {
         memberInfoLink.addEventListener('click', (e) => {
             e.preventDefault();
-            window.location.href = "/admin/memberlist"; // 내 정보 페이지 이동
+            window.location.href = "/admin/memberlist";
         });
     }
 
-    // ✅ Reservation links
+    // 예약 관련 링크 핸들링
     const reservationLinks = document.querySelectorAll('.reservation-links a');
     reservationLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            window.location.href = link.href; // 링크 정상 동작 추가
+            window.location.href = link.href;
         });
     });
 
-    // Accommodation links
+    // 숙소 관리 링크 핸들링
     const accommodationLinks = document.querySelectorAll('.accommodation-links a');
     accommodationLinks.forEach(link => {
         link.addEventListener('click', (e) => {
@@ -46,13 +46,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Logout handling
+    // 로그아웃 핸들링
     const logoutLink = document.querySelector('.logout');
     if (logoutLink) {
         logoutLink.addEventListener('click', (e) => {
             e.preventDefault();
             if (confirm('로그아웃 하시겠습니까?')) {
-                fetch('/auth/logout', { method: 'POST' }) // 로그아웃 요청
+                fetch('/auth/logout', { method: 'POST' })
                     .then(response => {
                         if (response.ok) {
                             window.location.href = "/";
@@ -65,16 +65,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Social media links
+    // 소셜 미디어 링크 핸들링
     const socialLinks = document.querySelectorAll('.social-links a');
     socialLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            window.open(link.href, "_blank"); // 새 창에서 열기
+            window.open(link.href, "_blank");
         });
     });
 
-    // Review delete link handling
+    // 후기 삭제 링크 핸들링
     const reviewDeleteLink = document.querySelector('a[href="/review/admin/review/list"]');
     if (reviewDeleteLink) {
         reviewDeleteLink.addEventListener('click', function(e) {

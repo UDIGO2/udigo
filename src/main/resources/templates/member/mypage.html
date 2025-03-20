@@ -10,13 +10,11 @@
 </head>
 <body>
 
-<!-- 헤더 추가 -->
 <div th:replace="~{fragments/header :: header}"></div>
 <div class="content container">
     <main class="mypage-container">
         <h1>MyPage</h1>
 
-        <!--  사용자 프로필 -->
         <div class="user-profile">
             <img th:src="@{/image/mypage/member.png}" alt="User" class="user-icon">
             <div class="user-info">
@@ -25,12 +23,10 @@
             <a href="/member/changepassword" class="password-link">비밀번호 변경 ></a>
         </div>
 
-        <!--  내 정보 -->
         <div class="my-info">
             <a href="/member/myinfo" class="info-link">내 정보 ></a>
         </div>
 
-        <!--  예약 & 결제 -->
         <section class="reservation-section">
             <h3>예약/결제</h3>
             <a href="/pay/payList" class="full-width-link">거래내역 전체 조회 ></a>
@@ -40,7 +36,6 @@
             </div>
         </section>
 
-        <!--  장바구니 & 후기 -->
         <section class="basket-section">
             <h3>장바구니/후기</h3>
             <a href="#" class="full-width-link">장바구니 목록 ></a>
@@ -51,7 +46,6 @@
             </div>
         </section>
 
-        <!--  로그아웃 -->
         <a href="/auth/logout" class="logout">로그아웃 ></a>
     </main>
     <div th:replace="~{fragments/footer :: footer}"></div>

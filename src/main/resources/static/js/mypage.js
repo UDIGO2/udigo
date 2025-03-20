@@ -1,61 +1,55 @@
-// DOM Elements
 document.addEventListener('DOMContentLoaded', function() {
     debugger;
-    // Navigation handling
+
+    // 내비게이션 링크 핸들링
     const navLinks = document.querySelectorAll('.nav-links a');
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            // Add navigation logic here
         });
     });
 
-    // Password change link
+    // 비밀번호 변경 링크 핸들링
     const passwordChangeLink = document.querySelector('.password-change');
     if (passwordChangeLink) {
         passwordChangeLink.addEventListener('click', (e) => {
             e.preventDefault();
-            // Add password change logic here
         });
     }
 
-    // Reservation links
+    // 예약 관련 링크 핸들링
     const reservationLinks = document.querySelectorAll('.reservation-links a');
     reservationLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             debugger;
             e.preventDefault();
-            // Add reservation handling logic here
         });
     });
 
-    // Basket links
+    // 장바구니 관련 링크 핸들링
     const basketLinks = document.querySelectorAll('.basket-links a');
     basketLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             debugger;
             e.preventDefault();
-            // Add basket handling logic here
         });
     });
 
-    // Logout handling
+    // 로그아웃 핸들링
     const logoutLink = document.querySelector('.logout');
     if (logoutLink) {
         logoutLink.addEventListener('click', (e) => {
             e.preventDefault();
             if (confirm('로그아웃 하시겠습니까?')) {
-                // Add logout logic here
             }
         });
     }
 
-    // Social media links
+    // 소셜 미디어 링크 핸들링
     const socialLinks = document.querySelectorAll('.social-links a');
     socialLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            // Add social media link handling here
         });
     });
 });

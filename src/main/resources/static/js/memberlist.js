@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    fetch('/admin/api/members') // ✅ 백엔드에서 회원 목록을 가져오는 API 엔드포인트
+    fetch('/admin/api/members')
         .then(response => {
             if (!response.ok) {
                 throw new Error("서버 응답이 실패했습니다.");
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
  */
 function populateMemberTable(members) {
     const tableBody = document.querySelector("#memberTable tbody");
-    tableBody.innerHTML = ""; // 기존 데이터 삭제
+    tableBody.innerHTML = "";
 
     members.forEach((member, index) => {
         const row = document.createElement("tr");

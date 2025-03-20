@@ -11,7 +11,7 @@
     background-color: #f9fafb;
 }
 
-/* 컨테이너 */
+/* 컨테이너 (회원 정보 박스) */
 .myinfo-container {
     width: 400px;
     background: white;
@@ -20,7 +20,7 @@
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* 제목 & 버튼 같은 라인 */
+/* 제목과 버튼을 같은 라인에 배치 */
 .myinfo-header {
     display: flex;
     justify-content: space-between;
@@ -28,6 +28,7 @@
     margin-bottom: 15px;
 }
 
+/* 회원 정보 페이지 제목 */
 .myinfo-title {
     font-size: 40px;
     font-weight: bold;
@@ -40,6 +41,7 @@
     gap: 8px;
 }
 
+/* 개별 탭 스타일 */
 .info-tab {
     text-align: center;
     padding: 8px 12px;
@@ -50,21 +52,24 @@
     transition: background-color 0.2s ease-in-out;
 }
 
-/* 버튼 색상 수정 */
+/* 기본 버튼 스타일 */
 .btn-primary {
     background-color: #007bff;
     color: white;
 }
 
+/* 기본 버튼 hover 효과 */
 .btn-primary:hover {
     background-color: #0056b3;
 }
 
+/* 삭제(탈퇴) 버튼 스타일 */
 .btn-danger {
     background-color: #007bff;
     color: white;
 }
 
+/* 삭제 버튼 hover 효과 */
 .btn-danger:hover {
     background-color: #0056b3;
 }
@@ -74,6 +79,7 @@
     margin-bottom: 15px;
 }
 
+/* 입력 필드 라벨 스타일 */
 .info-group label {
     font-size: 14px;
     font-weight: bold;
@@ -82,6 +88,7 @@
     color: #555;
 }
 
+/* 입력 필드 스타일 */
 .info-group input {
     width: 100%;
     padding: 12px;
@@ -106,12 +113,13 @@
     display: inline-block;
 }
 
-/* 회원 상태 색상 */
+/* 회원 상태: 활성 (ACTIVE) */
 .status-active {
     color: #007bff;
     background-color: #e0f0ff;
 }
 
+/* 회원 상태: 탈퇴 (WITHDRAWN) */
 .status-withdrawn {
     color: #dc3545;
     background-color: #fdecea;
@@ -132,6 +140,7 @@
     transition: background-color 0.2s ease-in-out;
 }
 
+/* 수정하기 버튼 hover 효과 */
 .update-btn:hover {
     background-color: #0056b3;
 }
@@ -146,11 +155,12 @@
     text-decoration: none;
 }
 
+/* 로그아웃 버튼 hover 효과 */
 .logout:hover {
     color: #555;
 }
 
-/* 반응형 디자인 (모바일 대응) */
+/* 반응형 디자인 (모바일 최적화) */
 @media (max-width: 500px) {
     .myinfo-container {
         width: 90%;
