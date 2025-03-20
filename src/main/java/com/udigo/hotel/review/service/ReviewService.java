@@ -37,7 +37,7 @@ public class ReviewService {
             e.printStackTrace();
         }
     }
-    
+
     // 모든 리뷰 이미지 URL 업데이트
     public void updateAllImageUrls() {
         reviewMapper.updateImageUrls();
@@ -60,7 +60,7 @@ public class ReviewService {
         // 이미지 저장
         if (!photos.isEmpty()) {
             int i = 1;
-            for (MultipartFile photo : photos) {  // 'for' 문을 올바르게 수정
+            for (MultipartFile photo : photos) {  //
 //                System.out.println("photo--->"+photo);
 
                 if (!photo.isEmpty()) {
@@ -76,15 +76,15 @@ public class ReviewService {
                     String fullImageUrl = "/image/review/" + savedFileName;
 
                     // 사진 URL을 리뷰에 추가
-                    if(i == 1){
+                    if (i == 1) {
                         reviewDTO.setRePhoto1(fullImageUrl);
-                    }else if(i == 2){
+                    } else if (i == 2) {
                         reviewDTO.setRePhoto2(fullImageUrl);
-                    }else if(i == 3){
+                    } else if (i == 3) {
                         reviewDTO.setRePhoto3(fullImageUrl);
                     }
-                    System.out.println("savedFileName--->"+savedFileName);
-                    System.out.println("fullImageUrl--->"+fullImageUrl);
+                    System.out.println("savedFileName--->" + savedFileName);
+                    System.out.println("fullImageUrl--->" + fullImageUrl);
                 }
                 i++;
             }
@@ -96,7 +96,7 @@ public class ReviewService {
     public Map<String, Object> getAllReviews(int page) {
         int limit = 10; // 페이지당 리뷰 수
         int offset = (page - 1) * limit;
-        
+
         List<ReviewDTO> reviews = reviewMapper.findAllReviews(offset, limit);
         int totalReviews = reviewMapper.getTotalReviewCount();
         int totalPages = (int) Math.ceil((double) totalReviews / limit);
@@ -115,8 +115,31 @@ public class ReviewService {
         reviewMapper.deleteReviewByAdmin(reviewId);
     }
 
-    // 숙소별 후기 조회
     public List<ReviewDTO> getReviewsByAcmId(int acmId) {
-        return reviewMapper.findReviewsByAcmId(acmId);
+        List<ReviewDTO> reviews = reviewMapper.findReviewsByAcmId(acmId);
+
+        // 이미지 경로 처리
+        for (ReviewDTO review : reviews) {
+            // null이거나 빈 문자열인 경우 null로 설정
+            if (review.getRePhoto1() == null || review.getRePhoto1().trim().isEmpty()) {
+                review.setRePhoto1(null);
+            } else if (!review.getRePhoto1().startsWith("/")) {
+                review.setRePhoto1("/image/review/" + review.getRePhoto1());
+            }
+
+            if (review.getRePhoto2() == null || review.getRePhoto2().trim().isEmpty()) {
+                review.setRePhoto2(null);
+            } else if (!review.getRePhoto2().startsWith("/")) {
+                review.setRePhoto2("/image/review/" + review.getRePhoto2());
+            }
+
+            if (review.getRePhoto3() == null || review.getRePhoto3().trim().isEmpty()) {
+                review.setRePhoto3(null);
+            } else if (!review.getRePhoto3().startsWith("/")) {
+                review.setRePhoto3("/image/review/" + review.getRePhoto3());
+            }
+        }
+
+        return reviews;
     }
 }

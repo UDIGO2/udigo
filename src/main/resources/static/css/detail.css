@@ -396,3 +396,21 @@
     .modal-confirm-btn:hover {
         background-color: #0056b3;
     }
+
+    .review-photos {
+        display: none; /* 기본적으로 숨김 */
+    }
+
+    .review-photos.has-images {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        margin-top: 10px;
+    }
+
+    .review-photos img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 8px;
+    }

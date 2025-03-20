@@ -19,9 +19,13 @@
     <div class="review-list">
         <div class="review-item" th:each="review : ${reviews}">
             <div class="review-content">
-                <div class="review-image">
-                    <img th:if="${review.rePhoto1 != null && !review.rePhoto1.isEmpty()}" th:src="@{${review.rePhoto1}}" alt="숙소 이미지">
-                    <img th:if="${review.rePhoto1 == null || review.rePhoto1.isEmpty()}" th:src="@{/image/default-review.jpg}" alt="기본 이미지">
+                <!-- 이미지가 있을 때만 이미지 섹션 표시 -->
+                <div class="review-image" th:if="${review.rePhoto1 != null}">
+                    <img th:src="${review.rePhoto1}" alt="숙소 이미지">
+                </div>
+                <!-- 이미지가 없을 때 메시지 표시 -->
+                <div class="no-image-message" th:if="${review.rePhoto1 == null}">
+                    <p>등록된 사진이 없습니다.</p>
                 </div>
                 <div class="review-info">
                     <h3 th:text="${review.acmId}">숙소 이름</h3>
@@ -29,7 +33,10 @@
                     <div class="review-date">
                         <span th:text="'작성일자 | ' + ${#temporals.format(review.writtenAt, 'yyyy.MM.dd')}">작성일자</span>
                     </div>
-                    <button class="delete-btn" th:data-review-id="${review.reviewId}">×</button>
+                    <form th:action="@{/review/delete}" method="post" style="position: absolute; top: 0; right: 0;">
+                        <input type="hidden" name="reviewId" th:value="${review.reviewId}">
+                        <button type="submit" class="delete-btn" onclick="return confirm('리뷰를 삭제하시겠습니까?')">×</button>
+                    </form>
                 </div>
             </div>
         </div>
