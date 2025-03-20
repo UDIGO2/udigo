@@ -49,4 +49,10 @@ public interface MemberMapper {
 
     /* 특정 회원 정보 조회 */
     MemberDTO selectMemberById(@Param("memberId") String memberId);
+
+    //  쿠폰 사용 여부 확인
+    int getCouponStatusByCode(@Param("memberCode") int memberCode);
+
+    //  쿠폰 사용 후 업데이트
+    void updateCouponUsed(@Param("memberCode") int memberCode);
 }

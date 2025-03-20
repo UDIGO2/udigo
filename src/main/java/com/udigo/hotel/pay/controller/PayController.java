@@ -29,6 +29,7 @@ import com.udigo.hotel.pay.model.dto.PayDTO;
 @RequestMapping("/pay")
 public class PayController {
     private final PayService payService;
+
     public PayController(PayService payService) {
         this.payService = payService;
     }
@@ -124,26 +125,35 @@ public class PayController {
     @ResponseBody
     public ResponseEntity<?> savePayment(@RequestBody Map<String, Object> paymentData) {
         try {
-            logger.info(" 결제 요청 데이터: " + paymentData);
+            logger.info("결제 요청 데이터: {}", paymentData);
 
-            // 로그인 확인
             CustomUserDetails userDetails = getMemberData();
             if (userDetails == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("message", "로그인이 필요합니다.", "status", false));
             }
-            
-            // 멤버 코드 추가
+
+            List<String> requiredFields = Arrays.asList(
+                    "acmId", "payMethod", "payStatus", "payPrice", "transactionId", "payProvider"
+            );
+
+            for (String field : requiredFields) {
+                if (!paymentData.containsKey(field) || paymentData.get(field) == null) {
+                    logger.error("필수 데이터 누락: {}", field);
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(Map.of("message", "필수 결제 정보가 누락되었습니다: " + field, "status", false));
+                }
+            }
+
             paymentData.put("memberCode", userDetails.getMemberCode());
 
-            // 결제 정보 저장
             payService.savePaymentRecord(paymentData);
 
-            return ResponseEntity.ok(Map.of("message", " 결제 성공!", "status", true));
+            return ResponseEntity.ok(Map.of("message", "결제 성공!", "status", true));
         } catch (Exception e) {
-            logger.error(" 결제 처리 오류: ", e);
+            logger.error("결제 처리 오류: ", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", " 결제 저장 실패!", "status", false));
+                    .body(Map.of("message", "결제 저장 실패!", "status", false));
         }
     }
     

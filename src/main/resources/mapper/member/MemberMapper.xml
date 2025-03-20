@@ -108,16 +108,21 @@
         WHERE member_id = #{memberId}
     </update>
 
-    <!-- 쿠폰 사용 여부 업데이트 -->
-    <update id="updateCouponUsed">
-        UPDATE tbl_member
-        SET coupon_used = 1
-        WHERE member_id = #{memberId}
-    </update>
-
     <!-- 쿠폰 사용 여부 조회 -->
     <select id="getCouponStatus" parameterType="string" resultType="int">
         SELECT coupon_used FROM tbl_member WHERE member_id = #{memberId}
+    </select>
+
+    <!-- 쿠폰 사용 여부 업데이트 ) -->
+    <update id="updateCouponUsed">
+        UPDATE tbl_member
+        SET coupon_used = 1
+        WHERE member_code = #{memberCode}
+    </update>
+
+    <!-- 쿠폰 사용 여부 조회 ) -->
+    <select id="getCouponStatusByCode" parameterType="int" resultType="int">
+        SELECT coupon_used FROM tbl_member WHERE member_code = #{memberCode}
     </select>
 
 </mapper>

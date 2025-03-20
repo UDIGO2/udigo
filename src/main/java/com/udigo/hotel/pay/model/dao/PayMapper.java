@@ -30,6 +30,8 @@ public interface PayMapper {
     // 예약 정보 저장
     void saveReservationRecord(Map<String, Object> paymentData);
 
+
+
     //  ============================
     //   PayList
     //  ============================
