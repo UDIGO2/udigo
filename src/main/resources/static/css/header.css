@@ -1,10 +1,8 @@
-/* Google Fonts - Noto Sans KR */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
 a {
     text-decoration: none;
 }
-
 
 /* 네비게이션바 */
 .h_navbar {
@@ -17,7 +15,6 @@ a {
     transition: height 0.3s ease; /* 높이 변화 애니메이션 */
 }
 
-
 .h_logo a img {
     position: relative;
     width: 100px;
@@ -25,7 +22,6 @@ a {
     height: auto;
     top: 4px;
 }
-
 
 /* 하위 메뉴 드롭다운 */
 .h_nav-links {

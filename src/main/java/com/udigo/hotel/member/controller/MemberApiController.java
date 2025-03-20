@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller //  @RestController 대신 @Controller 사용
+@Controller
 @RequestMapping("/api/member") //  API 전용 엔드포인트 생성
 public class MemberApiController {
 
@@ -23,7 +23,10 @@ public class MemberApiController {
             return ResponseEntity.badRequest().body("잘못된 요청입니다.");
         }
 
+        // 쿠폰 사용 여부 확인 (true: 사용 완료, false: 사용 가능)
         boolean couponUsed = memberService.checkCouponStatus(memberId);
+
+        // 쿠폰 사용 여부를 JSON 형태로 반환
         return ResponseEntity.ok(couponUsed ? "이미 사용한 쿠폰입니다." : "사용 가능한 쿠폰이 있습니다!");
     }
 }

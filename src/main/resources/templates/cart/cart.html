@@ -10,7 +10,7 @@
     <link rel="stylesheet" th:href="@{/css/cartadd.css}">
 </head>
 <body>
-<!-- 헤더를 fragment로 불러옵니다. -->
+
 <div th:replace="~{fragments/header :: header}"></div>
 
 <main>
@@ -19,19 +19,15 @@
         <div class="cart-icon">🛒</div>
         <p class="cart-message">장바구니가 비었습니다.<br>원하시는 숙소를 담아주세요.</p>
 
-        <!-- ✅ 메인 페이지로 이동하는 버튼 -->
+        <!-- 메인 페이지로 이동하는 버튼 -->
         <a href="/" class="button">담으러 가기</a>
 
-        <!-- ✅ 장바구니에 상품 추가하는 버튼 -->
+        <!-- 장바구니에 상품 추가하는 버튼 -->
         <form th:action="@{/cart/add}" method="post" onsubmit="redirectToCart(event)">
             <input type="hidden" name="acmId" value="1"> <!-- 예제 숙소 ID -->
 
         </form>
     </div>
-
-
-
-
 
     <div th:if="${#lists.size(cartItems) > 0}" class="cart-add-container">
         <div class="cart-add-header">
@@ -68,12 +64,11 @@
     </div>
 </main>
 
-<!-- 푸터를 fragment로 불러옵니다. -->
 <div th:replace="~{fragments/footer :: footer}"></div>
 
 <script src="/js/header.js"></script>
 
-<!-- ✅ 상품 추가 후 장바구니로 이동하는 스크립트 -->
+
 <script>
     function redirectToCart(event) {
         event.preventDefault(); // 기본 제출 동작 막기
@@ -106,7 +101,6 @@
         // window.location.href로 쿼리 파라미터를 추가하여 페이지 이동
         window.location.href = "/payment?selectedIds=" + queryParam;
     }
-
 
     function deleteItems(event) {
         let selectedIds = getSelectedItems();
@@ -181,7 +175,7 @@
             document.getElementById("total-price").textContent = totalPrice.toLocaleString() + "원";
         }
 
-        // ✅ 결제하기 버튼 클릭 시 장바구니 정보 JSON으로 변환 후 전송
+        // 결제하기 버튼 클릭 시 장바구니 정보 JSON으로 변환 후 전송
         document.getElementById("checkout").addEventListener("click", function (event) {
             event.preventDefault(); // 기본 제출 동작 막기
 

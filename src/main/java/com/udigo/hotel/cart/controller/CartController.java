@@ -88,7 +88,7 @@ public class CartController {
 
         return "redirect:/cart";
 
-        // ✅ 장바구니에서 결제 페이지(`payment.html`)로 이동
+        // 장바구니에서 결제 페이지(`payment.html`)로 이동
 //        @PostMapping("/payment")
 //        public String payment(@RequestParam("cartItemsJson") String cartItemsJson, Model model) {
 //            List<CartDTO> cartItems = new ArrayList<>();
@@ -100,7 +100,7 @@ public class CartController {
 //            }
 //
 //            model.addAttribute("cartItems", cartItems);
-//            return "payment"; // ✅ 결제 페이지(`payment.html`)로 이동
+//            return "payment"; // 결제 페이지(`payment.html`)로 이동
     }
 
     @DeleteMapping("/delete")

@@ -16,17 +16,17 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL 드라이버 설정
     context-path: /api  # API 기본 경로 설정 (없으면 `/`가 기본값)
   thymeleaf:
-    prefix: classpath:/templates/  # ✅ "classpath:/templates/"가 맞는지 확인
+    prefix: classpath:/templates/  # "classpath:/templates/"가 맞는지 확인
     suffix: .html
     mode: HTML
     encoding: UTF-8
-    cache: false  # ✅ 변경사항 즉시 반영
-    check-template-location: true  # ✅ 템플릿이 올바른 위치에 있는지 확인
-  mail: # ✅ 이메일(SMTP) 설정 추가
+    cache: false  # 변경사항 즉시 반영
+    check-template-location: true  # 템플릿이 올바른 위치에 있는지 확인
+  mail: # 이메일(SMTP) 설정 추가
     host: smtp.gmail.com  # SMTP 서버 (Gmail 사용)
     port: 587
-    username: "udigopwd@gmail.com"  # ✅ 본인 Gmail 주소
-    password: "mhhe uoup velx nmit"  # ✅ Gmail 앱 비밀번호 (2단계 인증 필요)
+    username: "udigopwd@gmail.com"  # 본인 Gmail 주소
+    password: "mhhe uoup velx nmit"  # Gmail 앱 비밀번호 (2단계 인증 필요)
     properties:
       mail:
         smtp:

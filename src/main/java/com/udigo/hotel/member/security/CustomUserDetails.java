@@ -13,22 +13,22 @@ public class CustomUserDetails implements UserDetails {
     private String password;
     private String role;
     private String memberName;
-    private String memberId;  // ✅ 로그인 ID 필드
+    private String memberId;  // 로그인 ID 필드
 
-    // ✅ 생성자 추가 (필요한 정보 초기화)
+    // 생성자 추가 (필요한 정보 초기화)
     public CustomUserDetails(int memberCode, String email, String password, String role, String memberName, String memberId) {
         this.memberCode = memberCode;
         this.email = email;
         this.password = password;
-        this.role = role != null ? role : "USER";  // ✅ 기본값 설정
+        this.role = role != null ? role : "USER";  // 기본 역할이 없는 경우 "USER"로 설정
         this.memberName = memberName;
         this.memberId = memberId;
     }
 
-    // ✅ `getUsername()`을 `memberId`로 변경 (Spring Security가 로그인 ID로 사용)
+    // `getUsername()`을 `memberId`로 변경 (Spring Security가 로그인 ID로 사용)
     @Override
     public String getUsername() {
-        return memberId;  // ✅ `authentication.getName()`이 `memberId`를 반환하도록 설정
+        return memberId;  // `authentication.getName()`이 `memberId`를 반환하도록 설정
     }
 
     @Override
@@ -61,7 +61,6 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
-    // ✅ Getter & Setter 추가
     public int getMemberCode() {
         return memberCode;
     }

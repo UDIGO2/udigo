@@ -3,7 +3,6 @@ package com.udigo.hotel.member.model.service;
 import com.udigo.hotel.auth.model.service.EmailService;
 import com.udigo.hotel.member.model.dao.MemberMapper;
 import com.udigo.hotel.member.model.dto.MemberDTO;
-import jakarta.mail.MessagingException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,44 +22,6 @@ public class MemberService {
         this.memberMapper = memberMapper;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
-    }
-
-    /* 아이디 중복 확인 (30일 제한 적용)  */
-    public boolean isMemberIdDuplicate(String memberId) {
-        MemberDTO member = memberMapper.findByMemberId(memberId);
-
-        // 회원이 존재하지 않으면 중복 아님 (가입 가능)
-        if (member == null) {
-            return false;
-        }
-
-        // 탈퇴한 회원인지 확인 (WITHDRAWN 상태이면서 deleted_at이 30일 이내)
-        if ("WITHDRAWN".equals(member.getStatus()) && member.getDeletedAt() != null) {
-            LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(30);
-            if (member.getDeletedAt().isAfter(thirtyDaysAgo)) {
-                return true; // 30일 이내 탈퇴한 회원 → 중복 처리 (가입 불가)
-            }
-        }
-
-        return true; // 활성화된 회원이면 중복 처리 (가입 불가)
-
-    }
-
-    /* 이메일 중복 확인 (30일 제한 적용) */
-    public boolean isEmailDuplicate(String email) {
-        MemberDTO member = memberMapper.findByEmail(email);
-
-        if (member == null) {
-            return false; // 사용 가능
-        }
-
-        // 탈퇴 회원이고 30일 이내라면 중복 처리 (가입 불가)
-        if ("WITHDRAWN".equals(member.getStatus()) && member.getDeletedAt() != null) {
-            LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(30);
-            return member.getDeletedAt().isAfter(thirtyDaysAgo);
-        }
-
-        return true; // 기존 회원이 존재하면 중복 처리 (가입 불가)
     }
 
     /* 회원가입 */
@@ -123,10 +84,11 @@ public class MemberService {
             return null;
         }
 
-        //  13자리 임시 비밀번호 생성
+        /* 13자리 임시 비밀번호 생성
+         * `UUID.randomUUID().toString()`을 사용하여 랜덤한 문자열을 생성하는 클래스
+         * 보안상 강력한 난수값을 만들 때 사용됨 (임시 비밀번호 생성 시 활용)
+         * */
         String tempPassword = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 13);
-        // `UUID.randomUUID().toString()`을 사용하여 랜덤한 문자열을 생성하는 클래스
-        // 보안상 강력한 난수값을 만들 때 사용됨 (임시 비밀번호 생성 시 활용)
         String encodedPassword = passwordEncoder.encode(tempPassword);
 
         //  DB에 임시 비밀번호 저장
@@ -139,7 +101,6 @@ public class MemberService {
                 "<p>안녕하세요, " + member.getMemberName() + "님.</p>" +
                 "<p>요청하신 임시 비밀번호는 <strong>" + tempPassword + "</strong> 입니다.</p>" +
                 "<p>로그인 후 반드시 새 비밀번호로 변경해주세요.</p>";
-
         try {
             emailService.sendEmail(email, subject, emailContent);
             System.out.println(" 이메일 전송 완료: " + email);
@@ -160,6 +121,7 @@ public class MemberService {
         return memberMapper.selectMemberById(memberId);
     }
 
+    /* 쿠폰 사용 처리 */
     @Transactional
     public void useCoupon(String memberId) {
         MemberDTO member = memberMapper.findByMemberId(memberId);

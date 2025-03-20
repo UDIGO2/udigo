@@ -21,7 +21,7 @@ public class AdminController {
 
     private final MemberService memberService;
 
-
+    // 생성자 주입을 통해 MemberService 사용
     public AdminController(MemberService memberService) {
         this.memberService = memberService;
     }
@@ -52,11 +52,12 @@ public class AdminController {
         return "member/admin/adminpage"; // 관리자 마이페이지 템플릿 반환
     }
 
+    // 전체 회원 목록 조회 (관리자 전용)
     @GetMapping("/memberlist")
     public String getMemberList(Model model) {
         List<MemberDTO> members = memberService.getAllMembers();
 
-        // LocalDateTime을 String으로 변환 (yyyy-MM-dd 형식)
+        // 가입 날짜(LocalDateTime)를 문자열(yyyy-MM-dd 형식)로 변환
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         List<MemberDTO> formattedMembers = members.stream()
                 .map(member -> {
@@ -76,7 +77,7 @@ public class AdminController {
     public String getMemberDetail(@PathVariable String memberId, Model model) {
         MemberDTO member = memberService.getMemberById(memberId);
 
-        // LocalDateTime을 String으로 변환하여 전달
+        // 가입 날짜(LocalDateTime)를 문자열(yyyy-MM-dd 형식)로 변환하여 전달
         if (member.getJoinDate() != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             member.setFormattedJoinDate(member.getJoinDate().format(formatter));

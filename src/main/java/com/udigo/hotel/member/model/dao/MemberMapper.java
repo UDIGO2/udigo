@@ -18,7 +18,6 @@ public interface MemberMapper {
     /* 이메일 기반 회원 조회
      * @Param("변수명") = SQL에서 사용할 변수명을 지정
      *  MyBatis에서 XML 없이 SQL을 실행할 때 사용됨 */
-
     MemberDTO findByEmail(@Param("email") String email);
 
     /* 회원 정보 수정 */

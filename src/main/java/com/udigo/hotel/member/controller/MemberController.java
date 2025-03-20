@@ -1,5 +1,6 @@
 package com.udigo.hotel.member.controller;
 
+import com.udigo.hotel.auth.model.service.AuthService;
 import com.udigo.hotel.member.model.dto.MemberDTO;
 import com.udigo.hotel.member.model.service.MemberService;
 import com.udigo.hotel.member.security.CustomUserDetails;
@@ -23,11 +24,13 @@ public class MemberController {
 
     @Autowired
     private final MemberService memberService;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;  // 비밀번호 암호화를 위한 객체
+    private final AuthService authService;
 
-    public MemberController(MemberService memberService, PasswordEncoder passwordEncoder) {
+    public MemberController(MemberService memberService, PasswordEncoder passwordEncoder, AuthService authService) {
         this.memberService = memberService;
-        this.passwordEncoder = passwordEncoder;  // 비밀번호 암호화를 위한 객체
+        this.passwordEncoder = passwordEncoder;
+        this.authService = authService;
     }
 
     /* 회원가입 페이지 이동 */
@@ -61,9 +64,9 @@ public class MemberController {
 
         boolean isDuplicate;
         if ("memberId".equals(type)) {
-            isDuplicate = memberService.isMemberIdDuplicate(value);
+            isDuplicate = authService.isMemberIdDuplicate(value);
         } else if ("email".equals(type)) {
-            isDuplicate = memberService.isEmailDuplicate(value);
+            isDuplicate = authService.isEmailDuplicate(value);
         } else {
             return ResponseEntity.badRequest().body(Map.of("message", "잘못된 요청입니다."));
         }

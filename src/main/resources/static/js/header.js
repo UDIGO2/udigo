@@ -1,17 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("📌 DOM 로드 완료! (header.js)");
+    console.log("DOM 로드 완료! (header.js)");
 
     const navBar = document.querySelector(".h_navbar");
     const subMenus = document.querySelectorAll(".h_nav-links ul");
     const content = document.querySelector(".content");
 
     if (!navBar) {
-        console.error("❌ 네비게이션 바(.h_navbar)를 찾을 수 없습니다.");
+        console.error("네비게이션 바(.h_navbar)를 찾을 수 없습니다.");
         return;
     }
 
     if (subMenus.length === 0) {
-        console.warn("⚠️ 서브메뉴(.h_nav-links ul)가 없습니다.");
+        console.warn("서브메뉴(.h_nav-links ul)가 없습니다.");
     }
 
     const dropdownBackground = document.createElement("div");

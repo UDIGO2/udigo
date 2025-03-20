@@ -23,7 +23,7 @@
     </ul>
 
     <div class="h_nav-buttons">
-      <!-- ✅ 로그인한 경우 -->
+      <!-- 로그인한 경우 -->
       <div th:if="${#authorization.expression('isAuthenticated()')}">
         <span class="welcome-message" th:text="|${#authentication.principal.memberId}님 환영합니다!|"></span>
         
@@ -33,7 +33,7 @@
             th:data-member-id="${#authentication.principal.memberId}"
             th:data-member-name="${#authentication.principal.memberName}"></div>
 
-        <!-- ✅ 일반 사용자만 마이페이지 버튼 보이기 -->
+        <!-- 일반 사용자만 마이페이지 버튼 보이기 -->
         <th:block th:unless="${#authorization.expression('hasRole(''ADMIN'')')}">
           <a href="/cart" class="cart-icon">
             🛒 <span class="cart-count"></span>
@@ -53,7 +53,7 @@
         </form>
       </div>
 
-      <!-- ✅ 비로그인 상태 -->
+      <!-- 비로그인 상태 -->
       <div th:if="${#authorization.expression('isAnonymous()') }">
         <button class="login-btn" onclick="location.href='/auth/login'">로그인</button>
       </div>

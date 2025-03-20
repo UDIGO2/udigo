@@ -35,7 +35,6 @@ public class MainController {
         return "pay/admin/adminpay";
     }
 
-
     @GetMapping("/cart-main")
     public String cart() {
         return "cart/cart";
