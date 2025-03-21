@@ -24,6 +24,7 @@ public class PayDTO {
     private String payProvider;
     private String memberName;
 
+
     public PayDTO() {
     }
 

@@ -227,22 +227,32 @@
     let finalPrice = totalPrice;
     let discount = 0;
     
+    // 쿠폰 사용 여부 확인 (로컬 스토리지)
+    const isCouponUsed = localStorage.getItem('couponUsed') === 'true';
+    
     // 쿠폰 적용 버튼 클릭 이벤트
     const couponButton = document.getElementById('applyCouponButton');
     if (couponButton) {
-      couponButton.addEventListener('click', function() {
-        discount = 5000;
-        finalPrice = totalPrice - discount;
-        if (finalPrice < 0) finalPrice = 0;
-        
-        // 가격 업데이트
-        document.querySelector('.total-price').textContent = finalPrice.toLocaleString() + '원';
-        
-        // 쿠폰 사용 표시
-        this.textContent = '쿠폰 적용됨';
-        this.disabled = true;
-        this.style.backgroundColor = '#aaa';
-      });
+      // 이미 쿠폰을 사용했으면 버튼 비활성화
+      if (isCouponUsed) {
+        couponButton.textContent = '쿠폰 사용 완료';
+        couponButton.disabled = true;
+        couponButton.style.backgroundColor = '#aaa';
+      } else {
+        couponButton.addEventListener('click', function() {
+          discount = 5000;
+          finalPrice = totalPrice - discount;
+          if (finalPrice < 0) finalPrice = 0;
+          
+          // 가격 업데이트
+          document.querySelector('.total-price').textContent = finalPrice.toLocaleString() + '원';
+          
+          // 쿠폰 사용 표시
+          this.textContent = '쿠폰 적용됨';
+          this.disabled = true;
+          this.style.backgroundColor = '#aaa';
+        });
+      }
     }
     
     // 결제하기 버튼 클릭 이벤트
@@ -328,6 +338,21 @@
               .then(response => {
                 console.log('서버 응답:', response.data);
                 if (response.data.status) {
+                  // 쿠폰을 사용했다면 쿠폰 사용 상태를 업데이트
+                  if(discount > 0) {
+                    // 로컬 스토리지에 쿠폰 사용 상태 저장
+                    localStorage.setItem('couponUsed', 'true');
+                    
+                    // 서버에도 쿠폰 사용 상태 업데이트 요청
+                    axios.post('/member/use-coupon')
+                      .then(couponResponse => {
+                        console.log('쿠폰 사용 처리 완료:', couponResponse.data);
+                      })
+                      .catch(couponError => {
+                        console.error('쿠폰 사용 처리 중 오류:', couponError);
+                      });
+                  }
+                  
                   const goToReservation = confirm('결제를 성공했습니다\n\n예약 페이지로 이동하시겠습니까?');
                   if (goToReservation) {
                     window.location.href = '/resv/current';
