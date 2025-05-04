@@ -120,6 +120,14 @@ public class CartController {
             cartParamItems.add(new CartParamDTO(memberCode, acmId));  // 직접 추가
         }
 
+
+
+
+
+
+
+
+        
         cartService.deleteItemFromCart(cartParamItems);
 
         return "cart/cartadd";
