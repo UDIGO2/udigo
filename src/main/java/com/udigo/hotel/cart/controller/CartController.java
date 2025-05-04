@@ -84,6 +84,13 @@ public class CartController {
 
         System.out.println("acmId" + acmId);
 
+
+
+
+
+
+
+
         cartService.addItemToCart(getMemberCode(), acmId);
 
         return "redirect:/cart";
